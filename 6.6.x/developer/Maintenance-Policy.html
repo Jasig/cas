@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Maintenance Policy</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    <h1 id="maintenance-policy">Maintenance Policy</h1>
+
+<p>This document describes the official CAS policy as it regards maintenance and management of released CAS server versions.</p>
+
+<p>In particular, the following questions are addressed:</p>
+
+<ul>
+  <li>How long should a CAS release be maintained?</li>
+  <li>What is the appropriate scope for release maintenance once a release is retired?</li>
+</ul>
+
+<h2 id="schedules">Schedules</h2>
+
+<p>The project release schedule is <a href="https://github.com/apereo/cas/milestones">available here</a>.</p>
+
+<div class="alert alert-info"><strong>Which version is more stable?</strong><p>CAS releases are strictly time-based releases; they 
+are not scheduled or based on specific benchmarks, statistics or completion of features or bug fixes. To gain confidence in a 
+release, you should start early by experimenting with release candidates and/or follow-up snapshots.
+In terms of stabillity, all versions of the Apereo CAS software are loosely based on the <i>Schrödinger's Cat</i> theory: there are no guarantees 
+until you open the box. Software distributed under the project license is distributed on an "AS IS" basis without warranties or conditions 
+of any kind, either express or implied. See the project license file for the specific language.
+</p></div>
+
+<h2 id="policy">Policy</h2>
+
+<ul>
+  <li>CAS adopters MAY expect a CAS release to be maintained for <strong>six months</strong>, starting from the <a href="https://github.com/apereo/cas/releases">original release date</a>.</li>
+  <li>Maintenance during this period includes bug fixes, security patches and general upkeep of the release. Patch releases may be expected during this period per the release schedule.</li>
+  <li>Afterwards, maintenance of the release is <em>strictly</em> limited to security patches and fixing vulnerabilities for another <strong>six months</strong> (i.e. SPM mode).</li>
+  <li>The lifespan of a release MAY be extended beyond a single year, to be decided by the <a href="Project-Commitee.html">CAS PMC</a> and the community at large when and where reasonable, assuming sufficient availability, resources and funding.</li>
+</ul>
+
+<p>“CAS Release” is any CAS feature release. (i.e. <code class="language-plaintext highlighter-rouge">4.1.x</code>, <code class="language-plaintext highlighter-rouge">4.2.x</code>, <code class="language-plaintext highlighter-rouge">5.0.x</code>, <code class="language-plaintext highlighter-rouge">5.1.x</code>, etc).</p>
+
+<div class="alert alert-info"><strong>Uh...Maintenance?</strong><p>
+In this context, maintenance strictly means that the release line and the target destination branch in the CAS codebase remains open to
+  accept patches and <strong>contributions from the community</strong> and that there will be follow-up binary releases forthcoming until the designated dates. 
+</p></div>
+
+<h2 id="timeline">Timeline</h2>
+
+<p>On a good day, the CAS project maintains three active branches/releases at the same time: the main branch which leads the project’s development efforts as well as two other maintenance releases whose maintenance cycle is addressed in this document. This policy and relevant maintenance cycle timelines are decided based on the availability, time, and interest of current project members and volunteers and reflect the project’s funding, resources, and commitment in practical and realistic ways. Should circumstances change, so might the policy to shorten or extend the maintenance cycle.</p>
+
+<h2 id="what-is-eol">What is EOL?</h2>
+
+<p>“End-of-life” (“EOL”) is a term used to describe that a given CAS release line (i.e. <code class="language-plaintext highlighter-rouge">6.1.x</code>, <code class="language-plaintext highlighter-rouge">6.2.x</code>, etc) is in the end of its practical life (from the project’s point of view), and the project stops accepting, adding and/or releasing patches of any kind once it reaches that designated date. The EOL release is considered dead and it will not receive any attention whatsoever regardless of the issue impact or severity, unless absolutely justified by the <a href="Project-Commitee.html">CAS PMC</a>, subject to people’s availability, project interest, resources and sufficient funding.</p>
+
+<div class="alert alert-info"><strong>Documentation</strong><p>
+The documentation maintenance and hosting efforts will cease to exist for EOL versions after some time. If you do need access to the documentation
+for an EOL version, you could always find the original pages in the CAS codebase where you could take the pages and render and host
+them as you would like and take on the maintenance and hosting burden on your own.
+</p></div>
+
+<h2 id="eol-schedule">EOL Schedule</h2>
+
+<p>The following CAS releases will transition into a security-patch mode (SPM) only and will be EOLed at the indicated dates.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Release</th>
+      <th style="text-align: center">SPM Starting Date</th>
+      <th style="text-align: right">Full EOL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">6.6.x</code></td>
+      <td style="text-align: center">March 2nd, 2023</td>
+      <td style="text-align: right">September 2nd, 2023</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">6.5.x</code></td>
+      <td style="text-align: center">September 2nd, 2022</td>
+      <td style="text-align: right">March 2nd, 2023</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>All previous releases absent in the above table are considered EOLed.</p>
+
+<h2 id="security-patch-mode-spm">Security-Patch Mode (SPM)</h2>
+
+<p>Once a CAS release transitions into an SPM phase, the release line and relevant milestones will be publicly closed. Patches and contributions must be communicated and reported via <a href="/cas/Mailing-Lists.html">desginated channels</a> designed for security-related issues and reports. Such reports will be reviewed and analyzed per the <a href="/cas/developer/Sec-Vuln-Response.html">Security Vulnerability Response</a>. Please make sure your report has enough information and detail so the issue can be reproduced based on a concrete use case or one that truly in practice affects the inner workings of the Apereo CAS software in a real way.</p>
+
+<h2 id="long-term-support-lts">Long-Term Support (LTS)</h2>
+
+<p>Based on the availability, funding status, and interest of existing project members and volunteers, the CAS project can not offer LTS releases in a practical and sustainable sense and keep to a committed schedule long-term based on volunteer efforts and free time. If you and/or your organization are interested in LTS releases and long-term commitments, please reach out to the project to discuss the details.</p>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = '';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

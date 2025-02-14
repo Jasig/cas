@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen" href='/cas/stylesheets/stylesheet.css'>
+    <link rel="stylesheet" type="text/css" media="print" href='/cas/stylesheets/print.css'>
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Metrics</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="/cas/images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/development/">Development</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.1.x/">v7.1.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+
+            
+                <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+                <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+            
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+                
+                
+
+                <section>
+                    
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+                    
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="statsd-storage---cas-metrics">StatsD Storage - CAS Metrics</h1>
+
+<p>The StatsD registry pushes metrics over UDP to a StatsD agent eagerly. By default,
+metrics are exported to a StatsD agent running on your local machine.
+The StatsD agent host and port to use can be provided using:</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenusmanagementmetricsexportstatsd">
+
+<li class="nav-item property-tab">
+    <a class="nav-link active" id="linkRequiredPropertiesmanagementmetricsexportstatsd" data-bs-toggle="tab" href="#requiredPropertiesmanagementmetricsexportstatsd"><i class="fa fa-hand-point-right px-1"></i>Required</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" id="linkOptionalPropertiesmanagementmetricsexportstatsd" data-bs-toggle="tab" href="#optionalPropertiesmanagementmetricsexportstatsd"><i class="fa fa-hand-spock px-1"></i>Optional</a>
+</li>
+
+<li class="nav-item property-tab" id="navSigningEncryptionPropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkSigningEncryptionmanagementmetricsexportstatsd" data-bs-toggle="tab" href="#signingEncryptionPropertiesmanagementmetricsexportstatsd"><i class="fa fa-user-secret px-1"></i>Signing &amp; Encryption</a>
+</li>
+
+<li class="nav-item property-tab" id="navRdbmsPropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkRdbmsmanagementmetricsexportstatsd" data-bs-toggle="tab" href="#rdbmsPropertiesmanagementmetricsexportstatsd"><i class="fa fa-database px-1"></i>Hibernate &amp; JDBC</a>
+</li>
+<li class="nav-item property-tab" id="navEmailPropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkEmailmanagementmetricsexportstatsd" data-bs-toggle="tab" href="#emailPropertiesmanagementmetricsexportstatsd"><i class="fa fa-envelope px-1"></i>Email Servers</a>
+</li>
+<li class="nav-item property-tab" id="navGroovyPropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkGroovymanagementmetricsexportstatsd" data-bs-toggle="tab" href="#groovyPropertiesmanagementmetricsexportstatsd"><i class="fa fa-laptop-code px-1"></i>Groovy Scripting</a>
+</li>
+
+<li class="nav-item property-tab" id="navLdapPropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkLdapmanagementmetricsexportstatsd" data-bs-toggle="tab" href="#ldapPropertiesmanagementmetricsexportstatsd"><i class="fa fa-server px-1"></i>LDAP &amp; Active Directory</a>
+</li>
+
+<li class="nav-item property-tab" id="navAuthnPredicatePropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkAuthnPredicatemanagementmetricsexportstatsd" data-bs-toggle="tab" href="#authnPredicatePropertiesmanagementmetricsexportstatsd"><i class="fa fa-user-check px-1"></i>Authentication</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordEncoderPropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkPasswordEncodermanagementmetricsexportstatsd" data-bs-toggle="tab" href="#passwordEncoderPropertiesmanagementmetricsexportstatsd"><i class="fa fa-key px-1"></i>Password Encoding</a>
+</li>
+
+<li class="nav-item property-tab" id="navPrincipalTransformationPropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkPrincipalTransformationmanagementmetricsexportstatsd" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabmanagementmetricsexportstatsd(this);" href="#principalTransformationPropertiesmanagementmetricsexportstatsd"><i class="fa fa-person-booth px-1"></i>Principal Transformation</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordPolicyPropertiesmanagementmetricsexportstatsd">
+    <a class="nav-link" id="linkPasswordPolicymanagementmetricsexportstatsd" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabmanagementmetricsexportstatsd(this);" href="#passwordPolicyPropertiesmanagementmetricsexportstatsd"><i class="fa fa-lock px-1"></i>Password Policy</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" id="linkThirdPartyPropertiesmanagementmetricsexportstatsd" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabmanagementmetricsexportstatsd(this);" href="#thirdPartyPropertiesmanagementmetricsexportstatsd"><i class="fa fa-gears px-1"></i>Third Party</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" onclick="javascript:enablePropertiesTabmanagementmetricsexportstatsd(this);" id="linkNotesmanagementmetricsexportstatsd" data-bs-toggle="tab" href="#notesmanagementmetricsexportstatsd"><i class="fa fa-newspaper px-1"></i> Notes</a>
+</li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentmanagementmetricsexportstatsd">
+
+
+    <div class="tab-pane properties-tab fade in active show" id="requiredPropertiesmanagementmetricsexportstatsd">
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+        </sub>
+        <br><p></p>
+
+        <p></p>
+
+        <table class="cas-datatable properties " id="tableRequiredPropertiesmanagementmetricsexportstatsd">
+            <thead><tr><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiesmanagementmetricsexportstatsd"></textarea>
+    </div>
+
+    <div class="tab-pane properties-tab fade in" id="optionalPropertiesmanagementmetricsexportstatsd">
+
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+            flag indicates that the presence of the setting
+            is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+            the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+            configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+        </sub>
+        <br><p></p>
+
+        <table class="cas-datatable properties " id="tableOptionalPropertiesmanagementmetricsexportstatsd">
+            <thead><tr><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiesmanagementmetricsexportstatsd"></textarea>
+    </div>
+<div class="tab-pane properties-tab fade in" id="thirdPartyPropertiesmanagementmetricsexportstatsd">
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <i>Third Party</i> in the CAS configuration metadata. This flag indicates that the configuration setting is not controlled, owned or managed by the CAS ecosystem, and affects functionality that is offered by a third-party library, such as Spring Boot or Spring Cloud to CAS. For additional info, you might have to visit the third-party source to find more details.
+        </sub>
+        <br><p></p>
+<!-- fragment:keep --><table class="cas-datatable properties " id="tableThirdPartyPropertiesmanagementmetricsexportstatsd">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.enabled=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdenabled"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdenabled"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdenabled"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdenabled"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdenabled"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>with a replacement setting: <code>management.statsd.metrics.export.enabled</code>.</p>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.flavor=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdflavorPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdflavorPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.flavor</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdflavor"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdflavor"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdflavor"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdflavor"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdflavor"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdflavor">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.flavor=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdflavor">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        flavor</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdflavor td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdflavor">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.flavor<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdflavor">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_FLAVOR</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdflavor">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.flavor<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>with a replacement setting: <code>management.statsd.metrics.export.flavor</code>.</p>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.host=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdhostPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdhostPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.host</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdhost"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdhost"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdhost"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdhost"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdhost"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdhost">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.host=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdhost">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        host</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdhost td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdhost">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.host<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdhost">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_HOST</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdhost">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.host<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>with a replacement setting: <code>management.statsd.metrics.export.host</code>.</p>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.max-packet-length=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdmaxpacketlengthPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdmaxpacketlengthPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.max-packet-length</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdmaxpacketlength"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdmaxpacketlength"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdmaxpacketlength"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdmaxpacketlength"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdmaxpacketlength"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdmaxpacketlength">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.max-packet-length=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdmaxpacketlength">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        max-packet-length</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdmaxpacketlength td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdmaxpacketlength">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.max-packet-length<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdmaxpacketlength">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_MAX_PACKET_LENGTH</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdmaxpacketlength">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.max-packet-length<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>with a replacement setting: <code>management.statsd.metrics.export.max-packet-length</code>.</p>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.polling-frequency=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdpollingfrequencyPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdpollingfrequencyPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.polling-frequency</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdpollingfrequency"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdpollingfrequency"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdpollingfrequency"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdpollingfrequency"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdpollingfrequency"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdpollingfrequency">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.polling-frequency=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdpollingfrequency">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        polling-frequency</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdpollingfrequency td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdpollingfrequency">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.polling-frequency<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdpollingfrequency">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_POLLING_FREQUENCY</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdpollingfrequency">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.polling-frequency<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>with a replacement setting: <code>management.statsd.metrics.export.polling-frequency</code>.</p>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.port=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdportPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdportPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.port</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdport"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdport"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdport"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdport"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdport"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdport">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.port=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdport">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        port</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdport td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdport">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.port<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdport">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_PORT</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdport">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.port<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>with a replacement setting: <code>management.statsd.metrics.export.port</code>.</p>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.protocol=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdprotocolPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdprotocolPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.protocol</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdprotocol"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdprotocol"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdprotocol"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdprotocol"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdprotocol"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdprotocol">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.protocol=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdprotocol">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        protocol</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdprotocol td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdprotocol">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.protocol<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdprotocol">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_PROTOCOL</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdprotocol">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.protocol<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>with a replacement setting: <code>management.statsd.metrics.export.protocol</code>.</p>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.publish-unchanged-meters=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdpublishunchangedmetersPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdpublishunchangedmetersPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.publish-unchanged-meters</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdpublishunchangedmeters"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdpublishunchangedmeters"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdpublishunchangedmeters"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdpublishunchangedmeters"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdpublishunchangedmeters"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdpublishunchangedmeters">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.publish-unchanged-meters=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdpublishunchangedmeters">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        publish-unchanged-meters</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdpublishunchangedmeters td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdpublishunchangedmeters">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.publish-unchanged-meters<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdpublishunchangedmeters">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_PUBLISH_UNCHANGED_METERS</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdpublishunchangedmeters">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.publish-unchanged-meters<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>with a replacement setting: <code>management.statsd.metrics.export.publish-unchanged-meters</code>.</p>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">management.metrics.export.statsd.queue-size=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                
+                    </p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#managementmetricsexportstatsdqueuesizePropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="managementmetricsexportstatsdqueuesizePropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>management.metrics.export.statsd.queue-size</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertymanagementmetricsexportstatsdqueuesize"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertymanagementmetricsexportstatsdqueuesize"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertymanagementmetricsexportstatsdqueuesize"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarmanagementmetricsexportstatsdqueuesize"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargmanagementmetricsexportstatsdqueuesize"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertymanagementmetricsexportstatsdqueuesize">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>management.metrics.export.statsd.queue-size=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertymanagementmetricsexportstatsdqueuesize">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">management: <br>  metrics: <br>    export: <br>      statsd: <br>        queue-size</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertymanagementmetricsexportstatsdqueuesize td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertymanagementmetricsexportstatsdqueuesize">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dmanagement</span>.metrics.export.statsd.queue-size<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarmanagementmetricsexportstatsdqueuesize">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">MANAGEMENT_METRICS_EXPORT_STATSD_QUEUE_SIZE</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargmanagementmetricsexportstatsdqueuesize">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--management</span>.metrics.export.statsd.queue-size<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+<p></p>
+<p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>ERROR</code>without a replacement setting.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+<textarea style="position:absolute; left: -10000px;" id="copyAreaThirdPartyPropertiesmanagementmetricsexportstatsd"># 
+# management.metrics.export.statsd.enabled=
+
+# 
+# management.metrics.export.statsd.flavor=
+
+# 
+# management.metrics.export.statsd.host=
+
+# 
+# management.metrics.export.statsd.max-packet-length=
+
+# 
+# management.metrics.export.statsd.polling-frequency=
+
+# 
+# management.metrics.export.statsd.port=
+
+# 
+# management.metrics.export.statsd.protocol=
+
+# 
+# management.metrics.export.statsd.publish-unchanged-meters=
+
+# 
+# management.metrics.export.statsd.queue-size=
+
+</textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notesmanagementmetricsexportstatsd">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.1.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+    </div>
+<script>
+        window.addEventListener('load', (event) => {$("#linkOptionalPropertiesmanagementmetricsexportstatsd").remove();$("#linkRdbmsmanagementmetricsexportstatsd").remove();$("#linkEmailmanagementmetricsexportstatsd").remove();$("#linkGroovymanagementmetricsexportstatsd").remove();$("#linkSigningEncryptionmanagementmetricsexportstatsd").remove();$("#linkRequiredPropertiesmanagementmetricsexportstatsd").remove();
+            $("#requiredPropertiesmanagementmetricsexportstatsd").remove();$("#linkPasswordPolicymanagementmetricsexportstatsd").remove();$("#linkPrincipalTransformationmanagementmetricsexportstatsd").remove();$("#linkPasswordEncodermanagementmetricsexportstatsd").remove();$("#linkAuthnPredicatemanagementmetricsexportstatsd").remove();$("#linkLdapmanagementmetricsexportstatsd").remove();// console.log("Checking for visible link menu in: navPillsMenusmanagementmetricsexportstatsd");
+            let id=$("#navPillsMenusmanagementmetricsexportstatsd a:visible:first").prop('id');
+            // console.log("Attempting to select tab with id " + id);
+            if (id != undefined && id != null) {
+                // console.log("Selecting first tab with link id " + id);
+                let firstTabEl = document.querySelector(`#${id}`);
+                let firstTab = new bootstrap.Tab(firstTabEl);
+                firstTab.show();
+                // console.log("Selected tab with link id " + id);
+            }
+
+            let c = $("#tableRequiredPropertiesmanagementmetricsexportstatsd li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navRequiredPropertiesmanagementmetricsexportstatsd").closest("table").remove();
+                $("#navRequiredPropertiesLeftmanagementmetricsexportstatsd").closest("table").remove();
+            }
+            c = $("#tableOptionalPropertiesmanagementmetricsexportstatsd li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navOptionalPropertiesmanagementmetricsexportstatsd").closest("table").remove();
+                $("#navOptionalPropertiesLeftmanagementmetricsexportstatsd").closest("table").remove();
+            }
+            c = $("#tableThirdPartyPropertiesmanagementmetricsexportstatsd li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navThirdPartyPropertiesmanagementmetricsexportstatsd").hide();
+            }
+
+        });
+    </script>
+
+</div>
+
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tether@2.0.0/dist/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="/cas/javascripts/URI.js"></script>
+    <script src="/cas/javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+    <script>
+        let pageSection = 'Monitoring & Statistics';
+        let siteUrl = '';
+        let basePath = '/cas';
+
+        
+    </script>
+</body>
+
+</html>

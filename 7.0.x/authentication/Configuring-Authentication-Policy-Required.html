@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Configuring Authentication Policy</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="../../images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+            <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+                
+
+                <section>
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="required---authentication-policy">Required - Authentication Policy</h1>
+
+<p>Satisfied if and only if a specified handler successfully authenticates its credential.</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnpolicyreq">
+
+    <li class="nav-item property-tab">
+        <a class="nav-link active" id="linkRequiredPropertiescasauthnpolicyreq" data-bs-toggle="tab" href="#requiredPropertiescasauthnpolicyreq">Required</a>
+    </li>
+    <li class="nav-item property-tab">
+        <a class="nav-link" id="linkOptionalPropertiescasauthnpolicyreq" data-bs-toggle="tab" href="#optionalPropertiescasauthnpolicyreq">Optional</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnpolicyreq">
+        <a class="nav-link" id="linkSigningEncryptioncasauthnpolicyreq" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnpolicyreq">Signing &amp; Encryption</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navRdbmsPropertiescasauthnpolicyreq">
+        <a class="nav-link" id="linkRdbmscasauthnpolicyreq" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnpolicyreq">Hibernate &amp; JDBC</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navEmailPropertiescasauthnpolicyreq">
+        <a class="nav-link" id="linkEmailcasauthnpolicyreq" data-bs-toggle="tab" href="#emailPropertiescasauthnpolicyreq">Email Servers</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navLdapPropertiescasauthnpolicyreq">
+        <a class="nav-link" id="linkLdapcasauthnpolicyreq" data-bs-toggle="tab" href="#ldapPropertiescasauthnpolicyreq">LDAP &amp; Active Directory</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnpolicyreq">
+        <a class="nav-link" id="linkAuthnPredicatecasauthnpolicyreq" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnpolicyreq">Authentication</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnpolicyreq">
+        <a class="nav-link" id="linkPasswordEncodercasauthnpolicyreq" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnpolicyreq">Password Encoding</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnpolicyreq">
+        <a class="nav-link" id="linkPrincipalTransformationcasauthnpolicyreq" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnpolicyreq(this);" href="#principalTransformationPropertiescasauthnpolicyreq">Principal Transformation</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnpolicyreq">
+        <a class="nav-link" id="linkPasswordPolicycasauthnpolicyreq" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnpolicyreq(this);" href="#passwordPolicyPropertiescasauthnpolicyreq">Password Policy</a>
+    </li>
+<li class="nav-item property-tab">
+        <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnpolicyreq(this);" id="linkNotescasauthnpolicyreq" data-bs-toggle="tab" href="#notescasauthnpolicyreq">Notes</a>
+    </li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnpolicyreq">
+
+
+<div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnpolicyreq">
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+    </sub>
+    <br><p></p>
+
+    <p></p>
+        
+    <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnpolicyreq">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.req.handler-name=handlerName</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                The handler name which must have successfully executed and validated credentials.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAuthenticationHandlerAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyreqhandlernamePropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyreqhandlernamePropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.req.handler-name</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyreqhandlername">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyreqhandlername">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyreqhandlername">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyreqhandlername">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyreqhandlername">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyreqhandlername">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.req.handler-name=handlerName
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyreqhandlername">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      req: <br>        handler-name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">handlerName"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyreqhandlername td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyreqhandlername">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.req.handler-name<span class="o">=</span><span class="s2">"handlerName"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyreqhandlername">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQ_HANDLER_NAME</span><span class="o">=</span><span class="s2">"handlerName"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyreqhandlername">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.req.handler-name<span class="o">=</span><span class="s2">"handlerName"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.required-attributes.attributes=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Map of attributes that are required to found either as authentication attributes or principal attributes.
+                    </p>
+<p></p>
+                    <p class="small text-left"><i class="fas fa-cogs small"></i> This settings supports regular expression patterns. <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;p class='small'&gt;
+                    A regular expression (shortened as regex or regexp) is a sequence of characters that specifies a search pattern in text. For example, the following pattern
+                    &lt;code&gt;^ent:.+(admin|system).+:com$&lt;/code&gt; should match &lt;code&gt;ent:sys-admin-anything:com&lt;/code&gt;. Regular expressions in CAS are handled using the JDK's &lt;code&gt;java.util.regex.Pattern&lt;/code&gt; class.
+                &lt;/p&gt;">[?]</sup>.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAttributesAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyrequiredattributesattributesPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyrequiredattributesattributesPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.required-attributes.attributes</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyrequiredattributesattributes">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyrequiredattributesattributes">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyrequiredattributesattributes">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyrequiredattributesattributes">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyrequiredattributesattributes">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyrequiredattributesattributes">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.required-attributes.attributes=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyrequiredattributesattributes">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      required-attributes: <br>        attributes</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyrequiredattributesattributes td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyrequiredattributesattributes">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.required-attributes.attributes<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyrequiredattributesattributes">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQUIRED_ATTRIBUTES_ATTRIBUTES</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyrequiredattributesattributes">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.required-attributes.attributes<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnpolicyreq"># The handler name which must have successfully executed and validated credentials.
+# cas.authn.policy.req.handler-name=handlerName
+
+# Map of attributes that are required to found either as authentication attributes or principal attributes.
+# cas.authn.policy.required-attributes.attributes=
+
+</textarea>
+</div>
+
+<div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnpolicyreq">
+
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+        flag indicates that the presence of the setting
+        is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+        the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+        configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+    </sub>
+    <br><p></p>
+
+    <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnpolicyreq">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.req.enabled=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Enables the policy.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAuthenticationHandlerAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyreqenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyreqenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.req.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyreqenabled">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyreqenabled">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyreqenabled">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyreqenabled">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyreqenabled">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyreqenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.req.enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyreqenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      req: <br>        enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyreqenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyreqenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.req.enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyreqenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQ_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyreqenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.req.enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.req.name=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                The name of the authentication policy.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAuthenticationHandlerAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyreqnamePropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyreqnamePropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.req.name</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyreqname">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyreqname">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyreqname">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyreqname">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyreqname">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyreqname">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.req.name=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyreqname">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      req: <br>        name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyreqname td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyreqname">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.req.name<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyreqname">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQ_NAME</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyreqname">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.req.name<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.req.order=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                The execution order of this policy.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAuthenticationHandlerAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyreqorderPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyreqorderPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.req.order</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyreqorder">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyreqorder">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyreqorder">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyreqorder">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyreqorder">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyreqorder">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.req.order=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyreqorder">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      req: <br>        order</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyreqorder td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyreqorder">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.req.order<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyreqorder">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQ_ORDER</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyreqorder">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.req.order<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.req.try-all=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Ensure number of provided credentials does not match the sum of authentication successes and failures.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAuthenticationHandlerAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyreqtryallPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyreqtryallPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.req.try-all</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyreqtryall">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyreqtryall">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyreqtryall">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyreqtryall">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyreqtryall">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyreqtryall">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.req.try-all=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyreqtryall">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      req: <br>        try-all</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyreqtryall td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyreqtryall">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.req.try-all<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyreqtryall">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQ_TRY_ALL</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyreqtryall">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.req.try-all<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.required-attributes.enabled=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Enables the policy.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAttributesAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyrequiredattributesenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyrequiredattributesenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.required-attributes.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyrequiredattributesenabled">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyrequiredattributesenabled">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyrequiredattributesenabled">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyrequiredattributesenabled">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyrequiredattributesenabled">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyrequiredattributesenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.required-attributes.enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyrequiredattributesenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      required-attributes: <br>        enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyrequiredattributesenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyrequiredattributesenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.required-attributes.enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyrequiredattributesenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQUIRED_ATTRIBUTES_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyrequiredattributesenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.required-attributes.enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.required-attributes.name=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                The name of the authentication policy.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAttributesAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyrequiredattributesnamePropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyrequiredattributesnamePropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.required-attributes.name</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyrequiredattributesname">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyrequiredattributesname">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyrequiredattributesname">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyrequiredattributesname">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyrequiredattributesname">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyrequiredattributesname">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.required-attributes.name=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyrequiredattributesname">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      required-attributes: <br>        name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyrequiredattributesname td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyrequiredattributesname">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.required-attributes.name<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyrequiredattributesname">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQUIRED_ATTRIBUTES_NAME</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyrequiredattributesname">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.required-attributes.name<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.required-attributes.order=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                The execution order of this policy.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.policy.RequiredAttributesAuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyrequiredattributesorderPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyrequiredattributesorderPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.required-attributes.order</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyrequiredattributesorder">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyrequiredattributesorder">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyrequiredattributesorder">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyrequiredattributesorder">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyrequiredattributesorder">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyrequiredattributesorder">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.required-attributes.order=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyrequiredattributesorder">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      required-attributes: <br>        order</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyrequiredattributesorder td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyrequiredattributesorder">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.required-attributes.order<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyrequiredattributesorder">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQUIRED_ATTRIBUTES_ORDER</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyrequiredattributesorder">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.required-attributes.order<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.policy.required-handler-authentication-policy-enabled=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Global authentication policy that is applied when CAS attempts to vend and validate tickets. Checks to make sure a particular authentication handler has successfully executed and validated credentials. Required handlers are defined per registered service.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.AuthenticationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnpolicyrequiredhandlerauthenticationpolicyenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnpolicyrequiredhandlerauthenticationpolicyenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.policy.required-handler-authentication-policy-enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnpolicyrequiredhandlerauthenticationpolicyenabled">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnpolicyrequiredhandlerauthenticationpolicyenabled">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnpolicyrequiredhandlerauthenticationpolicyenabled">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnpolicyrequiredhandlerauthenticationpolicyenabled">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnpolicyrequiredhandlerauthenticationpolicyenabled">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnpolicyrequiredhandlerauthenticationpolicyenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.policy.required-handler-authentication-policy-enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnpolicyrequiredhandlerauthenticationpolicyenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    policy: <br>      required-handler-authentication-policy-enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnpolicyrequiredhandlerauthenticationpolicyenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnpolicyrequiredhandlerauthenticationpolicyenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.policy.required-handler-authentication-policy-enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnpolicyrequiredhandlerauthenticationpolicyenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_POLICY_REQUIRED_HANDLER_AUTHENTICATION_POLICY_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnpolicyrequiredhandlerauthenticationpolicyenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.policy.required-handler-authentication-policy-enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnpolicyreq"># Enables the policy.
+# cas.authn.policy.req.enabled=false
+
+# The name of the authentication policy.
+# cas.authn.policy.req.name=
+
+# The execution order of this policy.
+# cas.authn.policy.req.order=
+
+# Ensure number of provided credentials does not match the sum of authentication successes and failures.
+# cas.authn.policy.req.try-all=false
+
+# Enables the policy.
+# cas.authn.policy.required-attributes.enabled=false
+
+# The name of the authentication policy.
+# cas.authn.policy.required-attributes.name=
+
+# The execution order of this policy.
+# cas.authn.policy.required-attributes.order=
+
+# Global authentication policy that is applied when CAS attempts to vend and validate tickets.
+# cas.authn.policy.required-handler-authentication-policy-enabled=false
+
+</textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnpolicyreq">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.0.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+</div>
+<script>
+    window.addEventListener('load', (event) => {$("#linkRdbmscasauthnpolicyreq").remove();$("#linkEmailcasauthnpolicyreq").remove();$("#linkSigningEncryptioncasauthnpolicyreq").remove();$("#linkPasswordPolicycasauthnpolicyreq").remove();$("#linkPrincipalTransformationcasauthnpolicyreq").remove();$("#linkPasswordEncodercasauthnpolicyreq").remove();$("#linkAuthnPredicatecasauthnpolicyreq").remove();$("#linkLdapcasauthnpolicyreq").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnpolicyreq");
+        let id=$("#navPillsMenuscasauthnpolicyreq a:visible:first").prop('id');
+        // console.log("Attempting to select tab with id " + id);
+        if (id != undefined && id != null) {
+            // console.log("Selecting first tab with link id " + id);
+            let firstTabEl = document.querySelector(`#${id}`);
+            let firstTab = new bootstrap.Tab(firstTabEl);
+            firstTab.show();
+            // console.log("Selected tab with link id " + id);
+        }
+
+        let c = $("#tableRequiredPropertiescasauthnpolicyreq li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navRequiredPropertiescasauthnpolicyreq").closest("table").remove();
+            $("#navRequiredPropertiesLeftcasauthnpolicyreq").closest("table").remove();
+        }
+        c = $("#tableOptionalPropertiescasauthnpolicyreq li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navOptionalPropertiescasauthnpolicyreq").closest("table").remove();
+            $("#navOptionalPropertiesLeftcasauthnpolicyreq").closest("table").remove();
+        }
+        c = $("#tableThirdPartyPropertiescasauthnpolicyreq li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navThirdPartyPropertiescasauthnpolicyreq").hide();
+        }
+        
+    });
+</script>
+
+</div>
+
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+
+    <script>
+        let pageSection = 'Authentication';
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+</body>
+
+</html>

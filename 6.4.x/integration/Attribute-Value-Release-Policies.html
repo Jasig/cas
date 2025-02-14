@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - Attribute Value Release Policies</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            
+<h1 id="attribute-value-filters">Attribute Value Filters</h1>
+
+<p>While each policy defines what principal attributes may be allowed for a given service,
+there are optional attribute filters that can be set per policy to further weed out attributes based on their <strong>values</strong>.</p>
+
+<h2 id="chaining-filters">Chaining Filters</h2>
+
+<p>Attribute filters can be chained together so as to associate multiple filters with a single service definition.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attributeFilter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.support.RegisteredServiceChainingAttributeFilter"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"filters"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w">
+        </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.support.RegisteredServiceRegexAttributeFilter"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"pattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^</span><span class="se">\\</span><span class="s2">w{3}$"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w"> </span><span class="s2">"groupMembership"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Chained attribute filters are sorted given their <code class="language-plaintext highlighter-rouge">order</code> property first before execution.</p>
+
+<h2 id="regex">Regex</h2>
+
+<p>The regex filter that is responsible to make sure only attributes whose value
+matches a certain regex pattern are released.</p>
+
+<p>Suppose that the following attributes are resolved:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">uid</code></td>
+      <td>jsmith</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">groupMembership</code></td>
+      <td>std</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cn</code></td>
+      <td>JohnSmith</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The following configuration for instance considers the initial list of <code class="language-plaintext highlighter-rouge">uid</code>,
+<code class="language-plaintext highlighter-rouge">groupMembership</code> and then only allows and releases attributes whose value’s length
+is 3 characters. Therefore, out of the above list, only <code class="language-plaintext highlighter-rouge">groupMembership</code> is released to the application.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attributeFilter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.support.RegisteredServiceRegexAttributeFilter"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"pattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^</span><span class="se">\\</span><span class="s2">w{3}$"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w"> </span><span class="s2">"groupMembership"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="mapped-regex">Mapped Regex</h2>
+
+<p>The regex filter that is responsible to make sure only a selected set of attributes whose value matches a certain regex pattern are released. The filter selectively applies patterns to attributes mapped in the configuration. If an attribute is mapped, it is only allowed to be released if it matches the linked pattern. If an attribute is not mapped, it may optionally be excluded from the released set of attributes.</p>
+
+<p>For example, the below example only allows release of <code class="language-plaintext highlighter-rouge">memberOf</code> if it contains a value that is 3 characters in length. If no values are found, the <code class="language-plaintext highlighter-rouge">memberOf</code> is excluded from the final released bundle.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attributeFilter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.support.RegisteredServiceMappedRegexAttributeFilter"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"patterns"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"java.util.TreeMap"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"memberOf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^</span><span class="se">\\</span><span class="s2">w{3}$"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"excludeUnmappedAttributes"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"completeMatch"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"caseInsensitive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w"> </span><span class="s2">"memberOf"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The following fields are supported by this filter:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">patterns</code></td>
+      <td>A map of attributes and their associated pattern tried against value(s).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">completeMatch</code></td>
+      <td>Indicates whether pattern-matching should execute over the entire value region.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">excludeUnmappedAttributes</code></td>
+      <td>Indicates whether unmapped attributes should be removed from the final bundle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">caseInsensitive</code></td>
+      <td>Indicates whether pattern matching should be done in a case-insensitive manner.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="reverse-mapped-regex">Reverse Mapped Regex</h2>
+
+<p>Identical to the <em>Mapped Regex</em> filter, except that the filter only allows a selected set of attributes whose value
+<strong>does not match</strong> a certain regex pattern are released.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attributeFilter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.support.RegisteredServiceReverseMappedRegexAttributeFilter"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"patterns"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"memberOf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^</span><span class="se">\\</span><span class="s2">w{3}$"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"excludeUnmappedAttributes"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"completeMatch"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"caseInsensitive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w"> </span><span class="s2">"memberOf"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="mutant-mapped-regex">Mutant Mapped Regex</h2>
+
+<p>This filter structurally, in terms of settings and properties, is identical to the <em>Mapped Regex</em> filter. Its main ability is to filter attribute values by a collection of patterns and then supplant the value dynamically based on the results of the regex match.</p>
+
+<p>For example, the following definition attempts to filter all values assigned to the attribute <code class="language-plaintext highlighter-rouge">memberOf</code> based on the given patterns. Each pattern is linked via <code class="language-plaintext highlighter-rouge">-&gt;</code> to the expected return value that may reference specific groups in the produced regex result. Assuming the attribute <code class="language-plaintext highlighter-rouge">memberOf</code> has values of <code class="language-plaintext highlighter-rouge">math101</code> and <code class="language-plaintext highlighter-rouge">marathon101</code>, the filter will produce values <code class="language-plaintext highlighter-rouge">courseA-athon101</code> and <code class="language-plaintext highlighter-rouge">courseB-h101</code> after processing.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attributeFilter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.support.RegisteredServiceMutantRegexAttributeFilter"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"patterns"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"java.util.TreeMap"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"memberOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"^mar(.+)(101) -&gt; courseA-$1$2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"^mat(.+)(101) -&gt; courseB-$1$2"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"excludeUnmappedAttributes"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"completeMatch"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"caseInsensitive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w"> </span><span class="s2">"memberOf"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="groovy">Groovy</h2>
+
+<p>Attribute value filtering may also be carried out using an inline or external Groovy script.
+Scripts have access to the current resolved attributes via <code class="language-plaintext highlighter-rouge">attributes</code> and a <code class="language-plaintext highlighter-rouge">logger</code>.
+The returned result of the script must be a <code class="language-plaintext highlighter-rouge">Map&lt;String, Object&gt;</code>.</p>
+
+<h3 id="inlined-groovy">Inlined Groovy</h3>
+
+<p>An inline groovy filter allows you to embed the script directly in the service definition.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attributeFilter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.support.RegisteredServiceScriptedAttributeFilter"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"script"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"groovy { return attributes }"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w"> </span><span class="s2">"groupMembership"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="external-groovy">External Groovy</h3>
+
+<p>An external groovy filter allows you to define the script in file located outside of the CAS web application.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attributeFilter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.support.RegisteredServiceScriptedAttributeFilter"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"script"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"file:/etc/cas/filter-this.groovy"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w"> </span><span class="s2">"groupMembership"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The outline of the script may be as follows:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">java.util.*</span>
+
+<span class="kt">def</span> <span class="nf">run</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">def</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="na">info</span> <span class="s2">"Attributes currently resolved: ${attributes}"</span>
+    <span class="kt">def</span> <span class="n">map</span> <span class="o">=...</span>
+    <span class="k">return</span> <span class="n">map</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The parameters passed are as follows:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">attributes</code></td>
+      <td>A <code class="language-plaintext highlighter-rouge">Map</code> of current  attributes resolved from sources.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logger</code></td>
+      <td>The object responsible for issuing log messages such as <code class="language-plaintext highlighter-rouge">logger.info(...)</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Attributes';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

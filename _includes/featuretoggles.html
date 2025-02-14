@@ -1,0 +1,14 @@
+<!-- fragment:keep -->
+
+{% assign features = include.features | split: "," %}
+
+#### Feature Activation
+
+To activate this feature, the following feature toggle(s) must be turned on:
+
+```properties
+{% for f in features %}CasFeatureModule.{{ f }}.enabled=true{% endfor %}
+```
+
+To learn more about configuration feature toggles,
+please <a href='/cas{{ version | append: "/configuration/Configuration-Feature-Toggles.html" | relative_url }}'>see this page</a>.

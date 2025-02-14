@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Memcached Ticket Registry</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="memcached-ticket-registry">Memcached Ticket Registry</h1>
+<p>Memcached integration is enabled by including the following dependency in the Maven WAR overlay:</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.jasig.cas&lt;/groupId&gt;
+    &lt;artifactId&gt;cas-server-integration-memcached&lt;/artifactId&gt;
+    &lt;version&gt;${cas.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p><code>MemCacheTicketRegistry</code> stores tickets in one or more <a href="http://memcached.org/">memcached</a> instances. The
+<a href="https://code.google.com/p/spymemcached/">spymemcached</a> library used by this component presents memcached as a
+key/value store that accepts <code>String</code> keys and Java <code>Object</code> values.
+Memcached stores data in exactly one node among many in a distributed cache, thus avoiding the requirement to replicate
+or otherwise share data between nodes. A deterministic function is used to locate the node, <em>N’</em>, on which to store
+key <em>K</em>:</p>
+
+<pre><code>N' = f(h(K), N1, N2, N3, ... Nm)
+</code></pre>
+
+<p>where <em>h(K)</em> is the hash of key <em>K</em>, <em>N1 … Nm</em> is the set of cache nodes, and <em>N’</em> ∈ <em>N … Nm</em>.</p>
+
+<p>The function is deterministic in that it consistently produces the same result for a given key and set of cache nodes.
+Note that a change in the set of available cache nodes may produce a different target node on which to store the key.</p>
+
+<h2 id="configuration-considerations">Configuration Considerations</h2>
+<p>There are three core configuration concerns with memcached:</p>
+
+<ol>
+  <li>Hash Algorithm</li>
+  <li>Node locator strategy</li>
+  <li>Object serialization mechanism</li>
+</ol>
+
+<h3 id="hash-algorithm">Hash Algorithm</h3>
+<p>The hash algorithm is used to transform a key value into a memcached storage key that uniquely identifies the
+corresponding value. The choice of hashing algorithm has implications for failover behavior that is important
+for HA deployments. The <code>FNV1_64_HASH</code> algorithm is recommended since it offers a nice balance of speed and low
+collision rate; see the
+<a href="https://github.com/couchbase/spymemcached/blob/2.8.1/src/main/java/net/spy/memcached/DefaultHashAlgorithm.java">javadocs</a>
+for alternatives. </p>
+
+<h3 id="node-locator">Node Locator</h3>
+<p>The node locator serves as the deterministic node selection function for the memcached client provided by the
+underlying spymemcached library. There are two choices:</p>
+
+<ol>
+  <li><a href="https://github.com/couchbase/spymemcached/blob/2.8.1/src/main/java/net/spy/memcached/ArrayModNodeLocator.java">ARRAY_MOD</a></li>
+  <li><a href="https://github.com/couchbase/spymemcached/blob/2.9.0/src/main/java/net/spy/memcached/KetamaNodeLocator.java">CONSISTENT</a></li>
+</ol>
+
+<p>The array modulus mechanism is the default and suitable for cases when the number of nodes in the memcached pool is
+expected to be consistent. The algorithm simply computes an index into the array of memcached nodes:</p>
+
+<pre><code>hash(key) % length(nodes)
+</code></pre>
+
+<p>Obviously the selected index is a function of the number of memcached nodes, so variance in number of nodes produces
+variance in the node selected to store the key, which is undesirable.</p>
+
+<p>The consistent strategy generally provides a target node that does not vary with the number of nodes. This strategy
+should be used in cases where the memcached pool may grow or shrink dynamically, including due to frequent node
+failure.</p>
+
+<h3 id="object-serialization">Object Serialization</h3>
+<p>Memcached stores bytes of data, so CAS tickets must be serialized to a byte array prior to storage. CAS ships with
+a custom serialization component <code>KryoTranscoder</code> based on the <a href="https://code.google.com/p/kryo/">Kryo</a> serialization
+framework. This component is recommended over the default Java serialization mechanism since it produces much more
+compact data, which benefits both storage requirements and throughput.</p>
+
+<h2 id="component-configuration">Component Configuration</h2>
+<p>The following configuration is a template for <code>ticketRegistry.xml</code> Spring configuration:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
+       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+       <span class="na">xmlns:c=</span><span class="s">&quot;http://www.springframework.org/schema/c&quot;</span>
+       <span class="na">xmlns:p=</span><span class="s">&quot;http://www.springframework.org/schema/p&quot;</span>
+       <span class="na">xmlns:util=</span><span class="s">&quot;http://www.springframework.org/schema/util&quot;</span>
+       <span class="na">xsi:schemaLocation=</span><span class="s">&quot;</span>
+<span class="s">       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+<span class="s">       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistry&quot;</span>
+          <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.MemCacheTicketRegistry&quot;</span>
+          <span class="na">c:client-ref=</span><span class="s">&quot;memcachedClient&quot;</span>
+          <span class="na">c:ticketGrantingTicketTimeOut=</span><span class="s">&quot;${tgt.maxTimeToLiveInSeconds}&quot;</span>
+          <span class="na">c:serviceTicketTimeOut=</span><span class="s">&quot;${st.timeToKillInSeconds}&quot;</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;memcachedClient&quot;</span> <span class="na">class=</span><span class="s">&quot;net.spy.memcached.spring.MemcachedClientFactoryBean&quot;</span>
+          <span class="na">p:servers=</span><span class="s">&quot;${memcached.servers}&quot;</span>
+          <span class="na">p:protocol=</span><span class="s">&quot;${memcached.protocol}&quot;</span>
+          <span class="na">p:locatorType=</span><span class="s">&quot;${memcached.locatorType}&quot;</span>
+          <span class="na">p:failureMode=</span><span class="s">&quot;${memcached.failureMode}&quot;</span>
+          <span class="na">p:transcoder-ref=</span><span class="s">&quot;kryoTranscoder&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hashAlg&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;util:constant</span> <span class="na">static-field=</span><span class="s">&quot;net.spy.memcached.DefaultHashAlgorithm.${memcached.hashAlgorithm}&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;kryoTranscoder&quot;</span>
+          <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.support.kryo.KryoTranscoder&quot;</span>
+          <span class="na">init-method=</span><span class="s">&quot;initialize&quot;</span>
+          <span class="na">c:initialBufferSize=</span><span class="s">&quot;8192&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></div>
+
+<p><code>MemCacheTicketRegistry</code> properties reference:</p>
+
+<pre><code># It is common to run memcached on every CAS node
+memcached.servers=cas-1.example.org:11211,cas-2.example.org:11211,cas-3.example.org:11211
+memcached.hashAlgorithm=FNV1_64_HASH
+memcached.protocol=BINARY
+memcached.locatorType=ARRAY_MOD
+memcached.failureMode=Redistribute
+</code></pre>
+
+<h2 id="high-availability-considerations">High Availability Considerations</h2>
+<p>Memcached does not provide for replication by design, but the client is tolerant to node failures with
+<code>failureMode="Redistribute"</code>. In this mode a write failure will simply cause the client to flag the node as failed
+and remove it from the set of available nodes. It subsequently recomputes the node location function with the reduced
+node set to find a new node on which to store the key. If the node location function selects the same node,
+which is likely for the <em>CONSISTENT</em> strategy, a backup node will be computed. The value is written to and read from
+the failover node until the primary node recovers. The client will periodically check the failed node for liveliness
+and restore it to the node pool as soon as it recovers. When the primary node is resurrected, if it contains a value
+for a particular key, it would supercede the value known to the failover node. The most common effect on CAS behavior
+in this circumstance would occur when ticket-granting tickets have duplicate values, which could affect single sign-out
+and prevent access to services. In particular, services accessed and forced authentications that occur while the
+failover service is active would be lost when the failed node recovers. In most cases this behavior is tolerable,
+but it can be avoided by restarting the memcached service on the failed node prior to rejoining the cache pool.</p>
+
+<p>A read failure in <em>Redistribute</em> mode causes the node to be removed from the set of available nodes, a failover node
+is computed, and a value is read from that node. In most cases this results in a key not found situation. The effect
+on CAS behavior depends on the type of ticket requested:</p>
+
+<ul>
+  <li>Service ticket - Service access would be denied for the requested ticket, but permitted for subsequent attempts since
+a new ticket would be generated and validated.</li>
+  <li>Ticket-granting ticket - The SSO session would be terminated and reauthentication would be required.</li>
+</ul>
+
+<p>Read failures are thus entirely innocuous for environments where reauthentication is acceptable.</p>
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

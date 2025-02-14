@@ -1,0 +1,48 @@
+.highlight {
+  background-color: transparent;
+  position: relative;
+  margin-bottom: 25px;
+
+  pre, code {
+    font-family: "Operator Mono Book", "Consolas", "Andale Mono", "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: .8rem;
+    color: #006699;
+  }
+  
+  pre.highlight {
+    border-radius: 5px 5px 5px 5px;
+  }
+
+  table {
+    border-radius: 5px;
+    margin-bottom: 0;
+    
+    pre {
+      padding: 10px;
+      overflow: auto;
+      margin-bottom: 0;
+    }
+
+    td {
+      border-top: none;
+
+      &.gutter, &.rouge-gutter {
+        padding: 0;
+      }
+
+      &.code, &.rouge-code {
+        width: 100%;
+        padding: 0;
+
+        pre {
+          border-left-width: 0;
+        }
+      }
+    }
+  }
+
+}
+
+pre code table.rouge-table.table.table-responsive {
+  border-color: transparent;
+}

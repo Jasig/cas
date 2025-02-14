@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - Test Process</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            
+<h1 id="test-process">Test Process</h1>
+
+<p>This page documents the steps that a CAS developer/contributor should take for testing a CAS 
+server deployment during development. For additional
+instructions and guidance on the general build process, please <a href="Build-Process.html">see this page</a>.</p>
+
+<div class="alert alert-info"><strong>Contributions</strong><p>Patches submitted to the CAS codebase 
+in form of pull requests must pass all automated unit or integration tests, and/or 
+provide adequate unit or integration tests for the proposed changes. In the absence of appropriate test cases,
+the contribution most likely will not be accepted into the codebase and ultimately may be closed.</p></div>
+
+<h2 id="testing-modules">Testing Modules</h2>
+
+<p>To test the functionality provided by a given CAS module, execute the following steps:</p>
+
+<ul>
+  <li>For the tomcat, undertow or jetty webapp, add the module reference to the <code class="language-plaintext highlighter-rouge">webapp.gradle</code> build script of web application you intend to run:</li>
+</ul>
+
+<div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">implementation</span> <span class="nf">project</span><span class="o">(</span><span class="s2">":support:cas-server-support-modulename"</span><span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Alternatively, pass the required modules automatically:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>bc ldap,x509
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>…where <code class="language-plaintext highlighter-rouge">bc</code> is an <a href="Build-Process.html#sample-build-aliases">alias for building CAS</a>.</p>
+
+<p>Prepare <a href="Build-Process.html#embedded-containers">the embedded container</a>, to run and deploy the web application.</p>
+
+<h2 id="unit--integration-testing">Unit / Integration Testing</h2>
+
+<p>To simplify the test execution process, you may take advantage of the <code class="language-plaintext highlighter-rouge">testcas.sh</code> script found at the root of the repository as such:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c"># chmod +x ./testcas.sh</span>
+./testcas.sh <span class="nt">--category</span> &lt;category&gt; <span class="o">[</span><span class="nt">--test</span> &lt;test-class&gt;] <span class="o">[</span><span class="nt">--debug</span><span class="o">]</span> <span class="o">[</span><span class="nt">--with-coverage</span><span class="o">]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>To learn more about the script, use:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>./testcas.sh <span class="nt">--help</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>All unit and integration tests are executed by the <a href="Test-Process.html#continuous-integration">continuous integration system</a>.</p>
+
+<h2 id="code-coverage--metrics">Code Coverage &amp; Metrics</h2>
+
+<p>Code coverage metrics are collected and reported by the following platforms:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Badge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Codacy</td>
+      <td><a href="https://www.codacy.com/gh/apereo/cas/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=apereo/cas&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/29973e19266547dab7ab73f1a511c826" alt="Codacy Badge" /></a></td>
+    </tr>
+    <tr>
+      <td>SonarCloud</td>
+      <td><a href="https://sonarcloud.io/dashboard?id=org.apereo.cas%3Acas-server"><img src="https://sonarcloud.io/api/project_badges/measure?project=org.apereo.cas%3Acas-server&amp;metric=coverage" alt="Coverage" /></a></td>
+    </tr>
+    <tr>
+      <td>CodeCov</td>
+      <td><a href="https://codecov.io/gh/apereo/cas"><img src="https://codecov.io/gh/apereo/cas/branch/master/graph/badge.svg" alt="codecov" /></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Quality metrics are collected and reported by the following platforms:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Badge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Codacy</td>
+      <td><a href="https://www.codacy.com/gh/apereo/cas/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=apereo/cas&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/29973e19266547dab7ab73f1a511c826" alt="Codacy Badge" /></a></td>
+    </tr>
+    <tr>
+      <td>SonarCloud Quality Gate</td>
+      <td><a href="https://sonarcloud.io/dashboard?id=org.apereo.cas%3Acas-server"><img src="https://sonarcloud.io/api/project_badges/measure?project=org.apereo.cas%3Acas-server&amp;metric=alert_status" alt="Sonarqube Quality" /></a></td>
+    </tr>
+    <tr>
+      <td>SonarCloud Maintainability</td>
+      <td><a href="https://sonarcloud.io/dashboard?id=org.apereo.cas%3Acas-server"><img src="https://sonarcloud.io/api/project_badges/measure?project=org.apereo.cas%3Acas-server&amp;metric=sqale_rating" alt="Sonarqube Quality" /></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="browser--functional-testing">Browser &amp; Functional Testing</h2>
+
+<p>Automated browser testing is done via the <a href="https://pptr.dev/">Puppeteer framework</a>. Puppeteer is a Node library which provides a high-level 
+API to control Chrome or Chromium over the DevTools Protocol and runs headless by default.</p>
+
+<p>Functional tests start by generating a plain CAS overlay as a baseline that is able to run under HTTPS using a pre-generated keystore.
+This overlay is supplied the test scenario configuration that explains the required modules, properties, etc to use when CAS is deployed
+inside an embedded Apache Tomcat container. Once running, the Puppeteer script is executed by Node for the given test scenario to verify
+specific functionality such as successful logins, generation of tickets, etc.</p>
+
+<p>All functional and browser tests are executed by the <a href="Test-Process.html#continuous-integration">continuous integration system</a>.</p>
+
+<p>To install Puppeteer once:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>npm i <span class="nt">-g</span> puppeteer
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>To help simplify the testing process, you may use the following bash function in your <code class="language-plaintext highlighter-rouge">~/.profile</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="k">function </span>pupcas<span class="o">()</span> <span class="o">{</span>
+  <span class="nv">scenario</span><span class="o">=</span><span class="nv">$1</span>
+  <span class="nb">cd</span> /path/to/cas 
+  ./ci/tests/puppeteer/run.sh ./ci/tests/puppeteer/scenarios/<span class="s2">"</span><span class="k">${</span><span class="nv">scenario</span><span class="k">}</span><span class="s2">"</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>…which can later be invoked as:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>pupcas &lt;scenario-name&gt;
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>To see the list of available test scenarios:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>./gradlew <span class="nt">--build-cache</span> <span class="nt">--configure-on-demand</span> <span class="nt">--no-daemon</span> <span class="nt">-q</span> puppeteerScenarios
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Remote debugging is available on port <code class="language-plaintext highlighter-rouge">5000</code>. To successfully run tests, 
+you need to make sure <a href="https://stedolan.github.io/jq/">jq</a> is installed.</p>
+
+<h3 id="macos-firewall-popup">MacOS Firewall Popup</h3>
+
+<p>To allow the firewall to accept incoming network connections for Chromium on MacOS, 
+you may apply the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nv">chromium</span><span class="o">=</span><span class="s2">"/path/to/cas/ci/tests/puppeteer/node_modules/puppeteer/.local-chromium"</span>
+<span class="nb">sudo </span>codesign <span class="nt">--force</span> <span class="nt">--deep</span> <span class="nt">--sign</span> - <span class="s2">"</span><span class="k">${</span><span class="nv">chromium</span><span class="k">}</span><span class="s2">/mac-*/chrome-mac/Chromium.app"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="continuous-integration">Continuous Integration</h2>
+
+<p>Unit and integration tests are automatically executed by the CAS CI system, <a href="https://github.com/apereo/cas/actions">GitHub Actions</a>.</p>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Developer';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

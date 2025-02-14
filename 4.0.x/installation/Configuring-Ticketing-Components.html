@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Configuring Ticketing Components</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="configuring-ticketing-components">Configuring Ticketing Components</h1>
+<p>There are two core configurable ticketing components:</p>
+
+<ul>
+  <li><code>TicketRegistry</code> - Provides for durable ticket storage.</li>
+  <li><code>ExpirationPolicy</code> - Provides a policy framework for ticket expiration semantics.</li>
+</ul>
+
+<h2 id="ticket-registry">Ticket Registry</h2>
+<p>The deployment environment and technology expertise generally determine the particular <code>TicketRegistry</code> component.
+A cache-backed implementation is recommended for HA deployments, while the default <code>DefaultTicketRegistry</code> in-memory component may be suitable for small deployments.</p>
+
+<h3 id="default-in-memory-ticket-registry">Default (In-Memory) Ticket Registry</h3>
+<p><code>DefaultTicketRegistry</code> uses a <code>ConcurrentHashMap</code> for memory-backed ticket storage and retrieval.
+This component does not preserve ticket state across restarts. There are a few configuration knobs available:</p>
+
+<ul>
+  <li><code>initialCapacity</code> - <code>ConcurrentHashMap</code> initial capacity.</li>
+  <li><code>loadFactor</code> - <code>ConcurrentHashMap</code> load factor.</li>
+  <li><code>concurrencyLevel</code> - Allows tuning the <code>ConcurrentHashMap</code> for concurrent write support.</li>
+</ul>
+
+<p>All three arguments map to those of the <a href="http://goo.gl/qKKg7"><code>ConcurrentHashMap</code> constructor</a>.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistry&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.DefaultTicketRegistry&quot;</span>
+      <span class="na">c:initialCapacity=</span><span class="s">&quot;10000&quot;</span>
+      <span class="na">c:loadFactor=</span><span class="s">&quot;1&quot;</span>
+      <span class="na">c:concurrencyLevel=</span><span class="s">&quot;20&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h3 id="cache-based-ticket-registries">Cache-Based Ticket Registries</h3>
+<p>Cached-based ticket registries provide a high-performance solution for ticket storage in high availability
+deployments. Components for the following caching technologies are provided:</p>
+
+<ul>
+  <li><a href="Ehcache-Ticket-Registry.html">Ehcache</a></li>
+  <li><a href="JBoss-Cache-Ticket-Registry.html">JBoss Cache</a></li>
+  <li><a href="Memcached-Ticket-Registry.html">Memcached</a></li>
+</ul>
+
+<h3 id="rdbms-ticket-registries">RDBMS Ticket Registries</h3>
+<p>RDBMS-based ticket registries provide a distributed ticket store across multiple CAS nodes. Components for the following caching technologies are provided:</p>
+
+<ul>
+  <li><a href="JPA-Ticket-Registry.html">JPA</a></li>
+</ul>
+
+<h3 id="ticket-generators">Ticket Generators</h3>
+<p>CAS presents a pluggable architecture for generating unique ticket ids for each ticket type. The configuration of each generator is defined at <code>src\main\webapp\WEB-INF\spring-configuration\uniqueIdGenerators.xml</code>. Here’s a brief sample:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketGrantingTicketUniqueIdGenerator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.util.DefaultUniqueTicketIdGenerator&quot;</span>
+        <span class="na">c:maxLength=</span><span class="s">&quot;50&quot;</span> <span class="na">c:suffix=</span><span class="s">&quot;${host.name}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;serviceTicketUniqueIdGenerator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.util.DefaultUniqueTicketIdGenerator&quot;</span>
+    <span class="na">c:maxLength=</span><span class="s">&quot;20&quot;</span> <span class="na">c:suffix=</span><span class="s">&quot;${host.name}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;loginTicketUniqueIdGenerator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.util.DefaultUniqueTicketIdGenerator&quot;</span>
+    <span class="na">c:maxLength=</span><span class="s">&quot;30&quot;</span> <span class="na">c:suffix=</span><span class="s">&quot;${host.name}&quot;</span> <span class="nt">/&gt;</span>
+	
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;proxy20TicketUniqueIdGenerator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.util.DefaultUniqueTicketIdGenerator&quot;</span>
+    <span class="na">c:maxLength=</span><span class="s">&quot;20&quot;</span> <span class="na">c:suffix=</span><span class="s">&quot;${host.name}&quot;</span> <span class="nt">/&gt;</span>
+ 
+<span class="nt">&lt;util:map</span> <span class="na">id=</span><span class="s">&quot;uniqueIdGeneratorsMap&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;entry</span>
+		<span class="na">key=</span><span class="s">&quot;org.jasig.cas.authentication.principal.SimpleWebApplicationServiceImpl&quot;</span>
+		<span class="na">value-ref=</span><span class="s">&quot;serviceTicketUniqueIdGenerator&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/util:map&gt;</span>
+</code></pre></div>
+
+<h4 id="components">Components</h4>
+
+<h5 id="uniqueticketidgenerator"><code>UniqueTicketIdGenerator</code></h5>
+<p>Strategy parent interface that describes operations needed to generate a unique id for a ticket.</p>
+
+<h5 id="defaultuniqueticketidgenerator"><code>DefaultUniqueTicketIdGenerator</code></h5>
+<p>Uses numeric and random string generators to create a unique id, while supporting prefixes for each ticket type, as is outlined by the CAS protocol, as well as a suffix that typically is mapped to the CAS server node identifier in order to indicate which node is the author of this ticket. The latter configuration point helps with troubleshooting and diagnostics in a clustered CAS environment.</p>
+
+<h5 id="samlcompliantuniqueticketidgenerator"><code>SamlCompliantUniqueTicketIdGenerator</code></h5>
+<p>Unique Ticket Id Generator compliant with the SAML 1.1 specification for artifacts, that is also compliant with the SAML v2 specification.</p>
+
+<h3 id="ticket-registry-cleaner">Ticket Registry Cleaner</h3>
+<p>The ticket registry cleaner should be used for ticket registries that cannot manage their own state. That would include the default in-memory registry and the JPA ticket registry. Cache-based ticket registry implementation such as Memcached of Ehcache do not require a registry cleaner.</p>
+
+<h4 id="components-1">Components</h4>
+
+<h5 id="registrycleaner"><code>RegistryCleaner</code></h5>
+<p>Strategy interface to denote the start of cleaning the registry.</p>
+
+<h5 id="defaultticketregistrycleaner"><code>DefaultTicketRegistryCleaner</code></h5>
+<p>The default ticket registry cleaner scans the entire CAS ticket registry for expired tickets and removes them.  This process is only required so that the size of the ticket registry will not grow beyond a reasonable size.
+The functionality of CAS is not dependent on a ticket being removed as soon as it is expired. Locking strategies may be used to support high availability environments. In a clustered CAS environment with several CAS nodes executing ticket cleanup, it is desirable to execute cleanup from only one CAS node at a time. </p>
+
+<h5 id="lockingstrategy"><code>LockingStrategy</code></h5>
+<p>Strategy pattern for defining a locking strategy in support of exclusive execution of some process.</p>
+
+<h5 id="nooplockingstrategy"><code>NoOpLockingStrategy</code></h5>
+<p>No-Op locking strategy that allows the use of <code>DefaultTicketRegistryCleaner</code> in environments where exclusive access to the registry for cleaning is either unnecessary or not possible.</p>
+
+<h5 id="jpalockingstrategy"><code>JpaLockingStrategy</code></h5>
+<p>JPA 2.0 implementation of awn exclusive, non-reentrant lock, to be used with the JPA-backed ticket registry.</p>
+
+<h4 id="configuration">Configuration</h4>
+<p>If you’re using the default ticket registry configuration, your <code>/cas-server-webapp/WEB-INF/spring-configuration/ticketRegistry.xml</code> probably looks like this:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="c">&lt;!-- TICKET REGISTRY CLEANER --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistryCleaner&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner&quot;</span>
+    <span class="na">p:ticketRegistry-ref=</span><span class="s">&quot;ticketRegistry&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;jobDetailTicketRegistryCleaner&quot;</span>  <span class="na">class=</span><span class="s">&quot;org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean&quot;</span>
+    <span class="na">p:targetObject-ref=</span><span class="s">&quot;ticketRegistryCleaner&quot;</span>
+    <span class="na">p:targetMethod=</span><span class="s">&quot;clean&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;triggerJobDetailTicketRegistryCleaner&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.scheduling.quartz.SimpleTriggerBean&quot;</span>
+    <span class="na">p:jobDetail-ref=</span><span class="s">&quot;jobDetailTicketRegistryCleaner&quot;</span>
+    <span class="na">p:startDelay=</span><span class="s">&quot;20000&quot;</span>
+    <span class="na">p:repeatInterval=</span><span class="s">&quot;5000000&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>If you’re using the JPA ticket registry, your configuration should likely be similar to the following:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistryCleaner&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner&quot;</span>
+    <span class="na">p:ticketRegistry-ref=</span><span class="s">&quot;ticketRegistry&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;lock&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.support.JdbcLockingStrategy&quot;</span>
+         <span class="na">p:uniqueId=</span><span class="s">&quot;my_unique_machine&quot;</span>
+         <span class="na">p:applicationId=</span><span class="s">&quot;cas&quot;</span>
+         <span class="na">p:dataSource-ref=</span><span class="s">&quot;dataSource&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+ 
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;jobDetailTicketRegistryCleaner&quot;</span>
+       <span class="na">class=</span><span class="s">&quot;org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean&quot;</span>
+        <span class="na">p:targetObject-ref=</span><span class="s">&quot;ticketRegistryCleaner&quot;</span>
+        <span class="na">p:targetMethod=</span><span class="s">&quot;clean&quot;</span> <span class="nt">/&gt;</span>
+ 
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;triggerJobDetailTicketRegistryCleaner&quot;</span> 
+    <span class="na">class=</span><span class="s">&quot;org.springframework.scheduling.quartz.SimpleTriggerBean&quot;</span>
+        <span class="na">p:jobDetail-ref=</span><span class="s">&quot;jobDetailTicketRegistryCleaner&quot;</span>
+        <span class="na">p:startDelay=</span><span class="s">&quot;20000&quot;</span>
+        <span class="na">p:repeatInterval=</span><span class="s">&quot;5000000&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>This will configure the cleaner with the following defaults:</p>
+
+<ul>
+  <li>tableName = “LOCKS”</li>
+  <li>uniqueIdColumnName = “UNIQUE_ID”</li>
+  <li>applicationIdColumnName = “APPLICATION_ID”</li>
+  <li>expirationDataColumnName = “EXPIRATION_DATE”</li>
+  <li>platform = SQL92</li>
+  <li>lockTimeout = 3600 (1 hour)</li>
+</ul>
+
+<h2 id="ticket-expiration-policies">Ticket Expiration Policies</h2>
+<p>CAS supports a pluggable and extensible policy framework to control the expiration policy of ticket-granting tickets (TGT) and service tickets (ST). Both TGT and ST expiration policy beans are defined in the <code>/cas-server-webapp/src/main/webapp/WEB-INF/spring-configuration/ticketExpirationPolicies.xml</code> file in the CAS distribution. </p>
+
+<div class="alert alert-info"><strong>Policies Are Not Ticket-Specific</strong><p>Ticket expiration policies are not specific to a particular kind of ticket, so it is possible to apply a policy intended for service tickets to ticket-granting tickets, although it may make little sense to do so.</p></div>
+
+<h3 id="ticket-granting-ticket-policies">Ticket-Granting Ticket Policies</h3>
+<p>TGT expiration policy governs the time span during which an authenticated user may grant STs with a valid (non-expired) TGT without having to reauthenticate. An attempt to grant a ST with an expired TGT would require the user to reauthenticate to obtain a new (valid) TGT.</p>
+
+<h4 id="timeoutexpirationpolicy"><code>TimeoutExpirationPolicy</code></h4>
+<p>The default expiration policy applied to TGTs provides for most-recently-used expiration policy, similar to a Web server session timeout. For example, a 2-hour time span with this policy in effect would require a TGT to be used every 2 hours or less, otherwise it would be marked as expired.</p>
+
+<h5 id="parameters">Parameters</h5>
+
+<ul>
+  <li><code>timeToKillInMilliSeconds</code> - Maximum amount of inactivity in ms from the last time the ticket was used beyond which it is considered expired.</li>
+</ul>
+
+<h5 id="usage-example">Usage Example</h5>
+
+<div class="highlight"><pre><code class="xml"><span class="c">&lt;!-- TGT expires after 2 hours in inactivity --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;grantingTicketExpirationPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.support.TimeoutExpirationPolicy&quot;</span>
+      <span class="na">c:timeToKillInMilliSeconds=</span><span class="s">&quot;7200000&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h4 id="hardtimeoutexpirationpolicy"><code>HardTimeoutExpirationPolicy</code></h4>
+<p>The hard timeout policy provides for finite ticket lifetime as measured from the time of creation. For example, a 4-hour time span for this policy means that a ticket created at 1PM may be used up until 5PM; subsequent attempts to use it will mark it expired and the user will be forced to reauthenticate.</p>
+
+<h5 id="parameters-1">Parameters</h5>
+<ul>
+  <li><code>timeToKillInMilliSeconds</code> - Total ticket lifetime in ms.</li>
+</ul>
+
+<h5 id="usage-example-1">Usage Example</h5>
+
+<div class="highlight"><pre><code class="xml"><span class="c">&lt;!-- TGT expires 4 hours after creation --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;grantingTicketExpirationPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.support.HardTimeoutExpirationPolicy&quot;</span><span class="nt">&gt;</span>
+  c:timeToKillInMilliSeconds=&quot;14400000&quot; /&gt;
+</code></pre></div>
+
+<h4 id="throttleduseandtimeoutexpirationpolicy"><code>ThrottledUseAndTimeoutExpirationPolicy</code></h4>
+<p>The throttled timeout policy extends the TimeoutExpirationPolicy with the concept of throttling where a ticket may be used at most every N seconds. This policy was designed to thwart denial of service conditions where a rogue or misconfigured client attempts to consume CAS server resources by requesting high volumes of service tickets in a short time.</p>
+
+<h5 id="parameters-2">Parameters</h5>
+<ul>
+  <li><code>timeToKillInMilliSeconds</code> - Maximum amount of inactivity in ms from the last time the ticket was used beyond which it is considered expired.</li>
+  <li><code>timeInBetweenUsesInMilliSeconds</code> - The minimum amount of time permitted between consecutive uses of a ticket.</li>
+</ul>
+
+<h5 id="usage-example-2">Usage Example</h5>
+
+<div class="highlight"><pre><code class="xml"><span class="c">&lt;!--</span>
+<span class="c">TGT expires under one of two conditions:</span>
+<span class="c"> * More than 3 hours of inactivity</span>
+<span class="c"> * Used consecutively where less than 5 seconds has elapsed from the first use</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;grantingTicketExpirationPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.support.ThrottledUseAndTimeoutExpirationPolicy&quot;</span>
+  <span class="na">p:timeToKillInMilliSeconds=</span><span class="s">&quot;10800000&quot;</span>
+  <span class="na">p:timeInBetweenUsesInMilliSeconds=</span><span class="s">&quot;5000&quot;</span>
+<span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h4 id="neverexpiresexpirationpolicy"><code>NeverExpiresExpirationPolicy</code></h4>
+<p>The never expires policy allows tickets to exist indefinitely.</p>
+
+<div class="alert alert-warning"><strong>Usage Warning!</strong><p>Use of this policy has significant consequences to overall security policy and should be enabled only after thorough review by a qualified security team. There are also implications to server resource usage for the ticket registries backed by filesystem storage. Since disk storage for tickets can never be reclaimed for those registries with this policy in effect, use of this policy with those ticket registry implementations is strongly discouraged.</p></div>
+
+<h5 id="usage-example-3">Usage Example</h5>
+
+<div class="highlight"><pre><code class="xml"><span class="c">&lt;!-- TGT never expires --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;grantingTicketExpirationPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.support.NeverExpiresExpirationPolicy&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h4 id="remembermedelegatingexpirationpolicy"><code>RememberMeDelegatingExpirationPolicy</code></h4>
+<p>This policy implements applies to <a href="Configuring-Authentication-Components.html">long term authentication</a> features of CAS known as “Remember Me”. </p>
+
+<h5 id="usage-example-4">Usage Example</h5>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;grantingTicketExpirationPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.support.RememberMeDelegatingExpirationPolicy&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;sessionExpirationPolicy&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;grantingTicketExpirationPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.support.TimeoutExpirationPolicy&quot;</span>
+                <span class="na">c:timeToKillInMilliSeconds=</span><span class="s">&quot;xxxxxx&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;/property&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;rememberMeExpirationPolicy&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;grantingTicketExpirationPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.support.TimeoutExpirationPolicy&quot;</span>
+                <span class="na">c:timeToKillInMilliSeconds=</span><span class="s">&quot;xxxxxx&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h3 id="service-ticket-policies">Service Ticket Policies</h3>
+
+<h4 id="multitimeuseortimeoutexpirationpolicy"><code>MultiTimeUseOrTimeoutExpirationPolicy</code></h4>
+<p>This is the default policy applied to service tickets where a ticket is expired after a fixed number of uses or after a maximum period of inactivity elapses.</p>
+
+<h5 id="parameters-3">Parameters</h5>
+<ul>
+  <li><code>numberOfUses</code> - Maximum number of times the ticket can be used.</li>
+  <li><code>timeToKill</code> - Maximum amount of inactivity from the last time the ticket was used beyond which it is considered expired.</li>
+  <li><code>timeUnit</code> - The unit of time based on which <code>timeToKill</code> will be calculated.</li>
+</ul>
+
+<h5 id="usage-example-5">Usage Example</h5>
+
+<div class="highlight"><pre><code class="xml"><span class="c">&lt;!-- ST may be used exactly once and must be validated within 10 seconds. --&gt;</span>
+<span class="nt">&lt;util:constant</span> <span class="na">id=</span><span class="s">&quot;SECONDS&quot;</span> <span class="na">static-field=</span><span class="s">&quot;java.util.concurrent.TimeUnit.SECONDS&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;serviceTicketExpirationPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.support.MultiTimeUseOrTimeoutExpirationPolicy&quot;</span>
+      <span class="na">c:numberOfUses=</span><span class="s">&quot;1&quot;</span> <span class="na">c:timeToKillInMilliSeconds=</span><span class="s">&quot;10&quot;</span> <span class="na">c:timeUnit-ref=</span><span class="s">&quot;SECONDS&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

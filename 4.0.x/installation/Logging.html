@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Logging Configuration</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="logging">Logging</h1>
+<p>CAS provides a logging facility that logs important informational events like authentication success and failure; it can be customized to produce additional information for troubleshooting. CAS uses the Slf4J Logging framework as a facade for the <a href="http://logging.apache.org/log4j/‎">Log4J engine</a> by default. </p>
+
+<p>The log4j configuration file is located in <code>cas-server-webapp/src/main/webapp/WEB-INF/classes/log4j.xml</code>. By default logging is set to <code>INFO</code> for all functionality related to <code>org.jasig.cas</code> code and <code>WARN</code> for messages related to Spring framework, etc. For debugging and diagnostic purposes you may want to set these levels to  <code>DEBUG</code>. </p>
+
+<div class="alert alert-warning"><strong>Usage Warning!</strong><p>When in production though, you probably want to run them both as `WARN`.</p></div>
+
+<h2 id="components">Components</h2>
+<p>The log4j configuration is by default loaded using the following components at <code>cas-server-webapp/src/main/webapp/WEB-INF/spring-configuration/log4jConfiguration.xml</code>:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;log4jInitialization&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.beans.factory.config.MethodInvokingFactoryBean&quot;</span>
+    <span class="na">p:targetClass=</span><span class="s">&quot;org.springframework.util.Log4jConfigurer&quot;</span> <span class="na">p:targetMethod=</span><span class="s">&quot;initLogging&quot;</span> <span class="na">p:arguments-ref=</span><span class="s">&quot;arguments&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;util:list</span> <span class="na">id=</span><span class="s">&quot;arguments&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;value&gt;</span>${log4j.config.location:classpath:log4j.xml}<span class="nt">&lt;/value&gt;</span>
+   <span class="nt">&lt;value&gt;</span>${log4j.refresh.interval:60000}<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/util:list&gt;</span>
+</code></pre></div>
+
+<p>It is often time helpful to externalize <code>log4j.xml</code> to a system path to preserve settings between upgrades. The location of <code>log4j.xml</code> file as well as its refresh interval by default is on the runtime classpath and at minute intervals respective. These may be overriden by the <code>cas.properties</code> file</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># log4j.config.location=classpath:log4j.xml</span>
+<span class="c">#</span>
+<span class="c"># log4j refresh interval in millis</span>
+<span class="c"># log4j.refresh.interval=60000</span>
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<p>The <code>log4j.xml</code> file by default at <code>WEB-INF/classes</code> provides the following <code>appender</code> elements that decide where and how messages from components should be displayed. Two are provided by default that output messages to the system console and a <code>cas.log</code> file:</p>
+
+<h3 id="appenders">Appenders</h3>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;console&quot;</span> <span class="na">class=</span><span class="s">&quot;org.apache.log4j.ConsoleAppender&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;org.apache.log4j.PatternLayout&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;ConversionPattern&quot;</span> <span class="na">value=</span><span class="s">&quot;%d %p [%c] - &amp;lt;%m&amp;gt;%n&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/layout&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;cas&quot;</span> <span class="na">class=</span><span class="s">&quot;org.apache.log4j.RollingFileAppender&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;File&quot;</span> <span class="na">value=</span><span class="s">&quot;cas.log&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;MaxFileSize&quot;</span> <span class="na">value=</span><span class="s">&quot;512KB&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;MaxBackupIndex&quot;</span> <span class="na">value=</span><span class="s">&quot;3&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;org.apache.log4j.PatternLayout&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;ConversionPattern&quot;</span> <span class="na">value=</span><span class="s">&quot;%d %p [%c] - %m%n&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/layout&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+</code></pre></div>
+
+<h3 id="loggers">Loggers</h3>
+<p>Additional loggers are available to specify the logging level for component categories.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;org.springframework&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&quot;WARN&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+
+<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;org.springframework.webflow&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&quot;WARN&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+
+<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;org.jasig&quot;</span> <span class="na">additivity=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&quot;INFO&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;cas&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+
+<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;com.github.inspektr.audit.support.Slf4jLoggingAuditTrailManager&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&quot;INFO&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;cas&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+
+<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;org.jasig.cas.web.flow&quot;</span> <span class="na">additivity=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&quot;INFO&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;cas&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+</code></pre></div>
+
+<h2 id="performance-statistics">Performance Statistics</h2>
+<p>CAS also uses the <a href="http://perf4j.codehaus.org/">Perf4J framework</a>, that provides set of utilities for calculating and displaying performance statistics. Similar to above, there are specific appenders and loggers available for logging performance data.</p>
+
+<h3 id="appenders-1">Appenders</h3>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;CoalescingStatistics&quot;</span> <span class="na">class=</span><span class="s">&quot;org.perf4j.log4j.AsyncCoalescingStatisticsAppender&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;TimeSlice&quot;</span> <span class="na">value=</span><span class="s">&quot;60000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;fileAppender&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;graphExecutionTimes&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;graphExecutionTPS&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+
+<span class="c">&lt;!-- This file appender is used to output aggregated performance statistics --&gt;</span>
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;fileAppender&quot;</span> <span class="na">class=</span><span class="s">&quot;org.apache.log4j.FileAppender&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;File&quot;</span> <span class="na">value=</span><span class="s">&quot;perfStats.log&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;org.apache.log4j.PatternLayout&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;ConversionPattern&quot;</span> <span class="na">value=</span><span class="s">&quot;%m%n&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/layout&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;graphExecutionTimes&quot;</span> <span class="na">class=</span><span class="s">&quot;org.perf4j.log4j.GraphingStatisticsAppender&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Possible GraphTypes are Mean, Min, Max, StdDev, Count and TPS --&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;GraphType&quot;</span> <span class="na">value=</span><span class="s">&quot;Mean&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- The tags of the timed execution blocks to graph are specified here --&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;TagNamesToGraph&quot;</span> <span class="na">value=</span><span class="s">&quot;DESTROY_TICKET_GRANTING_TICKET,GRANT_SERVICE_TICKET,GRANT_PROXY_GRANTING_TICKET,VALIDATE_SERVICE_TICKET,CREATE_TICKET_GRANTING_TICKET,AUTHENTICATE&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;graphExecutionTPS&quot;</span> <span class="na">class=</span><span class="s">&quot;org.perf4j.log4j.GraphingStatisticsAppender&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;GraphType&quot;</span> <span class="na">value=</span><span class="s">&quot;TPS&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;TagNamesToGraph&quot;</span> <span class="na">value=</span><span class="s">&quot;DESTROY_TICKET_GRANTING_TICKET,GRANT_SERVICE_TICKET,GRANT_PROXY_GRANTING_TICKET,VALIDATE_SERVICE_TICKET,CREATE_TICKET_GRANTING_TICKET,AUTHENTICATE&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+</code></pre></div>
+
+<h3 id="loggers-1">Loggers</h3>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;org.perf4j.TimingLogger&quot;</span> <span class="na">additivity=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&quot;INFO&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;CoalescingStatistics&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/logger&gt;</span>
+</code></pre></div>
+
+<h3 id="sample-output">Sample Output</h3>
+
+<div class="highlight"><pre><code class="bash">Performance Statistics   2013-12-15 00:19:00 - 2013-12-15 00:20:00
+Tag                                                  Avg<span class="o">(</span>ms<span class="o">)</span>         Min         Max     Std Dev       Count
+
+Performance Statistics   2013-12-15 00:24:00 - 2013-12-15 00:25:00
+Tag                                                  Avg<span class="o">(</span>ms<span class="o">)</span>         Min         Max     Std Dev       Count
+CREATE_TICKET_GRANTING_TICKET                        42215.0       42215       42215         0.0           1
+GRANT_SERVICE_TICKET                                 21023.0       21023       21023         0.0           1
+</code></pre></div>
+
+<h1 id="audits">Audits</h1>
+<p>CAS uses the <a href="https://github.com/dima767/inspektr">Inspektr framework</a> for auditing purposes and statistics. The Inspektr project allows for non-intrusive auditing and logging of the coarse-grained execution paths e.g. Spring-managed beans method executions by using annotations and Spring-managed <code>@Aspect</code>-style aspects.</p>
+
+<h2 id="components-1">Components</h2>
+
+<h3 id="audittrailmanagementaspect"><code>AuditTrailManagementAspect</code></h3>
+<p>Aspect modularizing management of an audit trail data concern.</p>
+
+<h3 id="slf4jloggingaudittrailmanager"><code>Slf4jLoggingAuditTrailManager</code></h3>
+<p><code>AuditTrailManager</code> that dumps auditable information to a configured logger based on SLF4J, at the <code>INFO</code> level.</p>
+
+<h3 id="jdbcaudittrailmanager"><code>JdbcAuditTrailManager</code></h3>
+<p><code>AuditTrailManager</code> to persist the audit trail to the <code>AUDIT_TRAIL</code> table in a rational database.</p>
+
+<h3 id="ticketasfirstparameterresourceresolver"><code>TicketAsFirstParameterResourceResolver</code></h3>
+<p><code>ResourceResolver</code> that can determine the ticket id from the first parameter of the method call.</p>
+
+<h3 id="ticketorcredentialprincipalresolver"><code>TicketOrCredentialPrincipalResolver</code></h3>
+<p><code>PrincipalResolver</code> that can retrieve the username from either the Ticket or from the <code>Credential</code>.</p>
+
+<h2 id="configuration-1">Configuration</h2>
+<p>Audit functionality is specifically controlled by the <code>WEB-INF/spring-configuration/auditTrailContext.xml</code>. Configuration of the audit trail manager is defined inside <code>deployerConfigContext.xml</code>.</p>
+
+<h3 id="database-audits">Database Audits</h3>
+<p>By default, audit messages appear in log files via the <code>Slf4jLoggingAuditTrailManager</code>. If you intend to use a database for auditing functionality, adjust the audit manager to match the sample configuration below:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;auditManager&quot;</span> <span class="na">class=</span><span class="s">&quot;com.github.inspektr.audit.support.JdbcAuditTrailManager&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;inspektrTransactionTemplate&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;dataSource&quot;</span> <span class="na">ref=</span><span class="s">&quot;dataSource&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;cleanupCriteria&quot;</span> <span class="na">ref=</span><span class="s">&quot;auditCleanupCriteria&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;auditCleanupCriteria&quot;</span>
+  <span class="na">class=</span><span class="s">&quot;com.github.inspektr.audit.support.MaxAgeWhereClauseMatchCriteria&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">value=</span><span class="s">&quot;180&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<p>Refer to <a href="https://github.com/dima767/inspektr/wiki/Inspektr-Auditing">Inspektr documentation</a> on how to create the database schema.</p>
+
+<h2 id="sample-log-output">Sample Log Output</h2>
+
+<div class="highlight"><pre><code class="bash">WHO: org.jasig.cas.support.oauth.authentication.principal.OAuthCredentials@6cd7c975
+WHAT: supplied credentials: org.jasig.cas.support.oauth.authentication.principal.OAuthCredentials@6cd7c975
+ACTION: AUTHENTICATION_SUCCESS
+APPLICATION: CAS
+WHEN: Mon Aug 26 12:35:59 IST 2013
+CLIENT IP ADDRESS: 172.16.5.181
+SERVER IP ADDRESS: 192.168.200.22
+
+WHO: org.jasig.cas.support.oauth.authentication.principal.OAuthCredentials@6cd7c975
+WHAT: TGT-9-qj2jZKQUmu1gQvXNf7tXQOJPOtROvOuvYAxybhZiVrdZ6pCUwW-cas01.example.org
+ACTION: TICKET_GRANTING_TICKET_CREATED
+APPLICATION: CAS
+WHEN: Mon Aug 26 12:35:59 IST 2013
+CLIENT IP ADDRESS: 172.16.5.181
+SERVER IP ADDRESS: 192.168.200.22
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Protocol Overview</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    
+<h1 id="protocols-overview">Protocols Overview</h1>
+
+<p>The following protocols are supported and provided by CAS:</p>
+
+<ul>
+  <li><a href="CAS-Protocol.html">CAS</a></li>
+  <li><a href="OpenID-Protocol.html">OpenID</a></li>
+  <li><a href="OAuth-Protocol.html">OAuth</a></li>
+  <li><a href="OIDC-Protocol.html">OpenID Connect</a></li>
+  <li><a href="WS-Federation-Protocol.html">WS Federation</a></li>
+  <li><a href="SAML-Protocol.html">SAML1</a></li>
+  <li><a href="../authentication/Configuring-SAML2-Authentication.html">SAML2</a></li>
+  <li><a href="REST-Protocol.html">REST Protocol</a></li>
+</ul>
+
+<h2 id="design">Design</h2>
+
+<p>CAS presents itself as a multilingual platform supporting protocols such as CAS, SAML2, OAuth2 and OpenID Connect, etc. Support and functionality for each of these protocols continually improves per every iteration and release of the software thanks to excellent community feedback and adoption. While almost all such protocols are similar in nature and intention, they all have their own specific bindings, parameters, payload and security requirements. This section provides a quick introduction on how existing protocols are supported in CAS.</p>
+
+<p>It all starts with something rather trivial: The Bridge.</p>
+
+<h3 id="the-bridge">The Bridge</h3>
+
+<p>The bridge <em>design pattern</em> is an approach where an intermediary sits between the client and the server, translating requests back and forth. It acts as a link between the two sides allowing authentication requests from the client to be translated, massaged and transformed and then routed “invisibly” to CAS and then back.</p>
+
+<p>This is a neat trick because the client does not care how the authentication request is processes once it’s submitted. The <em>thing</em> that receives that request, acting as a bridge can do anything required to process that request and ultimately submitting some sort of response back to the client. The bridge also does not care what external authentication system handles and honors that request and how all that processing internally works. All the bridge cares about is, “I routed the request to X. As long as X gives me back the right stuff, I should be fine to resume”.</p>
+
+<p>So the bridge for the most part is the “control tower” of the operation. It speaks many languages and protocols, and just like any decent translator, it knows about the quirks and specifics of each language and as such is able to dynamically translate the technical lingo.</p>
+
+<h3 id="supported-protocols">Supported Protocols</h3>
+
+<p>If you understand the above strategy, then you would be glad to learn that <em>almost</em> all protocols supported by CAS operate with the same exact intentions. A given CAS deployment is equipped with embedded plugins/bridges/modules that know how to speak SAML2 and CAS, OAuth2 and CAS, or OpenID Connect and CAS or whatever. The right-hand side of that equation is always CAS when you consider, as an example, the following authentication flow with an OAuth2-enabled client application:</p>
+
+<ol>
+  <li>The CAS deployment has turned on the OAuth2 plugin.</li>
+  <li>An OAuth2 authorization request is submitted to the relevant CAS endpoint.</li>
+  <li>The OAuth2 plugin verifies the request and translates it to a CAS authentication request!</li>
+  <li>The authentication request is routed to the relevant CAS login endpoint.</li>
+  <li>User authenticates and CAS routes the flow back to the OAuth2 plugin, having issued a service ticket for the plugin.</li>
+  <li>The OAuth2 plugin attempts to validate that ticket to retrieve the necessary user profile and attributes.</li>
+  <li>The OAuth2 plugin then proceeds to issue the right OAuth2 response by translating and transforming the profile and validated assertions into what the client application may need.</li>
+</ol>
+
+<div class="alert alert-info"><strong>Note</strong><p>The above strategy applies exactly the same, if CAS decides to delegate the authentication to an external identity provider such as Facebook or a SAML2 identity provider.</p></div>
+
+<p>The right-hand side of the flow is always CAS, because the plugin always translates protocol requests into CAS requests. Another way of looking at it is that all protocol plugins and modules are themselves clients of the CAS server! They are issued service tickets and they proceed to validate them just like any other CAS-enabled client. Just like above, to the OAuth2-enabled client all such details are totally transparent and as long as “the right stuff” is produced back to the client, it shall not care.</p>
+
+<p>There are some internal technical and architectural advantages to this approach. Namely:</p>
+
+<p>The core of the CAS authentication engine, flow and components need not be modified at all. After all, we are just integrating yet another client even if it’s embedded directly in CAS itself. Because of that, support for that protocol can be very easily removed, if needed. After all, protocols come and go every day. Finally and just like any other CAS client, all features of the CAS server are readily available and translated to the relevant client removing the need to duplicate and re-create protocol-specific configuration as much as  possible. Things like access strategies, attribute release, username providers, etc.</p>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = 'Protocols';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

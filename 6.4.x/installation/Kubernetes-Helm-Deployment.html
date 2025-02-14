@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - Kubernetes Helm Deployment</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            
+<h1 id="kubernetes-helm-installation">Kubernetes Helm Installation</h1>
+
+<p>The <a href="WAR-Overlay-Initializr.html">CAS WAR Overlay Initializr</a> includes a CAS Helm chart that can 
+be used to deploy CAS on a Kubernetes cluster. This document won’t discuss setting up a production
+Kubernetes cluster, but it will walk through setting CAS up using a <a href="https://helm.sh/">Helm</a> chart 
+on a local Kubernetes cluster. This document assumes the <a href="WAR-Overlay-Initializr.html">CAS Initializr</a> 
+has been used to create an overlay since that Initializr project houses the Helm chart and 
+the overlay generated by the initializr is needed for building the CAS container image.</p>
+
+<div class="alert alert-info"><strong>Note</strong>
+<p>This Helm chart is new and once it stabilizes it may be published to a helm repository. 
+For now it is probably best considered as a deployment option for deployers with CAS and Kubernetes experience.</p></div>
+
+<h1 id="what-is-helm">What is Helm?</h1>
+
+<p>Helm Charts are a set of templates that are combined with deployment specific values
+to generate Kubernetes configuration yaml. The deployer of a Helm chart should be able to 
+make their own values file that overrides any default values that the chart defines and install
+the application without having to change the templates. If the templates need changing, 
+those changes are candidates for contributing back the Helm chart, so it will get more customizable 
+and support more deployment options over time.</p>
+
+<h1 id="cas-helm-chart-overview">CAS Helm Chart Overview</h1>
+
+<p>The current helm chart for CAS will deploy CAS with a Spring Boot Admin Server.
+Eventually it might be nice to support a config-server and have cas-management or cas-shell available.<br />
+The chart supports mapping in arbitrary volumes and cas config can be specified in values files.
+The config could be in cloud config rather than kubernetes config maps, the service registry
+could be in a database, git, or a simple json registry in a kubernetes persistent volume. 
+The ticket registry could use a standard helm chart for redis, postgresql, or mongo, etc.
+Currently, the chart is using SSL between ingress controller and the CAS and Boot Admin servers.
+This may be overkill and involves all the pain that comes with SSL (e.g. trust &amp; hostname verification).
+This chart uses <code class="language-plaintext highlighter-rouge">StatefulSet</code> for CAS rather than a <code class="language-plaintext highlighter-rouge">Deployment</code> but this may change in the future or
+become configurable.</p>
+
+<p>The Spring Boot Admin CAS server discovery method should probably change to “cloud” discovery eventually.</p>
+
+<h2 id="installing-cas-on-local-kubernetes-installation">Installing CAS on local Kubernetes Installation</h2>
+
+<p>The following sections provide an overview of the steps for installing Helm and Kubernetes and
+getting the CAS Helm chart installed and running locally.</p>
+
+<h3 id="install-helm-and-kubectl">Install Helm and Kubectl</h3>
+
+<p>Helm v3 and Kubectl are just single binary programs. Kubectl may come with the kubernetes
+installation, but both should be downloaded and put them in the PATH.</p>
+
+<ul>
+  <li>Install <a href="https://helm.sh/docs/intro/install/">Helm</a></li>
+  <li>Install <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">Kubectl</a></li>
+</ul>
+
+<h3 id="install-kubernetes">Install Kubernetes</h3>
+
+<p>There are multiple options for running a Kubernetes cluster on Mac, Windows or Linux, but
+they all require Linux as a VM or as the host OS. The CAS Helm Chart is installed and tested
+on a K3S Kubernetes installation as part of the continuous integration scripts of the CAS Initializr 
+so that method should always work, but it does require users of Windows and Mac to install
+a Linux virtual machine (e.g. running Ubuntu).</p>
+
+<h3 id="k3s-kubernetes">K3S Kubernetes</h3>
+
+<p><a href="https://k3s.io/">k3s</a> works on linux, very light-weight and easy to install for development. Installing Docker is not required.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="c"># install k3s, without traefik ingress controller</span>
+curl <span class="nt">-sfL</span> https://get.k3s.io | <span class="nv">INSTALL_K3S_EXEC</span><span class="o">=</span><span class="s2">"server --disable traefik"</span> sh
+<span class="c"># the following export is needed for helm, put in profile</span>
+<span class="nb">export </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/etc/rancher/k3s/k3s.yaml
+<span class="c"># build a CAS image from the overlay generated from Initializr</span>
+./gradlew clean build jibBuildTar <span class="nt">--refresh-dependencies</span>
+<span class="c"># import the image to k3s (k3s can pull images from registries but can't see local docker images)</span>
+k3s ctr images import build/jib-image.tar
+<span class="c"># verify the image is loaded</span>
+k3s ctr images <span class="nb">ls</span> | <span class="nb">grep </span>cas
+<span class="c"># Go to folder with helm chart</span>
+<span class="nb">cd </span>helm 
+<span class="c"># create secret for tomcat</span>
+./create-cas-server-keystore-secret.sh
+<span class="c"># create secret for ingress controller to use with CAS ingress (nginx-ingress will use default if not created)</span>
+./create-ingress-tls.sh
+<span class="c"># create configmap containing SSL trust store</span>
+./create-truststore.sh
+<span class="c"># install cas-server helm chart</span>
+helm upgrade <span class="nt">--install</span> cas-server ./cas-server
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="other-options">Other Options</h4>
+
+<ul>
+  <li><a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a>
+    <ul>
+      <li>Install Docker Desktop</li>
+      <li>Enable Kubernetes in Settings</li>
+      <li><a href="#install-helm-and-kubectl">Helm and Kubectl</a> should be installed and added to path of bash terminal 
+(Use Git Bash or Cygwin or Msys2 on Windows)</li>
+      <li>Run shell scripts for installing certs and trust stores (in <code class="language-plaintext highlighter-rouge">helm</code> sub-directory)</li>
+      <li>Build CAS image via <code class="language-plaintext highlighter-rouge">./gradlew clean build jibBuildTar --refresh-dependencies</code></li>
+      <li>Load CAS image locally into Docker <code class="language-plaintext highlighter-rouge">docker load &lt; build/jib-image.tar</code></li>
+      <li>Install <a href="#install-ingress-controller">Ingress Controller</a></li>
+      <li>Install CAS Helm chart</li>
+    </ul>
+  </li>
+  <li><a href="https://minikube.sigs.k8s.io/docs/start/">Minikube</a></li>
+</ul>
+
+<h3 id="install-ingress-controller">Install Ingress Controller</h3>
+
+<p>The CAS Helm chart is only tested with Kubernetes ingress-nginx, feel free to add support for other ingress controllers. Kubernetes Nginx 
+Ingress Installation Guide can be found <a href="https://kubernetes.github.io/ingress-nginx/deploy/">here</a>.</p>
+
+<p>To install the Ingress controller using Helm and the <code class="language-plaintext highlighter-rouge">ingress-nginx</code> Helm chart:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+kubectl create namespace ingress-nginx
+helm <span class="nb">install</span> <span class="nt">--namespace</span> ingress-nginx ingress-nginx ingress-nginx/ingress-nginx
+kubectl <span class="nb">wait</span> <span class="nt">--namespace</span> ingress-nginx <span class="se">\</span>
+  <span class="nt">--for</span><span class="o">=</span><span class="nv">condition</span><span class="o">=</span>ready pod <span class="se">\</span>
+  <span class="nt">--selector</span><span class="o">=</span>app.kubernetes.io/component<span class="o">=</span>controller <span class="se">\</span>
+  <span class="nt">--timeout</span><span class="o">=</span>120s
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="install-cas-server-helm-chart">Install CAS Server Helm Chart</h3>
+
+<p>Helm charts consist of templates which are combined with values from one or more values files
+(and command line set arguments) to produce kubernetes yaml. The chart folder (containing the <code class="language-plaintext highlighter-rouge">templates</code> directory)
+contains a default values.yaml that is used by default but additional values files should be
+specified on the command line to override the default values as appropriate.
+The following examples use the <code class="language-plaintext highlighter-rouge">default</code> namespace but <code class="language-plaintext highlighter-rouge">--namespace cas</code> can be added to any 
+of the following <code class="language-plaintext highlighter-rouge">helm</code> commands to put CAS in its own kubernetes namespace (The namespace would 
+need to be created first, e.g. <code class="language-plaintext highlighter-rouge">kubectl create namespace cas</code>)</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="c"># delete cas-server helm chart install</span>
+helm delete cas-server
+<span class="c"># install cas-server chart </span>
+helm <span class="nb">install </span>cas-server ./cas-server
+<span class="c"># install or update cas-server</span>
+helm upgrade <span class="nt">--install</span> cas-server ./cas-server
+<span class="c"># use local values file to override defaults </span>
+helm upgrade <span class="nt">--install</span> cas-server <span class="nt">--values</span> values-local.yaml ./cas-server
+<span class="c"># see kubernetes yaml without installing  </span>
+helm upgrade <span class="nt">--install</span> cas-server <span class="nt">--values</span> values-local.yaml ./cas-server <span class="nt">--dry-run</span> <span class="nt">--debug</span>
+<span class="c"># sometimes dry-run fails b/c yaml can't convert to json so use template instead to see problem</span>
+helm template cas-server <span class="nt">--values</span> values-local.yaml ./cas-server <span class="nt">--debug</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="useful-kubectl-commands">Useful <code class="language-plaintext highlighter-rouge">kubectl</code> Commands</h3>
+
+<p>Don’t forget to add <code class="language-plaintext highlighter-rouge">-n</code> or <code class="language-plaintext highlighter-rouge">--namespace</code> if using non-default namespace.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="c"># Look at the pods to see the status</span>
+kubectl get pods 
+<span class="c"># Describe the CAS pod to see why it isn't starting</span>
+kubectl describe pod cas-server-0
+<span class="c"># tail the console logs</span>
+kubectl logs cas-server-0 <span class="nt">-f</span>
+<span class="c"># exec into container</span>
+kubectl <span class="nb">exec</span> <span class="nt">-it</span> cas-server-0 sh
+<span class="c"># bounce CAS pod</span>
+kubectl delete pod cas-server-0
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="browse-to-cas">Browse to CAS</h3>
+
+<p>Make sure host file entries exist for whatever host is listed in values file for this entry:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="na">ingress</span><span class="pi">:</span>
+  <span class="na">hosts</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s">cas.example.org</span>
+      <span class="na">paths</span><span class="pi">:</span> 
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">/cas"</span>
+  <span class="na">tls</span><span class="pi">:</span> 
+    <span class="pi">-</span> <span class="na">secretName</span><span class="pi">:</span> <span class="s">cas-server-ingress-tls</span>
+      <span class="na">hosts</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">cas.example.org</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c"># host entry</span>
+127.0.0.1 cas.example.org 
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>If the CAS pod is running, browse to <code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/login</code>. 
+There is also an ingress for the CAS Spring Boot Admin server that should be accessible
+using the host name specified for the Boot Admin’s ingress.<br />
+The CAS Spring Boot Admin server has its own ingress since it is meant to be internally accessible 
+and CAS is likely external, but both could be internal or external.</p>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Installation';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

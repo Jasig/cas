@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - SysLog Logging Configuration</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            
+<h1 id="syslog-logging">SysLog Logging</h1>
+
+<p>CAS logging framework does have the ability to route messages to an external
+syslog instance. To configure this,
+you first to configure the <code class="language-plaintext highlighter-rouge">SysLogAppender</code> and then specify which
+messages needs to be routed over to this instance:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre>...
+<span class="nt">&lt;Appenders&gt;</span>
+    <span class="nt">&lt;Syslog</span> <span class="na">name=</span><span class="s">"SYSLOG"</span> <span class="na">format=</span><span class="s">"RFC5424"</span> <span class="na">host=</span><span class="s">"localhost"</span> <span class="na">port=</span><span class="s">"8514"</span>
+            <span class="na">protocol=</span><span class="s">"TCP"</span> <span class="na">appName=</span><span class="s">"MyApp"</span> <span class="na">includeMDC=</span><span class="s">"true"</span> <span class="na">mdcId=</span><span class="s">"mdc"</span>
+            <span class="na">facility=</span><span class="s">"LOCAL0"</span> <span class="na">enterpriseNumber=</span><span class="s">"18060"</span> <span class="na">newLine=</span><span class="s">"true"</span>
+            <span class="na">messageId=</span><span class="s">"Audit"</span> <span class="na">id=</span><span class="s">"App"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/Appenders&gt;</span>
+...
+<span class="nt">&lt;Logger</span> <span class="na">name=</span><span class="s">"org.apereo"</span> <span class="na">additivity=</span><span class="s">"true"</span> <span class="na">level=</span><span class="s">"debug"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"cas"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"SYSLOG"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/Logger&gt;</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="alert alert-warning">
+  <strong>Pay Attention</strong><br /><a href="Logging-MDC.html">Mapped Diagnostic Context</a> (<code>MDC</code>) may contain the password. Setting <code>includeMDC=true</code> sends clear password as a variable to SysLog.
+</div>
+
+<p>You can also configure the remote destination output over
+SSL and specify the related keystore configuration:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre>...
+
+<span class="nt">&lt;Appenders&gt;</span>
+    <span class="nt">&lt;TLSSyslog</span> <span class="na">name=</span><span class="s">"bsd"</span> <span class="na">host=</span><span class="s">"localhost"</span> <span class="na">port=</span><span class="s">"6514"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;SSL&gt;</span>
+        <span class="nt">&lt;KeyStore</span> <span class="na">location=</span><span class="s">"log4j2-keystore.jks"</span> <span class="na">password=</span><span class="s">"changeme"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;TrustStore</span> <span class="na">location=</span><span class="s">"truststore.jks"</span> <span class="na">password=</span><span class="s">"changeme"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/SSL&gt;</span>
+    <span class="nt">&lt;/TLSSyslog&gt;</span>
+<span class="nt">&lt;/Appenders&gt;</span>
+
+...
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Logs & Audits';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

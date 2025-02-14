@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Maven Overlay Installation</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="maven-overlay-installation">Maven Overlay Installation</h1>
+<p>CAS installation is a fundamentally source-oriented process, and we recommend a
+<a href="http://maven.apache.org/plugins/maven-war-plugin/overlays.html">Maven WAR overlay</a> project to organize
+customizations such as component configuration and UI design.
+The output of a Maven WAR overlay build is a <code>cas.war</code> file that can be deployed on a Java servlet container like
+<a href="http://tomcat.apache.org/whichversion.html">Tomcat</a>.</p>
+
+<p>A simple Maven WAR overlay project is provided for reference and study:
+<a href="https://github.com/UniconLabs/simple-cas4-overlay-template">https://github.com/UniconLabs/simple-cas4-overlay-template</a></p>
+
+<p>The following list of CAS components are those most often customized by deployers:</p>
+
+<ol>
+  <li>Authentication handlers (i.e. <code>LdapAuthenticationHandler</code>)</li>
+  <li>Storage backend (i.e. <code>MemcachedTicketRegistry</code>)</li>
+  <li>View layer files (JSP/CSS/Javascript)</li>
+</ol>
+
+<p>The first two are controlled by modifying Spring XML configuration files under
+<code>src/main/webapp/WEB-INF/spring-configuration</code>, the latter by modifying JSP and CSS files under
+<code>src/main/webapp/WEB-INF/view/jsp/default</code> in the Maven WAR overlay project. Every aspect of CAS can be controlled by
+adding, removing, or modifying files in the overlay; it’s also possible and indeed common to customize the behavior of
+CAS by adding third-party components that implement CAS APIs as Java source files or dependency references.</p>
+
+<p>Once an overlay project has been created, the <code>cas.war</code> file must be built and subsequently deployed into a Java
+servlet container like Tomcat. The following set of commands, issued from the Maven WAR overlay project root
+directory, provides a sketch of how to accomplish this on a Unix platform.</p>
+
+<pre><code>mvn clean package
+cp target/cas.war $CATALINA_HOME/webapps/
+$CATALINA_HOME/bin/catalina.sh start
+</code></pre>
+
+<h2 id="configuration-files">Configuration Files</h2>
+<p>CAS configuration is controlled primarily by Spring XML context configuration files. At a minimum, every deployer
+must customize <code>deployerConfigContext.xml</code> and <code>cas.properties</code> by including them in the Maven WAR overlay,
+but there are other optional configuration files that may be included in the overlay for further customization
+or to provide additional features. The following exploded filesystem hierarchy shows how files should be organized
+in the overlay:</p>
+
+<pre><code>├── src
+│   ├── main
+│   │   └── webapp
+│   │       ├── WEB-INF
+│   │       │   ├── cas-servlet.xml
+│   │       │   ├── cas.properties
+│   │       │   ├── deployerConfigContext.xml
+│   │       │   ├── login-webflow.xml
+│   │       │   ├── logout-webflow.xml
+│   │       │   ├── restlet-servlet.xml
+│   │       │   ├── spring-configuration
+│   │       │   │   ├── applicationContext.xml
+│   │       │   │   ├── argumentExtractorsConfiguration.xml
+│   │       │   │   ├── auditTrailContext.xml
+│   │       │   │   ├── filters.xml
+│   │       │   │   ├── log4jConfiguration.xml
+│   │       │   │   ├── propertyFileConfigurer.xml
+│   │       │   │   ├── securityContext.xml
+│   │       │   │   ├── ticketExpirationPolicies.xml
+│   │       │   │   ├── ticketGrantingTicketCookieGenerator.xml
+│   │       │   │   ├── ticketRegistry.xml
+│   │       │   │   ├── uniqueIdGenerators.xml
+│   │       │   │   └── warnCookieGenerator.xml
+│   │       │   ├── unused-spring-configuration
+│   │       │   │   ├── clearpass-configuration.xml
+│   │       │   │   ├── lppe-configuration.xml
+│   │       │   │   └── mbeans.xml
+</code></pre>
+
+<p>The approach to Spring configuration is to group related components into a single configuration file, which allows
+deployers to include the handful of files containing components (typically authentication and ticketing) required
+for their environment. The files are intended to be self-identifying with respect to the kinds of components they
+contain, with the exception of <code>applicationContext.xml</code> and <code>cas-servlet.xml</code>. For example, <code>auditTrailContext.xml</code>
+contains components related to the CAS audit trail where events are emitted for successful and failed authentication
+attempts, among other kinds of auditable events.</p>
+
+<p>It is common practice to exclude cas.properties from the overlay and place it at a well-known filesystem location
+outside the WAR deployable. In that case, <code>propertyFileConfigurer.xml</code> must be configured to point to the filesystem
+location of <code>cas.properties</code>. Generally, the Spring XML configuration files under <code>spring-configuration</code> are the most
+common configuration files, beyond <code>deployerConfigContext.xml</code>, to be included in an overlay. The supplementary Spring
+configuration files are organized into logically separate configuration concerns that are clearly indicated by the file
+name.</p>
+
+<p>CAS uses Spring Webflow to drive the login process in a modular and configurable fashion; the <code>login-webflow.xml</code>
+file contains a straightforward description of states and transitions in the flow. Customizing this file is probably
+the most common configuration concern beyond component configuration in the Spring XML configuration files. See the
+Spring Webflow Customization Guide for a thorough description of the various CAS flows and discussion of common
+configuration points.</p>
+
+<h2 id="custom-and-third-party-source">Custom and Third-Party Source</h2>
+<p>It is common to customize or extend the functionality of CAS by developing Java components that implement CAS APIs or
+to include third-party source by Maven dependency references. Including third-party source is trivial; simply include
+the relevant dependency in the overlay <code>pom.xml</code> file. In order to include custom Java source, it should be included
+under a <code>src/java/main</code> directory in the overlay project source tree.</p>
+
+<pre><code>├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── edu
+│   │   │       └── vt
+│   │   │           └── middleware
+│   │   │               └── cas
+│   │   │                   ├── audit
+│   │   │                   │   ├── CompactSlf4jAuditTrailManager.java
+│   │   │                   │   ├── CredentialsResourceResolver.java
+│   │   │                   │   ├── ServiceResourceResolver.java
+│   │   │                   │   └── TicketOrCredentialPrincipalResolver.java
+│   │   │                   ├── authentication
+│   │   │                   │   └── principal
+│   │   │                   │       ├── AbstractCredentialsToPrincipalResolver.java
+│   │   │                   │       ├── PDCCredentialsToPrincipalResolver.java
+│   │   │                   │       └── UsernamePasswordCredentialsToPrincipalResolver.java
+│   │   │                   ├── services
+│   │   │                   │   └── JsonServiceRegistryDao.java
+│   │   │                   ├── util
+│   │   │                   │   └── X509Helper.java
+│   │   │                   └── web
+│   │   │                       ├── HelpController.java
+│   │   │                       ├── RegisteredServiceController.java
+│   │   │                       ├── StatsController.java
+│   │   │                       ├── WarnController.java
+│   │   │                       ├── flow
+│   │   │                       │   ├── AbstractForgottenCredentialAction.java
+│   │   │                       │   ├── AbstractLdapQueryAction.java
+│   │   │                       │   ├── AffiliationHandlerAction.java
+│   │   │                       │   ├── CheckAccountRecoveryMaintenanceAction.java
+│   │   │                       │   ├── CheckPasswordExpirationAction.java
+│   │   │                       │   ├── ForgottenCredentialTypeAction.java
+│   │   │                       │   ├── LookupRegisteredServiceAction.java
+│   │   │                       │   ├── NoSuchFlowHandler.java
+│   │   │                       │   ├── User.java
+│   │   │                       │   ├── UserLookupAction.java
+│   │   │                       │   └── WarnCookieHandlerAction.java
+│   │   │                       └── util
+│   │   │                           ├── ProtocolParameterAuthority.java
+│   │   │                           ├── UriEncoder.java
+│   │   │                           └── UrlBuilder.java
+</code></pre>
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

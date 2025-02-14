@@ -1,0 +1,51 @@
+<!-- fragment:keep -->
+{% assign groups = include.groups | split: "," %}
+
+<p>The following properties are available and recognized by CAS for various modules and features:</p>
+
+<table class="cas-datatable paginated-table" id="table-properties">
+    <thead>
+        <tr>
+          <th>Name</th>
+          <th>Default Value</th>
+          <th>Type</th>
+          <th>Group</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cfg in site.data[siteDataVersion]["registered-service-properties"] %}
+                {% assign configBlock = cfg[1] %}
+
+                {% for config in configBlock %}
+
+                    {% assign found = false %}
+                    {% if groups.size == 0 %}
+                        {% assign found = true %}
+                    {% endif %}
+
+                    {% for gp in groups %}
+                        {% if config.group == gp %}
+                            {% assign found = true %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if found == true %}
+                        <tr>
+                            <td>
+                                <code>{{ config.name }}</code>
+                            </td>
+                            <td>
+                                <code>{{ config.defaultValue }}</code>
+                            </td>
+                            <td>
+                                <code>{{ config.type }}</code>
+                            </td>
+                            <td>
+                                <code>{{ config.group }}</code>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>

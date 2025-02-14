@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - SAML2 Service Management</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="../../images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+            <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+                
+
+                <section>
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="saml2-services">SAML2 Services</h1>
+
+<p>SAML relying parties and services must be registered within 
+the <a href="../services/Service-Management.html">CAS service registry</a> similar to the following example:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td>
+<td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"the-entity-id-of-the-sp"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"SAMLService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10000003</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"evaluationOrder"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://url/to/metadata.xml"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Entity ID Patterns</strong><p>The <code>serviceId</code> field here should represent the entity id
+of the SAML2 service provider in form of a proper regular expression, allowing you to authorize and register multiple SAML2 service providers 
+in your metadata file, if necessary. Remember to escape all the right characters when you build the expression pattern.</p>
+</div>
+
+<p>The following fields are available for SAML services:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataLocation</code></td>
+      <td>Location of service metadata defined from system files, classpath, directories or URL resources.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataProxyLocation</code></td>
+      <td>Proxy endpoint (<code class="language-plaintext highlighter-rouge">https://proxy-address:8901</code>) to fetch service metadata from URL resources.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataSignatureLocation</code></td>
+      <td>Location of the metadata signing certificate/public key to validate the metadata which must be defined from system files or classpath. If defined, will enforce the <code class="language-plaintext highlighter-rouge">SignatureValidationFilter</code> validation filter on metadata.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataExpirationDuration</code></td>
+      <td>If defined, will expire metadata in the cache after the indicated duration which will force CAS to <br>retrieve and resolve the metadata again. Default is <code class="language-plaintext highlighter-rouge">60</code> minutes.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">requireSignedRoot</code></td>
+      <td>Whether the metadata root element is required to be signed. Default is <code class="language-plaintext highlighter-rouge">true</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signUnsolicitedAuthnRequest</code></td>
+      <td>When dealing with Unsolicited SSO, determine whether the authentication request should be forcefully signed.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signAssertions</code></td>
+      <td>Whether <a href="../installation/Configuring-SAML2-Security.html">assertions should be signed</a>. Default is <code class="language-plaintext highlighter-rouge">FALSE</code>. Accepted values are <code class="language-plaintext highlighter-rouge">TRUE</code>, <code class="language-plaintext highlighter-rouge">FALSE</code>, <code class="language-plaintext highlighter-rouge">UNDEFINED</code>. When set to <code class="language-plaintext highlighter-rouge">UNDEFINED</code>, CAS will respect the <code class="language-plaintext highlighter-rouge">WantAssertionsSigned</code> flag in the SAML service provider metadata.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signResponses</code></td>
+      <td>Whether <a href="../installation/Configuring-SAML2-Security.html">responses should be signed</a>. Default is <code class="language-plaintext highlighter-rouge">true</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptionOptional</code></td>
+      <td>Encrypt whenever possible (i.e a compatible key is found in the peer’s metadata) or skip encryption otherwise. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptAssertions</code></td>
+      <td>Whether <a href="../installation/Configuring-SAML2-Security.html">assertions should be encrypted</a>. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptAttributes</code></td>
+      <td>Whether assertion attributes should be encrypted. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptableAttributes</code></td>
+      <td>Set of attributes nominated for encryption, disqualifying others absent in this collection. Default (i.e. <code class="language-plaintext highlighter-rouge">*</code>) is to encrypt all once <code class="language-plaintext highlighter-rouge">encryptAttributes</code> is true.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">requiredAuthenticationContextClass</code></td>
+      <td>If defined, will specify the SAML authentication context class in the final response. If undefined, the authentication class will either be <code class="language-plaintext highlighter-rouge">urn:oasis:names:tc:SAML:2.0:ac:classes:unspecified</code> or <code class="language-plaintext highlighter-rouge">urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</code> depending on the SAML authentication request. The value may be specified as a path to an external Groovy script.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">requiredNameIdFormat</code></td>
+      <td>If defined, will force the indicated Name ID format in the final SAML response.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skewAllowance</code></td>
+      <td>If defined, indicates number of seconds used to skew authentication dates such as valid-from and valid-until elements, etc.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataCriteriaPattern</code></td>
+      <td>
+<a href="../installation/SAML2-ServiceProvider-Metadata-Filtering.html">If defined</a>, will force an entity id filter on the metadata aggregate based on the <code class="language-plaintext highlighter-rouge">PredicateFilter</code> to include/exclude specific entity ids based on a valid regex pattern.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataCriteriaDirection</code></td>
+      <td>
+<a href="../installation/SAML2-ServiceProvider-Metadata-Filtering.html">If defined</a>, will force the <code class="language-plaintext highlighter-rouge">PredicateFilter</code> to either include or remove entities from the resolved metadata. Allowed values are <code class="language-plaintext highlighter-rouge">INCLUDE</code>,<code class="language-plaintext highlighter-rouge">EXCLUDE</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataCriteriaRoles</code></td>
+      <td>
+<a href="../installation/SAML2-ServiceProvider-Metadata-Filtering.html">If defined</a>, will allow the defined metadata roles (i.e. <code class="language-plaintext highlighter-rouge">SPSSODescriptor</code>, <code class="language-plaintext highlighter-rouge">IDPSSODescriptor</code>). Default is <code class="language-plaintext highlighter-rouge">SPSSODescriptor</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataCriteriaRemoveEmptyEntitiesDescriptors</code></td>
+      <td>Controls whether to keep entities descriptors that contain no entity descriptors. Default is <code class="language-plaintext highlighter-rouge">true</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadataCriteriaRemoveRolelessEntityDescriptors</code></td>
+      <td>Controls whether to keep entity descriptors that contain no roles. Default is <code class="language-plaintext highlighter-rouge">true</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">attributeNameFormats</code></td>
+      <td>Map that defines attribute name formats for a given attribute name to be encoded in the SAML response.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">attributeFriendlyNames</code></td>
+      <td>Map that defines attribute friendly names for a given attribute name to be encoded in the SAML response.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">attributeValueTypes</code></td>
+      <td>Map that defines the type of attribute values for a given attribute name.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nameIdQualifier</code></td>
+      <td>If defined, will overwrite the <code class="language-plaintext highlighter-rouge">NameQualifier</code> attribute of the produced subject’s name id. Use <code class="language-plaintext highlighter-rouge">none</code> to skip.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logoutResponseBinding</code></td>
+      <td>If defined, will overwrite the binding used to prepare logout responses for the service provider.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logoutResponseEnabled</code></td>
+      <td>Control whether SAML2 logout responses should be generated and sent for this SAML2 service provider.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signLogoutResponse</code></td>
+      <td>Control whether SAML2 logout responses should be signed.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">issuerEntityId</code></td>
+      <td>If defined, will override the issue value with the given identity provider entity id. This may be useful in cases where CAS needs to maintain multiple identity provider entity ids.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">assertionAudiences</code></td>
+      <td>Comma-separated list of audience urls to include in the assertion. Will override the entity id.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">subjectLocality</code></td>
+      <td>If defined, will overwrite the <code class="language-plaintext highlighter-rouge">SubjectLocality</code> attribute of the SAML2 authentication statement.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">serviceProviderNameIdQualifier</code></td>
+      <td>If defined, will overwrite the <code class="language-plaintext highlighter-rouge">SPNameQualifier</code> attribute of the produced subject’s name id. Use <code class="language-plaintext highlighter-rouge">none</code> to skip.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipValidatingAuthnRequest</code></td>
+      <td>Skip validating the SAML2 authentication request and its signature in particular. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingAssertionNameId</code></td>
+      <td>Whether generation of a name identifier should be skipped for assertions. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingTransientNameId</code></td>
+      <td>Whether transient name identifier generation should be skipped. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">isSkipGeneratingResponseInResponseTo</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">InResponseTo</code> element should be skipped for responses. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingSubjectConfirmationInResponseTo</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">InResponseTo</code> element should be skipped for subject confirmations. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingSubjectConfirmationNotOnOrAfter</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">NotOnOrBefore</code> element should be skipped for subject confirmations. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingSubjectConfirmationAddress</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">Address</code> element should be skipped for subject confirmations. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingSubjectConfirmationRecipient</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">Recipient</code> element should be skipped for subject confirmations. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingSubjectConfirmationNotBefore</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">NotBefore</code> element should be skipped for subject confirmations. Default is <code class="language-plaintext highlighter-rouge">true</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingSubjectConfirmationNameId</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">NameID</code> element should be skipped for subject confirmations. Default is <code class="language-plaintext highlighter-rouge">true</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingServiceProviderNameIdQualifier</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">SPNameQualifier</code> element should be skipped. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingNameIdQualifier</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">NameIdQualifier</code> element should be skipped. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipGeneratingSessionNotOnOrAfter</code></td>
+      <td>Whether generation of the <code class="language-plaintext highlighter-rouge">SessionNotOnOrAfter</code> element should be skipped. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signingCredentialFingerprint</code></td>
+      <td>
+<code class="language-plaintext highlighter-rouge">SHA-1</code> digest of the signing credential’s public key, parsed as a regular expression, used for the purposes of key rotation when dealing with multiple credentials.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signingCredentialType</code></td>
+      <td>Acceptable values are <code class="language-plaintext highlighter-rouge">BASIC</code> and <code class="language-plaintext highlighter-rouge">X509</code>. This setting controls the type of the signature block produced in the final SAML response for this application. The latter, being the default, encodes the signature in <code class="language-plaintext highlighter-rouge">PEM</code> format inside a <code class="language-plaintext highlighter-rouge">X509Data</code> block while the former encodes the signature based on the resolved public key under a <code class="language-plaintext highlighter-rouge">DEREncodedKeyValue</code> block.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signingSignatureReferenceDigestMethods</code></td>
+      <td>Collection of signing signature reference digest methods, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signingKeyAlgorithm</code></td>
+      <td>Signing key algorithm to forcibly use for signing operations when loading the private key. Default is <code class="language-plaintext highlighter-rouge">RSA</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signingSignatureAlgorithms</code></td>
+      <td>Collection of signing signature algorithms, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signingSignatureBlackListedAlgorithms</code></td>
+      <td>Collection of rejected signing signature algorithms, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signingSignatureWhiteListedAlgorithms</code></td>
+      <td>Collection of allowed signing signature algorithms, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signingSignatureCanonicalizationAlgorithm</code></td>
+      <td>The signing signature canonicalization algorithm, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptionDataAlgorithms</code></td>
+      <td>Collection of encryption data algorithms, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptionKeyAlgorithms</code></td>
+      <td>Collection of encryption key transport algorithms, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptionBlackListedAlgorithms</code></td>
+      <td>Collection of rejected encryption algorithms, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptionWhiteListedAlgorithms</code></td>
+      <td>Collection of allowed encryption algorithms, if any, to override the global defaults.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">whiteListBlackListPrecedence</code></td>
+      <td>Preference value indicating which should take precedence when both whitelist and blacklist are non-empty. Accepted values are <code class="language-plaintext highlighter-rouge">INCLUDE</code> or <code class="language-plaintext highlighter-rouge">EXCLUDE</code>. Default is <code class="language-plaintext highlighter-rouge">INCLUDE</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Keep What You Need!</strong><p>You are encouraged to only keep and maintain properties and settings needed for a 
+particular integration. It is UNNECESSARY to grab a copy of all service fields and try to configure them yet again based on their default. While 
+you may wish to keep a copy as a reference, this strategy would ultimately lead to poor upgrades increasing chances of breaking changes and a messy 
+deployment at that.</p>
+</div>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnsamlidpservices">
+
+    <li class="nav-item property-tab">
+        <a class="nav-link active" id="linkRequiredPropertiescasauthnsamlidpservices" data-bs-toggle="tab" href="#requiredPropertiescasauthnsamlidpservices">Required</a>
+    </li>
+    <li class="nav-item property-tab">
+        <a class="nav-link" id="linkOptionalPropertiescasauthnsamlidpservices" data-bs-toggle="tab" href="#optionalPropertiescasauthnsamlidpservices">Optional</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnsamlidpservices">
+        <a class="nav-link" id="linkSigningEncryptioncasauthnsamlidpservices" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnsamlidpservices">Signing &amp; Encryption</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navRdbmsPropertiescasauthnsamlidpservices">
+        <a class="nav-link" id="linkRdbmscasauthnsamlidpservices" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnsamlidpservices">Hibernate &amp; JDBC</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navEmailPropertiescasauthnsamlidpservices">
+        <a class="nav-link" id="linkEmailcasauthnsamlidpservices" data-bs-toggle="tab" href="#emailPropertiescasauthnsamlidpservices">Email Servers</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navLdapPropertiescasauthnsamlidpservices">
+        <a class="nav-link" id="linkLdapcasauthnsamlidpservices" data-bs-toggle="tab" href="#ldapPropertiescasauthnsamlidpservices">LDAP &amp; Active Directory</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnsamlidpservices">
+        <a class="nav-link" id="linkAuthnPredicatecasauthnsamlidpservices" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnsamlidpservices">Authentication</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnsamlidpservices">
+        <a class="nav-link" id="linkPasswordEncodercasauthnsamlidpservices" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnsamlidpservices">Password Encoding</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnsamlidpservices">
+        <a class="nav-link" id="linkPrincipalTransformationcasauthnsamlidpservices" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnsamlidpservices(this);" href="#principalTransformationPropertiescasauthnsamlidpservices">Principal Transformation</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnsamlidpservices">
+        <a class="nav-link" id="linkPasswordPolicycasauthnsamlidpservices" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnsamlidpservices(this);" href="#passwordPolicyPropertiescasauthnsamlidpservices">Password Policy</a>
+    </li>
+<li class="nav-item property-tab">
+        <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnsamlidpservices(this);" id="linkNotescasauthnsamlidpservices" data-bs-toggle="tab" href="#notescasauthnsamlidpservices">Notes</a>
+    </li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnsamlidpservices">
+
+
+<div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnsamlidpservices">
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+    </sub>
+    <br><p></p>
+
+    <p></p>
+        
+    <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnsamlidpservices">
+    <thead><tr><th></th></tr></thead>
+    <tbody></tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnsamlidpservices"></textarea>
+</div>
+
+<div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnsamlidpservices">
+
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+        flag indicates that the presence of the setting
+        is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+        the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+        configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+    </sub>
+    <br><p></p>
+
+    <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnsamlidpservices">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.saml-idp.services.defaults=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Control the default, initial values for fields that are part of a SAML service definition. This is defined as a map where the key is the field name (i.e. <code>signAssertions</code>) and the value should be the default value. If a service definition explicitly defines a value for a field, that value will take over and the default defined here will be ignored. If a service definition does not define a value for a field and no defaults are specified for that field, then the default value that is directly assigned to the field in the body of the service definition will take over.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.saml.idp.SamlIdPServicesProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnsamlidpservicesdefaultsPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnsamlidpservicesdefaultsPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.saml-idp.services.defaults</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnsamlidpservicesdefaults">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnsamlidpservicesdefaults">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnsamlidpservicesdefaults">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnsamlidpservicesdefaults">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnsamlidpservicesdefaults">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnsamlidpservicesdefaults">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.saml-idp.services.defaults=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnsamlidpservicesdefaults">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    saml-idp: <br>      services: <br>        defaults</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnsamlidpservicesdefaults td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnsamlidpservicesdefaults">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.saml-idp.services.defaults<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnsamlidpservicesdefaults">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_SAML_IDP_SERVICES_DEFAULTS</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnsamlidpservicesdefaults">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.saml-idp.services.defaults<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnsamlidpservices"># Control the default, initial values for fields that are part of a SAML service definition.
+# cas.authn.saml-idp.services.defaults=
+
+</textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnsamlidpservices">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.0.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+</div>
+<script>
+    window.addEventListener('load', (event) => {$("#linkRdbmscasauthnsamlidpservices").remove();$("#linkEmailcasauthnsamlidpservices").remove();$("#linkSigningEncryptioncasauthnsamlidpservices").remove();$("#linkRequiredPropertiescasauthnsamlidpservices").remove();
+            $("#requiredPropertiescasauthnsamlidpservices").remove();$("#linkPasswordPolicycasauthnsamlidpservices").remove();$("#linkPrincipalTransformationcasauthnsamlidpservices").remove();$("#linkPasswordEncodercasauthnsamlidpservices").remove();$("#linkAuthnPredicatecasauthnsamlidpservices").remove();$("#linkLdapcasauthnsamlidpservices").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnsamlidpservices");
+        let id=$("#navPillsMenuscasauthnsamlidpservices a:visible:first").prop('id');
+        // console.log("Attempting to select tab with id " + id);
+        if (id != undefined && id != null) {
+            // console.log("Selecting first tab with link id " + id);
+            let firstTabEl = document.querySelector(`#${id}`);
+            let firstTab = new bootstrap.Tab(firstTabEl);
+            firstTab.show();
+            // console.log("Selected tab with link id " + id);
+        }
+
+        let c = $("#tableRequiredPropertiescasauthnsamlidpservices li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navRequiredPropertiescasauthnsamlidpservices").closest("table").remove();
+            $("#navRequiredPropertiesLeftcasauthnsamlidpservices").closest("table").remove();
+        }
+        c = $("#tableOptionalPropertiescasauthnsamlidpservices li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navOptionalPropertiescasauthnsamlidpservices").closest("table").remove();
+            $("#navOptionalPropertiesLeftcasauthnsamlidpservices").closest("table").remove();
+        }
+        c = $("#tableThirdPartyPropertiescasauthnsamlidpservices li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navThirdPartyPropertiescasauthnsamlidpservices").hide();
+        }
+        
+    });
+</script>
+
+</div>
+
+<h2 id="service-provider-integrations">Service Provider Integrations</h2>
+
+<p>A number of SAML2 service provider integrations are provided natively by CAS. To learn more,
+please <a href="../integration/Configuring-SAML-SP-Integrations.html">review this guide</a>.</p>
+
+<h2 id="service-provider-metadata">Service Provider Metadata</h2>
+
+<p>SAML2 service provider metadata can be registered with and managed by CAS in several ways. To learn more, 
+please <a href="../installation/SAML2-ServiceProvider-Metadata.html">review this guide</a>.</p>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+
+    <script>
+        let pageSection = 'Services';
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+</body>
+
+</html>

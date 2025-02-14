@@ -1,0 +1,63 @@
+<!-- fragment:keep -->
+
+<p>The following user interface templates are available and recognized by CAS for various modules and features:</p>
+<table class="cas-datatable paginated-table" id="table-ui-templates" data-page-length="15">
+    <thead>
+        <tr>
+          <th>Category</th>
+          <th>Name</th>
+          <th>Full Path</th>
+          <th>Owner</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cfg in site.data[siteDataVersion]["userinterface-templates"] %}
+                {% assign configBlock = cfg[1] %}
+                {% for config in configBlock %}
+
+                    {% assign words = config.name | remove: "/src/main/resources/templates/" | split: '/' %}
+                    {% assign category = words | first | remove: ".html" | remove: ".mustache" %}
+
+                    {%- if config.name contains ".mustache" -%}
+                        {%- assign owner = "Mustache" -%}
+                    {%- else -%}
+                        {%- assign owner = "Thymeleaf" -%}
+                    {%- endif -%}
+
+                    {%- assign allowEntry = "true" -%}
+
+                    {%- if include.category -%}
+                        {%- assign allowEntry = false -%}
+                        {%- if protocol contains include.category -%}
+                            {%- assign allowEntry = true -%}
+                        {%- endif -%}
+                    {%- endif -%}
+
+                    {%- if include.owner != nil and allowEntry == "true" -%}
+                        {%- assign allowEntry = "false" -%}
+                        {%- if owner contains include.owner -%}
+                            {%- assign allowEntry = "true" -%}
+                        {%- endif -%}
+                    {%- endif -%}
+
+                    {%- if allowEntry == "true" -%}
+                    <tr>
+                        <td>
+                            <code>{{ category }}</code>
+                        </td>
+                        <td>
+                            <code>{{ words | last }}</code>
+                        </td>
+                        <td>
+                            <code class="text-wrap text-break">{{ config.name }}</code>
+                        </td>
+                        <td>
+                            <code class="text-wrap text-break">{{ owner }}</code>
+                        </td>
+                    </tr>
+                    {%- endif -%}
+
+                {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>

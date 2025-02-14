@@ -1,0 +1,165 @@
+{%- assign min = 1 -%}
+{%- assign max = 999999 -%}
+{%- assign diff = max | minus: min -%}
+{%- assign casModuleRandomNumber = include.group | append: include.module | remove: "-" | remove: "." | truncate: 50, '' -%}
+
+<script type="text/javascript">
+
+    function tabClicked(element) {
+        let radius = "0px 5px 5px 5px";
+        let href = $(element).attr("href");
+        if (!href.startsWith("#maven")) {
+            radius = "5px 5px 5px 5px";
+        }
+        $(".tab-pane .highlight>pre.highlight").css("border-radius", radius);
+
+        let label = $(element).text();
+
+        function updateTab(targetId, idsToDeactivate) {
+            $(`div #${targetId}{{ casModuleRandomNumber }}`).addClass("active").addClass("show");
+            idsToDeactivate.forEach(id => $(`div #${id}{{ casModuleRandomNumber }}`).removeClass("active").removeClass("show"));
+        }
+
+        switch (label) {
+        case "Apache Maven":
+            updateTab("maven", ["gradle", "bom", "bomGradle"]);
+            break;
+        case "Gradle":
+            updateTab("gradle", ["maven", "bom", "bomGradle"]);
+            break;
+        case "BOM - Spring":
+            updateTab("bom", ["maven", "gradle", "bomGradle"]);
+            break;
+        case "BOM - Gradle":
+            updateTab("bomGradle", ["maven", "bom", "gradle"]);
+            break;
+        }
+    }
+
+    window.onload = () => {
+        $("ul.cas-modules li.cas-module a.nav-link.active").first().click();
+    }
+</script>
+
+{%- assign displayClass = "block" -%}
+
+{%- if include.hide == "true" -%}
+{%- assign displayClass="none" -%}
+{%- endif -%}
+
+<div style="display: {{ displayClass }}">
+
+    <ul class='nav nav-pills cas-modules'>
+        <li class='nav-item cas-module'><a class='nav-link' onclick="tabClicked(this)" data-bs-toggle='tab' href='#maven{{ casModuleRandomNumber }}'>Apache Maven</a></li>
+        <li class='nav-item cas-module'><a class='nav-link' onclick="tabClicked(this)" data-bs-toggle='tab' href='#gradle{{ casModuleRandomNumber }}'>Gradle</a></li>
+
+        {%- unless include.ignoreBOM == "true" -%}
+        <li class='nav-item cas-module'><a class='nav-link' onclick="tabClicked(this)" data-bs-toggle='tab'
+                                           href='#bom{{ casModuleRandomNumber }}'>BOM - Spring</a></li>
+
+        <li class='nav-item cas-module'>
+            <a class='nav-link active' onclick="tabClicked(this)" data-bs-toggle='tab' href='#bomGradle{{ casModuleRandomNumber }}'>BOM - Gradle</a>
+        </li>
+        {%- endunless -%}
+
+        <li role='presentation' class='nav-item dropdown cas-module'>
+            <a class='nav-link dropdown-toggle' onclick="tabClicked(this)" data-bs-toggle='dropdown' href='#' role='button'>Resources<span class='caret'></span>
+            </a>
+            <div class='dropdown-menu'>
+                <a class='dropdown-item' href="javascript:showOverlay('{{include.module}}', 'cas-overlay');">Show in CAS Initializr</a>
+                <a class='dropdown-item' href="javascript:generateOverlay('{{include.module}}', 'cas-overlay');">Generate CAS Server WAR Overlay</a>
+                <a class='dropdown-item' href="javascript:generateOverlay('{{include.module}}', 'cas-config-server-overlay');">Generate CAS Configuration Server WAR Overlay</a>
+            </div>
+        </li>
+    </ul>
+
+
+    <div class='cas-module-tabs tab-content clearfix'>
+        <div class='tab-pane fade in' id='maven{{ casModuleRandomNumber }}'>
+            {%- capture maven -%}
+```xml
+<dependency>
+    <groupId>{{include.group}}</groupId>
+    <artifactId>{{include.module}}</artifactId>
+    <version>${cas.version}</version>
+</dependency>
+```
+            {%- endcapture -%}
+
+            <span>
+      {{ maven | markdownify }}
+    </span>
+
+        </div>
+
+
+        <div class='tab-pane fade in active show' id='gradle{{ casModuleRandomNumber }}'>
+            {%- if include.module contains "-bom" -%}
+{%- capture gradle -%}
+```groovy
+implementation enforcedPlatform("{{include.group}}:{{include.module}}:${project.'cas.version'}")
+```
+{% endcapture %}
+            {% endif %}
+
+            {% unless include.module contains "-bom" %}
+            {% capture gradle %}
+```groovy
+implementation "{{include.group}}:{{include.module}}:${project.'cas.version'}"
+```
+            {%- endcapture -%}
+            {%- endunless -%}
+            <span>
+    {{ gradle | markdownify }}
+  </span>
+
+        </div>
+
+        <div class='tab-pane fade in' id='bom{{ casModuleRandomNumber }}'>
+            {%- capture bom -%}
+```groovy
+dependencyManagement {
+    imports {
+        mavenBom "org.apereo.cas:cas-server-support-bom:${project.'cas.version'}"
+    }
+}
+
+dependencies {
+    implementation "{{include.group}}:{{include.module}}"
+}
+```
+            {%- endcapture -%}
+            <span>
+    {{ bom | markdownify }}
+  </span>
+
+        </div>
+
+        <div class='tab-pane fade in' id='bomGradle{{ casModuleRandomNumber }}'>
+            {%- capture bom -%}
+```groovy
+dependencies {
+    /*
+        The following platform references should be included automatically and are listed here for reference only.
+
+        implementation enforcedPlatform("org.apereo.cas:cas-server-support-bom:${project.'cas.version'}")
+        implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+        {% if include.bundled == "true" %}
+        Including this module in the CAS WAR overlay is optional and unnecessary. This module is automatically included
+        and bundled with the CAS server distribution and there are alternative options baked in to allow one to replace
+        this module with another. The entry below is listed for reference only.
+        {%- endif %}
+    */
+    implementation "{{include.group}}:{{include.module}}"
+}
+```
+            {%- endcapture -%}
+            <span>
+    {{ bom | markdownify }}
+  </span>
+
+        </div>
+
+    </div>
+
+</div>

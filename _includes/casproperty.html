@@ -1,0 +1,222 @@
+{%- assign rbrace = "}" -%}
+{%- assign rbrace2 = rbrace | append: rbrace -%}
+{%- assign lbrace = "{" -%}
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+        {%- assign singlePropertyKey = include.name
+        | remove: "["
+        | remove: "]"
+        | remove: "."
+        | remove: "-"
+        | remove: '"'
+        | remove: '/'
+        | remove: '$'
+        | remove: rbrace
+        | remove: lbrace -%}
+        {%- assign propertyValueFormatted = include.defaultValue | default: "..." | prepend: '"' | append: '"' -%}
+        <li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">{{ include.name | replace: "[]", "[0]"}}={{ include.defaultValue }}</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                {{ include.description
+                | replace: "<p>", "<p/>"
+            | replace: "</p>", "<p/>"
+            | replace: "@code", "<code>"
+            | replace: "@value", "<code>"
+                | replace: "@deprecation", "<code>Deprecation:</code>"
+                | replace: "@deprecated", "<code>Deprecation:</code>"
+                | replace: "@link", "<code>"
+                    | replace: rbrace2, rbrace
+                    | replace: "&lt;", "<"
+                    | replace: "&gt;", ">"
+                    }}
+                    </p>
+                    {%- if include.duration -%}
+                    <p/>
+                    <p class="small text-left"><i class="fas fa-clock"></i> This settings supports the
+                        <code>java.time.Duration</code> syntax <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="<p class='small'>The format of the value will be <code>PTnHnMnS</code>, where <code>n</code> is the relevant hours, minutes or seconds part of the duration. Any fractional seconds are placed after a decimal point in the seconds section. If a section has a zero value, it is omitted. The hours, minutes and seconds will all have the same sign. Example values
+                    could be in the form of <code>PT20S</code>, <code>PT15M</code>, <code>PT10H</code>, <code>PT6D</code>, <code>P2DT3H4M</code>.
+                    If the value is set to <code>0</code> or <code>never</code>, the duration will be set to zero. If the value is blank, set to <code>-1</code>,
+                    or <code>infinite</code>, the value will effectively represent an unending duration.</p>">[?]</sup>.
+                    </p>
+                    {%- endif -%}
+                    {%- if include.regexPattern -%}
+                    <p/>
+                    <p class="small text-left"><i class="fas fa-cogs small"></i> This settings supports regular expression patterns. <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="<p class='small'>
+                    A regular expression (shortened as regex or regexp) is a sequence of characters that specifies a search pattern in text. For example, the following pattern
+                    <code>^ent:.+(admin|system).+:com$</code> should match <code>ent:sys-admin-anything:com</code>. Regular expressions in CAS are handled using the JDK's <code>java.util.regex.Pattern</code> class.
+                </p>">[?]</sup>.
+                    </p>
+                    {%- endif -%}
+                    {%- if include.expressionLanguage -%}
+                    <p/><p class="small text-left"><i class="fas fa-info-circle small"></i> This setting supports the <a href="/cas/{{ version }}/configuration/Configuration-Spring-Expressions.html">Spring Expression Language</a>.</p>
+                    {%- endif -%}
+                    {%- if include.owner.size > 0 -%}
+                    <p/><p class="small text-left"><i class="fas fa-code small"
+                                                      data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>{{ include.owner }}.</code></p>
+                    {%- endif -%}
+                    <p/>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#{{singlePropertyKey}}PropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    <div class="modal fade" id="{{singlePropertyKey}}PropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>{{ include.name }}</code></h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p/>
+                                    <div class="alert alert-info">:information_source: <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle='tab' href="#simpleproperty{{ singlePropertyKey }}"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle='tab' href="#yamlproperty{{ singlePropertyKey }}"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle='tab' href="#systemproperty{{ singlePropertyKey }}"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle='tab' href="#envvar{{ singlePropertyKey }}"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle='tab' href="#cmdarg{{ singlePropertyKey }}"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class='tab-content'>
+                                        <p/>
+                                        <div class="tab-pane fade active show" id="simpleproperty{{singlePropertyKey}}">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p/>
+
+{%- capture markdownprop -%}
+```
+{{ include.name | replace: "[]", "[0]"}}={{ include.defaultValue | default: "..." }}
+```
+{%- endcapture -%}
+
+                                            {{ markdownprop || markdownify }}
+
+                                            <p/>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlproperty{{singlePropertyKey}}">
+                                            {%- assign path = "" -%}
+                                            CAS properties can be specified using the YAML syntax:<p/>
+
+                                            {%- assign propertyWords = include.name | split: "." -%}
+                                            {%- assign totalWords = propertyWords | size -%}
+
+                                            {%- for word in propertyWords -%}
+                                                {%- assign count = 2 -%}
+                                                {%- assign indentCount = forloop.index | times: count | minus: 2 -%}
+                                                {%- assign indentation = "" -%}
+
+                                                {%- for i in (1..indentCount) -%}
+                                                    {%- assign indentation = indentation | append: " " -%}
+                                                {%- endfor -%}
+
+                                                {%- assign path = path | append: indentation | append: word | replace: "[]", "[0]" | append: ": " -%}
+
+                                                {%- if forloop.index == totalWords -%}
+                                                    {%- assign path = path | append: propertyValueFormatted -%}
+                                                {%- else -%}
+                                                    {%- assign path = path | append: "\n" -%}
+                                                {%- endif -%}
+
+                                            {%- endfor -%}
+
+{% capture yamlprop -%}
+```yaml
+{{ path }}
+```
+{% endcapture -%}
+                                            {{ yamlprop | markdownify | replace: "\n", "<br>" }}
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlproperty{{singlePropertyKey}} td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p/>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systemproperty{{singlePropertyKey}}">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p/>
+
+{%- capture markdownprop -%}
+```bash
+java -D{{ include.name | replace: "[]", "[0]"}}={{ propertyValueFormatted }} -jar build/libs/cas.war
+```
+{%- endcapture -%}
+                                            {{ markdownprop || markdownify }}
+                                            <p/>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvar{{singlePropertyKey}}">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p/>
+{%- capture markdownprop %}
+```bash
+export {{ include.name | replace: "[]", "[0]" | replace: ".", "_" | replace: "-", "_" | upcase }}={{ propertyValueFormatted }}
+
+java -jar build/libs/cas.war
+```
+{%- endcapture %}
+{{ markdownprop || markdownify }}
+                                            <p/>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdarg{{singlePropertyKey}}">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p/>
+
+{%- capture markdownprop -%}
+```bash
+java -jar build/libs/cas.war --{{ include.name | replace: "[]", "[0]"}}={{ propertyValueFormatted }}
+```
+{%- endcapture -%}
+                                            {{ markdownprop || markdownify }}
+
+                                            <p/>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </p>
+        </div>
+        {%- if include.deprecationLevel.size > 0 -%}
+        <p/><p class="small text-left"><i class="fas fa-skull"></i> Deprecation status is <code>{{ include.deprecationLevel }}</code>
+        {%- if include.deprecationReplacement.size > 0 -%}
+         with a replacement setting: <code>{{ include.deprecationReplacement | default: "N/A" }}</code>.
+        {%- else -%}
+         without a replacement setting.
+        {%- endif -%}
+    </p>
+        {%- endif -%}
+    </td>
+</tr>

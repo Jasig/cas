@@ -1,0 +1,2780 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen" href='/cas/stylesheets/stylesheet.css'>
+    <link rel="stylesheet" type="text/css" media="print" href='/cas/stylesheets/print.css'>
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Google reCAPTCHA</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="/cas/images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/development/">Development</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.1.x/">v7.1.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+
+            
+                <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+                <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+            
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+                
+                
+                <div id="dev-doc-info" class="alert alert-danger" role="alert">
+                    <h3>WORKERS AHEAD!</h3>
+                    <p>You are viewing the <strong>development</strong> documentation for the Apereo CAS server. <strong>The
+                        functionality presented here <a href="https://github.com/apereo/cas/milestones">is not officially released yet</a></strong>.
+                        This is a work in progress and will be continually updated as development moves forward.
+                        <strong>You are most encouraged to test the changes presented.</strong>
+                    </p>
+                </div>
+                
+
+                <section>
+                    
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+                    
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="google-recaptcha">Google reCAPTCHA</h1>
+
+<p>reCAPTCHA is a <a href="https://developers.google.com/recaptcha">Google service</a> that 
+protects your CAS deployment from spam and abuse.
+It uses advanced risk analysis techniques to tell humans and bots 
+apart. CAS supports the reCAPTCHA API <code class="language-plaintext highlighter-rouge">v2</code> and <code class="language-plaintext highlighter-rouge">v3</code>.</p>
+
+<p>Support is enabled by including the following module in the WAR Overlay:</p>
+
+<script type="text/javascript">
+
+    function tabClicked(element) {
+        let radius = "0px 5px 5px 5px";
+        let href = $(element).attr("href");
+        if (!href.startsWith("#maven")) {
+            radius = "5px 5px 5px 5px";
+        }
+        $(".tab-pane .highlight>pre.highlight").css("border-radius", radius);
+
+        let label = $(element).text();
+
+        function updateTab(targetId, idsToDeactivate) {
+            $(`div #${targetId}orgapereocascasserversupportcaptcha`).addClass("active").addClass("show");
+            idsToDeactivate.forEach(id => $(`div #${id}orgapereocascasserversupportcaptcha`).removeClass("active").removeClass("show"));
+        }
+
+        switch (label) {
+        case "Apache Maven":
+            updateTab("maven", ["gradle", "bom", "bomGradle"]);
+            break;
+        case "Gradle":
+            updateTab("gradle", ["maven", "bom", "bomGradle"]);
+            break;
+        case "BOM - Spring":
+            updateTab("bom", ["maven", "gradle", "bomGradle"]);
+            break;
+        case "BOM - Gradle":
+            updateTab("bomGradle", ["maven", "bom", "gradle"]);
+            break;
+        }
+    }
+
+    window.onload = () => {
+        $("ul.cas-modules li.cas-module a.nav-link.active").first().click();
+    }
+</script>
+<div style="display: block">
+
+    <ul class="nav nav-pills cas-modules">
+        <li class="nav-item cas-module"><a class="nav-link" onclick="tabClicked(this)" data-bs-toggle="tab" href="#mavenorgapereocascasserversupportcaptcha">Apache Maven</a></li>
+        <li class="nav-item cas-module"><a class="nav-link" onclick="tabClicked(this)" data-bs-toggle="tab" href="#gradleorgapereocascasserversupportcaptcha">Gradle</a></li>
+<li class="nav-item cas-module"><a class="nav-link" onclick="tabClicked(this)" data-bs-toggle="tab" href="#bomorgapereocascasserversupportcaptcha">BOM - Spring</a></li>
+
+        <li class="nav-item cas-module">
+            <a class="nav-link active" onclick="tabClicked(this)" data-bs-toggle="tab" href="#bomGradleorgapereocascasserversupportcaptcha">BOM - Gradle</a>
+        </li>
+<li role="presentation" class="nav-item dropdown cas-module">
+            <a class="nav-link dropdown-toggle" onclick="tabClicked(this)" data-bs-toggle="dropdown" href="#" role="button">Resources<span class="caret"></span>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="javascript:showOverlay('cas-server-support-captcha',%20'cas-overlay');">Show in CAS Initializr</a>
+                <a class="dropdown-item" href="javascript:generateOverlay('cas-server-support-captcha',%20'cas-overlay');">Generate CAS Server WAR Overlay</a>
+                <a class="dropdown-item" href="javascript:generateOverlay('cas-server-support-captcha',%20'cas-config-server-overlay');">Generate CAS Configuration Server WAR Overlay</a>
+            </div>
+        </li>
+    </ul>
+
+
+    <div class="cas-module-tabs tab-content clearfix">
+        <div class="tab-pane fade in" id="mavenorgapereocascasserversupportcaptcha">
+<span>
+      <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td>
+<td class="rouge-code"><pre><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apereo.cas<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>cas-server-support-captcha<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${cas.version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+    </span>
+
+        </div>
+
+
+        <div class="tab-pane fade in active show" id="gradleorgapereocascasserversupportcaptcha">
+
+            <span>
+    
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="n">implementation</span> <span class="s2">"org.apereo.cas:cas-server-support-captcha:${project.'cas.version'}"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+  </span>
+
+        </div>
+
+        <div class="tab-pane fade in" id="bomorgapereocascasserversupportcaptcha">
+<span>
+    <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre><span class="n">dependencyManagement</span> <span class="o">{</span>
+    <span class="n">imports</span> <span class="o">{</span>
+        <span class="n">mavenBom</span> <span class="s2">"org.apereo.cas:cas-server-support-bom:${project.'cas.version'}"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">implementation</span> <span class="s2">"org.apereo.cas:cas-server-support-captcha"</span>
+<span class="o">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+  </span>
+
+        </div>
+
+        <div class="tab-pane fade in" id="bomGradleorgapereocascasserversupportcaptcha">
+<span>
+    <div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+<td class="rouge-code"><pre><span class="n">dependencies</span> <span class="o">{</span>
+    <span class="cm">/*
+        The following platform references should be included automatically and are listed here for reference only.
+
+        implementation enforcedPlatform("org.apereo.cas:cas-server-support-bom:${project.'cas.version'}")
+        implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+        
+    */</span>
+    <span class="n">implementation</span> <span class="s2">"org.apereo.cas:cas-server-support-captcha"</span>
+<span class="o">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+  </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasgooglerecaptcha">
+
+<li class="nav-item property-tab">
+    <a class="nav-link active" id="linkRequiredPropertiescasgooglerecaptcha" data-bs-toggle="tab" href="#requiredPropertiescasgooglerecaptcha"><i class="fa fa-hand-point-right px-1"></i>Required</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" id="linkOptionalPropertiescasgooglerecaptcha" data-bs-toggle="tab" href="#optionalPropertiescasgooglerecaptcha"><i class="fa fa-hand-spock px-1"></i>Optional</a>
+</li>
+
+<li class="nav-item property-tab" id="navSigningEncryptionPropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkSigningEncryptioncasgooglerecaptcha" data-bs-toggle="tab" href="#signingEncryptionPropertiescasgooglerecaptcha"><i class="fa fa-user-secret px-1"></i>Signing &amp; Encryption</a>
+</li>
+
+<li class="nav-item property-tab" id="navRdbmsPropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkRdbmscasgooglerecaptcha" data-bs-toggle="tab" href="#rdbmsPropertiescasgooglerecaptcha"><i class="fa fa-database px-1"></i>Hibernate &amp; JDBC</a>
+</li>
+<li class="nav-item property-tab" id="navEmailPropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkEmailcasgooglerecaptcha" data-bs-toggle="tab" href="#emailPropertiescasgooglerecaptcha"><i class="fa fa-envelope px-1"></i>Email Servers</a>
+</li>
+<li class="nav-item property-tab" id="navGroovyPropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkGroovycasgooglerecaptcha" data-bs-toggle="tab" href="#groovyPropertiescasgooglerecaptcha"><i class="fa fa-laptop-code px-1"></i>Groovy Scripting</a>
+</li>
+
+<li class="nav-item property-tab" id="navLdapPropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkLdapcasgooglerecaptcha" data-bs-toggle="tab" href="#ldapPropertiescasgooglerecaptcha"><i class="fa fa-server px-1"></i>LDAP &amp; Active Directory</a>
+</li>
+
+<li class="nav-item property-tab" id="navAuthnPredicatePropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkAuthnPredicatecasgooglerecaptcha" data-bs-toggle="tab" href="#authnPredicatePropertiescasgooglerecaptcha"><i class="fa fa-user-check px-1"></i>Authentication</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordEncoderPropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkPasswordEncodercasgooglerecaptcha" data-bs-toggle="tab" href="#passwordEncoderPropertiescasgooglerecaptcha"><i class="fa fa-key px-1"></i>Password Encoding</a>
+</li>
+
+<li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkPrincipalTransformationcasgooglerecaptcha" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasgooglerecaptcha(this);" href="#principalTransformationPropertiescasgooglerecaptcha"><i class="fa fa-person-booth px-1"></i>Principal Transformation</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordPolicyPropertiescasgooglerecaptcha">
+    <a class="nav-link" id="linkPasswordPolicycasgooglerecaptcha" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasgooglerecaptcha(this);" href="#passwordPolicyPropertiescasgooglerecaptcha"><i class="fa fa-lock px-1"></i>Password Policy</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" onclick="javascript:enablePropertiesTabcasgooglerecaptcha(this);" id="linkNotescasgooglerecaptcha" data-bs-toggle="tab" href="#notescasgooglerecaptcha"><i class="fa fa-newspaper px-1"></i> Notes</a>
+</li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasgooglerecaptcha">
+
+
+    <div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasgooglerecaptcha">
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+        </sub>
+        <br><p></p>
+
+        <p></p>
+
+        <table class="cas-datatable properties " id="tableRequiredPropertiescasgooglerecaptcha">
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.enabled=true</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                Whether reCAPTCHA should be enabled.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchaenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchaenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchaenabled"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchaenabled"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchaenabled"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchaenabled"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchaenabled"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchaenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.enabled=true
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchaenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">true"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchaenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchaenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.enabled<span class="o">=</span><span class="s2">"true"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchaenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_ENABLED</span><span class="o">=</span><span class="s2">"true"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchaenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.enabled<span class="o">=</span><span class="s2">"true"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.score=0.5</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                Google reCAPTCHA v3 returns a score (1.0 is very likely a good interaction, 0.0 is very likely a bot). reCAPTCHA learns by seeing real traffic on your site. For this reason, scores in a staging environment or soon after implementing may differ from production. As reCAPTCHA v3 doesn't ever interrupt the user flow, you can first run reCAPTCHA without taking action and then decide on thresholds by looking at your traffic in the admin console. By default, you can use a threshold of 0.5.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchascorePropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchascorePropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.score</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchascore"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchascore"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchascore"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchascore"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchascore"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchascore">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.score=0.5
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchascore">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    score</span><span class="pi">:</span> <span class="s2">"</span><span class="s">0.5"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchascore td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchascore">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.score<span class="o">=</span><span class="s2">"0.5"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchascore">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_SCORE</span><span class="o">=</span><span class="s2">"0.5"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchascore">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.score<span class="o">=</span><span class="s2">"0.5"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.secret=</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                The reCAPTCHA site secret.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchasecretPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchasecretPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.secret</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchasecret"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchasecret"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchasecret"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchasecret"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchasecret"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchasecret">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.secret=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchasecret">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    secret</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchasecret td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchasecret">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.secret<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchasecret">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_SECRET</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchasecret">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.secret<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.site-key=</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                The reCAPTCHA site key.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-info-circle small"></i> This setting supports the <a href="/cas/development/configuration/Configuration-Spring-Expressions.html">Spring Expression Language</a>.</p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchasitekeyPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchasitekeyPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.site-key</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchasitekey"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchasitekey"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchasitekey"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchasitekey"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchasitekey"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchasitekey">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.site-key=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchasitekey">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    site-key</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchasitekey td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchasitekey">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.site-key<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchasitekey">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_SITE_KEY</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchasitekey">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.site-key<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasgooglerecaptcha"># Whether reCAPTCHA should be enabled.
+# cas.google-recaptcha.enabled=true
+
+# Google reCAPTCHA v3 returns a score (1.0 is very likely a good interaction, 0.0 is very likely a bot). reCAPTCHA learns by seeing real traffic on your site.
+# cas.google-recaptcha.score=0.5
+
+# The reCAPTCHA site secret.
+# cas.google-recaptcha.secret=
+
+# The reCAPTCHA site key.
+# cas.google-recaptcha.site-key=
+
+</textarea>
+    </div>
+
+    <div class="tab-pane properties-tab fade in" id="optionalPropertiescasgooglerecaptcha">
+
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+            flag indicates that the presence of the setting
+            is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+            the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+            configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+        </sub>
+        <br><p></p>
+
+        <table class="cas-datatable properties " id="tableOptionalPropertiescasgooglerecaptcha">
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.activate-for-ip-address-pattern=</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                A regular expression pattern to indicate that captcha should be activated when the remote IP address matches this pattern, and otherwise skipped and disabled.
+                    </p>
+<p></p>
+                    <p class="small text-left"><i class="fas fa-cogs small"></i> This settings supports regular expression patterns. <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;p class='small'&gt;
+                    A regular expression (shortened as regex or regexp) is a sequence of characters that specifies a search pattern in text. For example, the following pattern
+                    &lt;code&gt;^ent:.+(admin|system).+:com$&lt;/code&gt; should match &lt;code&gt;ent:sys-admin-anything:com&lt;/code&gt;. Regular expressions in CAS are handled using the JDK's &lt;code&gt;java.util.regex.Pattern&lt;/code&gt; class.
+                &lt;/p&gt;">[?]</sup>.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchaactivateforipaddresspatternPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchaactivateforipaddresspatternPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.activate-for-ip-address-pattern</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchaactivateforipaddresspattern"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchaactivateforipaddresspattern"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchaactivateforipaddresspattern"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchaactivateforipaddresspattern"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchaactivateforipaddresspattern"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchaactivateforipaddresspattern">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.activate-for-ip-address-pattern=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchaactivateforipaddresspattern">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    activate-for-ip-address-pattern</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchaactivateforipaddresspattern td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchaactivateforipaddresspattern">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.activate-for-ip-address-pattern<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchaactivateforipaddresspattern">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_ACTIVATE_FOR_IP_ADDRESS_PATTERN</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchaactivateforipaddresspattern">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.activate-for-ip-address-pattern<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.headers=</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                Headers, defined as a <code>Map</code>, to include in the request when making the verification call to the recaptcha API.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchaheadersPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchaheadersPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.headers</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchaheaders"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchaheaders"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchaheaders"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchaheaders"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchaheaders"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchaheaders">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.headers=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchaheaders">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    headers</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchaheaders td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchaheaders">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.headers<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchaheaders">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_HEADERS</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchaheaders">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.headers<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.invisible=false</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                Whether google reCAPTCHA invisible should be enabled.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchainvisiblePropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchainvisiblePropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.invisible</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchainvisible"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchainvisible"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchainvisible"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchainvisible"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchainvisible"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchainvisible">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.invisible=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchainvisible">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    invisible</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchainvisible td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchainvisible">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.invisible<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchainvisible">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_INVISIBLE</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchainvisible">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.invisible<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.position=bottomright</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                The google reCAPTCHA badge position (only if invisible is enabled). Accepted values are: </p>
+<ul> <li>
+<code>bottomright</code>: bottom right corner, default value.</li> <li>
+<code>bottomleft</code>: bottom left corner</li> <li>
+<code>inline</code>: allows to control the CSS.</li> </ul>
+                    <p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchapositionPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchapositionPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.position</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchaposition"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchaposition"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchaposition"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchaposition"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchaposition"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchaposition">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.position=bottomright
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchaposition">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    position</span><span class="pi">:</span> <span class="s2">"</span><span class="s">bottomright"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchaposition td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchaposition">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.position<span class="o">=</span><span class="s2">"bottomright"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchaposition">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_POSITION</span><span class="o">=</span><span class="s2">"bottomright"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchaposition">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.position<span class="o">=</span><span class="s2">"bottomright"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.verify-url=https://www.google.com/recaptcha/api/siteverify</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                The reCAPTCHA endpoint for verification of the reCAPTCHA response. The endpoint is specific to the reCAPTCHA provider: </p>
+<ul> <li>For Google reCAPTCHA, the endpoint is <code>https://www.google.com/recaptcha/api/siteverify</code>.</li> <li>For hCaptcha, the endpoint is <code>https://hcaptcha.com/siteverify</code>.</li> <li>For Turnstile, the endpoint is <code>https://challenges.cloudflare.com/turnstile/v0/siteverify</code>.</li> </ul>
+                    <p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchaverifyurlPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchaverifyurlPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.verify-url</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchaverifyurl"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchaverifyurl"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchaverifyurl"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchaverifyurl"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchaverifyurl"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchaverifyurl">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.verify-url=https://www.google.com/recaptcha/api/siteverify
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchaverifyurl">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    verify-url</span><span class="pi">:</span> <span class="s2">"</span><span class="s">https://www.google.com/recaptcha/api/siteverify"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchaverifyurl td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchaverifyurl">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.verify-url<span class="o">=</span><span class="s2">"https://www.google.com/recaptcha/api/siteverify"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchaverifyurl">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_VERIFY_URL</span><span class="o">=</span><span class="s2">"https://www.google.com/recaptcha/api/siteverify"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchaverifyurl">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.verify-url<span class="o">=</span><span class="s2">"https://www.google.com/recaptcha/api/siteverify"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.google-recaptcha.version=GOOGLE_RECAPTCHA_V2</code>
+        </li>
+        <div class="property-description text-wrap">
+            <p>
+                Indicate the version of the recaptcha api.
+Available values are as follows:
+</p>
+<ul>
+<li>
+<code>GOOGLE_RECAPTCHA_V2</code>: V2 version of the recaptcha API.</li>
+<li>
+<code>GOOGLE_RECAPTCHA_V3</code>: V3 version of the recaptcha API.</li>
+<li>
+<code>HCAPTCHA</code>: hCaptcha is an alternative to reCAPTCHA that requires website visitors
+to label images as part of its business model.
+The provider is more focused on manual image recognition challenges. It is a image classification
+task based CAPTCHA provider employing visual challenges like identifying objects.</li>
+<li>
+<code>TURNSTILE</code>: Offers a CAPTCHA alternative by Cloudflare that prioritizes user experience and privacy.
+Turnstile delivers frustration-free, CAPTCHA-free web experiences to website visitors -
+with just a simple snippet of free code. Moreover, Turnstile stops abuse and confirms
+visitors are real without the data privacy concerns or awful user experience of CAPTCHAs.</li>
+<li>
+<code>FRIENDLY_CAPTCHA</code>: Friendly captcha is a European alternative, accessible and GDPR compliant.</li>
+</ul>
+                    <p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.captcha.GoogleRecaptchaProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casgooglerecaptchaversionPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casgooglerecaptchaversionPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.google-recaptcha.version</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasgooglerecaptchaversion"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasgooglerecaptchaversion"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasgooglerecaptchaversion"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasgooglerecaptchaversion"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasgooglerecaptchaversion"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasgooglerecaptchaversion">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.google-recaptcha.version=GOOGLE_RECAPTCHA_V2
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasgooglerecaptchaversion">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  google-recaptcha: <br>    version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">GOOGLE_RECAPTCHA_V2"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasgooglerecaptchaversion td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasgooglerecaptchaversion">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.google-recaptcha.version<span class="o">=</span><span class="s2">"GOOGLE_RECAPTCHA_V2"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasgooglerecaptchaversion">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_GOOGLE_RECAPTCHA_VERSION</span><span class="o">=</span><span class="s2">"GOOGLE_RECAPTCHA_V2"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasgooglerecaptchaversion">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.google-recaptcha.version<span class="o">=</span><span class="s2">"GOOGLE_RECAPTCHA_V2"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasgooglerecaptcha"># A regular expression pattern to indicate that captcha should be activated when the remote IP address matches this pattern, and otherwise skipped and disabled.
+# cas.google-recaptcha.activate-for-ip-address-pattern=
+
+# Headers, defined as a {@link Map}, to include in the request when making the verification call to the recaptcha API.
+# cas.google-recaptcha.headers=
+
+# Whether google reCAPTCHA invisible should be enabled.
+# cas.google-recaptcha.invisible=false
+
+# The google reCAPTCHA badge position (only if invisible is enabled).
+# cas.google-recaptcha.position=bottomright
+
+# The reCAPTCHA endpoint for verification of the reCAPTCHA response.
+# cas.google-recaptcha.verify-url=https://www.google.com/recaptcha/api/siteverify
+
+# Indicate the version of the recaptcha api.
+# cas.google-recaptcha.version=GOOGLE_RECAPTCHA_V2
+
+</textarea>
+    </div>
+<div class="tab-pane properties-tab fade in" id="notescasgooglerecaptcha">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/cas/development/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+    </div>
+<script>
+        window.addEventListener('load', (event) => {$("#linkRdbmscasgooglerecaptcha").remove();$("#linkEmailcasgooglerecaptcha").remove();$("#linkGroovycasgooglerecaptcha").remove();$("#linkSigningEncryptioncasgooglerecaptcha").remove();$("#linkPasswordPolicycasgooglerecaptcha").remove();$("#linkPrincipalTransformationcasgooglerecaptcha").remove();$("#linkPasswordEncodercasgooglerecaptcha").remove();$("#linkAuthnPredicatecasgooglerecaptcha").remove();$("#linkLdapcasgooglerecaptcha").remove();// console.log("Checking for visible link menu in: navPillsMenuscasgooglerecaptcha");
+            let id=$("#navPillsMenuscasgooglerecaptcha a:visible:first").prop('id');
+            // console.log("Attempting to select tab with id " + id);
+            if (id != undefined && id != null) {
+                // console.log("Selecting first tab with link id " + id);
+                let firstTabEl = document.querySelector(`#${id}`);
+                let firstTab = new bootstrap.Tab(firstTabEl);
+                firstTab.show();
+                // console.log("Selected tab with link id " + id);
+            }
+
+            let c = $("#tableRequiredPropertiescasgooglerecaptcha li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navRequiredPropertiescasgooglerecaptcha").closest("table").remove();
+                $("#navRequiredPropertiesLeftcasgooglerecaptcha").closest("table").remove();
+            }
+            c = $("#tableOptionalPropertiescasgooglerecaptcha li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navOptionalPropertiescasgooglerecaptcha").closest("table").remove();
+                $("#navOptionalPropertiesLeftcasgooglerecaptcha").closest("table").remove();
+            }
+            c = $("#tableThirdPartyPropertiescasgooglerecaptcha li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navThirdPartyPropertiescasgooglerecaptcha").hide();
+            }
+
+        });
+    </script>
+
+</div>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Use Case</strong><p>Note that this particular integration
+applies to login and authentication attempts. Several other CAS modules do also support reCAPTCHA
+integrations for their own special flows, specially when it comes to reCAPTCHA activation strategies,
+separate from what is documented and available here.</p>
+</div>
+
+<h2 id="internet-explorer">Internet Explorer</h2>
+
+<p>Remember to disable Internet Explorer’s “Compatibility View” mode. reCAPTCHA
+may not render correctly when that mode is turned on.</p>
+
+<h2 id="recaptcha-per-service">reCAPTCHA Per Service</h2>
+
+<p>Certain reCAPTCHA settings can be defined on a per-service 
+basis via <a href="../services/Configuring-Service-Custom-Properties.html">dedicated properties</a>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td>
+<td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.CasRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^https://.+"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sample service"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"properties"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"java.util.HashMap"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"captchaEnabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.DefaultRegisteredServiceProperty"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"values"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.HashSet"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"false"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"captchaIPAddressPattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.DefaultRegisteredServiceProperty"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"values"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.HashSet"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"pattern1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern2"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<!-- fragment:keep -->
+
+<p>The following properties are available and recognized by CAS for various modules and features:</p>
+
+<table class="cas-datatable paginated-table" id="table-properties">
+    <thead>
+        <tr>
+          <th>Name</th>
+          <th>Default Value</th>
+          <th>Type</th>
+          <th>Group</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+                
+
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                        <tr>
+                            <td>
+                                <code>captchaIPAddressPattern</code>
+                            </td>
+                            <td>
+                                <code>true</code>
+                            </td>
+                            <td>
+                                <code>SET</code>
+                            </td>
+                            <td>
+                                <code>RECAPTCHA</code>
+                            </td>
+                        </tr>
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                        <tr>
+                            <td>
+                                <code>captchaEnabled</code>
+                            </td>
+                            <td>
+                                <code>true</code>
+                            </td>
+                            <td>
+                                <code>BOOLEAN</code>
+                            </td>
+                            <td>
+                                <code>RECAPTCHA</code>
+                            </td>
+                        </tr>
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+
+                    
+                    
+
+                    
+
+                    
+                
+        
+    </tbody>
+</table>
+
+<h2 id="activation-strategy">Activation Strategy</h2>
+
+<p>reCAPTCHA activation strategy is generally controlled via CAS settings. It is also possible to design and 
+inject your own activation strategy into CAS using the following <code class="language-plaintext highlighter-rouge">@Bean</code> that would 
+be registered in a <code class="language-plaintext highlighter-rouge">@AutoConfiguration</code> class:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td>
+<td class="rouge-code"><pre><span class="nd">@Bean</span>
+<span class="kd">public</span> <span class="nc">CaptchaActivationStrategy</span> <span class="nf">captchaActivationStrategy</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">MyCaptchaActivationStrategy</span><span class="o">();</span>
+<span class="o">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>Your configuration class needs to be registered
+with CAS. <a href="../configuration/Configuration-Management-Extensions.html">See this guide</a> for better details.</p>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tether@2.0.0/dist/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="/cas/javascripts/URI.js"></script>
+    <script src="/cas/javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/js/lightbox.min.js"></script>
+
+    <script>
+        let pageSection = 'Integration';
+        let siteUrl = '';
+        let basePath = '/cas';
+
+        
+    </script>
+</body>
+
+</html>

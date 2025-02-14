@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - User Interface Customization</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="overview">Overview</h1>
+<p>Branding the CAS User Interface (UI) involves simply editing the CSS stylesheet and also a small collection of relatively simple JSP include files, also known as views. Optionally, you may also wish to modify the text displayed and/or add additional Javascript effects on these views.</p>
+
+<p>All the files that we’ll be discussing in this section that concern the theme are located in and referenced from: <code>/cas-server-webapp/src/main/webapp</code>.</p>
+
+<h1 id="browser-support">Browser Support</h1>
+<p>CAS user interface should properly and comfortably lend itself to all major browser vendors:</p>
+
+<ul>
+  <li>Google Chrome</li>
+  <li>Mozilla Firefox</li>
+  <li>Apple Safari</li>
+  <li>Microsoft Internet Explorer</li>
+</ul>
+
+<p>Note that certain older version of IE, particularly IE 9 and below may impose additional difficulty in getting the right UI configuration in place.</p>
+
+<h1 id="getting-started">Getting Started</h1>
+
+<h2 id="css">CSS</h2>
+<p>The default styles are all contained in a single file located in <code>css/cas.css</code>. This location is set in <code>WEB-INF/classes/cas-theme-default.properties</code>. If you would like to create your own <code>css/custom.css file</code>, for example, you will need to update <code>standard.custom.css.file</code> key in that file.</p>
+
+<div class="highlight"><pre><code class="bash">standard.custom.css.file<span class="o">=</span>/css/cas.css
+cas.javascript.file<span class="o">=</span>/js/cas.js
+</code></pre></div>
+
+<h3 id="css-per-locale">CSS per Locale</h3>
+<p>Selecting CSS files per enabled locale would involve changing the <code>top.jsp</code> file to include the below sample code:</p>
+
+<div class="highlight"><pre><code class="jsp"><span class="k">&lt;%</span>
+    <span class="n">String</span> <span class="n">cssFileName</span> <span class="o">=</span> <span class="s">&quot;cas.css&quot;</span><span class="o">;</span> <span class="c1">// default</span>
+    <span class="n">Locale</span> <span class="n">locale</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getLocale</span><span class="o">();</span>
+ 
+    <span class="k">if</span> <span class="o">(</span><span class="n">locale</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">locale</span><span class="o">.</span><span class="na">getLanguage</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+       <span class="n">String</span> <span class="n">languageCssFileName</span> <span class="o">=</span> <span class="s">&quot;cas_&quot;</span> <span class="o">+</span> <span class="n">locale</span><span class="o">.</span><span class="na">getLanguage</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;.css&quot;</span><span class="o">;</span>
+       <span class="n">cssFileName</span> <span class="o">=</span> <span class="n">languageCssFileName</span><span class="o">;</span> <span class="c1">//ensure this file exists</span>
+    <span class="o">}</span>
+ 
+<span class="k">%&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;/path/to/css/</span><span class="k">&lt;%=</span><span class="n">cssFileName</span><span class="k">%&gt;</span><span class="s">&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h3 id="responsive-design">Responsive Design</h3>
+<p>CSS media queries bring responsive design features to CAS which would allow adopter to focus on one theme for all appropriate devices and platforms. These queries are defined in the same <code>css/cas.css</code> file. Below follows an example:</p>
+
+<div class="highlight"><pre><code class="css"><span class="k">@media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">960px</span><span class="o">)</span> <span class="p">{</span> 
+  <span class="nt">footer</span> <span class="p">{</span> <span class="k">padding-left</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">@media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">799px</span><span class="o">)</span> <span class="p">{</span> 
+  <span class="nt">header</span> <span class="nt">h1</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span> <span class="p">}</span>
+  <span class="nf">#login</span> <span class="p">{</span> <span class="k">float</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span> <span class="p">}</span>
+  <span class="nf">#fm1</span> <span class="nc">.row</span> <span class="nt">input</span><span class="o">[</span><span class="nt">type</span><span class="o">=</span><span class="nt">text</span><span class="o">],</span> 
+  <span class="nf">#fm1</span> <span class="nc">.row</span> <span class="nt">input</span><span class="o">[</span><span class="nt">type</span><span class="o">=</span><span class="nt">password</span><span class="o">]</span> <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="n">box</span><span class="o">-</span><span class="n">sizing</span><span class="o">:</span> <span class="k">border</span><span class="o">-</span><span class="n">box</span><span class="p">;</span> <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">box</span><span class="o">-</span><span class="n">sizing</span><span class="o">:</span> <span class="k">border</span><span class="o">-</span><span class="n">box</span><span class="p">;</span> <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="n">box</span><span class="o">-</span><span class="n">sizing</span><span class="o">:</span> <span class="k">border</span><span class="o">-</span><span class="n">box</span><span class="p">;</span> <span class="p">}</span>
+  <span class="nf">#fm1</span> <span class="nc">.row</span> <span class="nc">.btn-submit</span> <span class="p">{</span> <span class="k">outline</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span> <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">appearance</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span> <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span> <span class="k">border</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span> <span class="k">background</span><span class="o">:</span> <span class="m">#210F7A</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span> <span class="m">20px</span><span class="p">;</span> <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">3px</span><span class="p">;</span> <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">3px</span><span class="p">;</span> <span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">3px</span><span class="p">;</span> <span class="p">}</span>
+  <span class="nf">#fm1</span> <span class="nc">.row</span> <span class="nc">.btn-reset</span> <span class="p">{</span> <span class="k">display</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span> <span class="p">}</span>
+  <span class="nf">#sidebar</span> <span class="p">{</span> <span class="k">margin-top</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+  <span class="nf">#sidebar</span> <span class="nc">.sidebar-content</span> <span class="p">{</span> <span class="k">padding</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="javascript">Javascript</h2>
+<p>If you need to add some JavaScript, feel free to append <code>js/cas.js</code>.</p>
+
+<p>You can also create your own <code>custom.js</code> file, for example, and call it from within <code>WEB-INF/view/jsp/default/ui/includes/bottom.jsp</code> like so:</p>
+
+<pre><code>&lt;script type="text/javascript" src="&lt;c:url value="/js/custom.js" /&gt;"&gt;&lt;/script&gt; 
+</code></pre>
+
+<p>If you are developing themes per service, each theme also has the ability to specify a custom <code>cas.js</code> file under the <code>cas.javascript.file</code> setting. </p>
+
+<p>The following Javascript libraries are utilized by CAS automatically:</p>
+
+<ul>
+  <li>JQuery</li>
+  <li>JQuery UI</li>
+  <li><a href="http://benalman.com/projects/javascript-debug-console-log/">JavaScript Debug</a>: A simple wrapper for <code>console.log()</code></li>
+</ul>
+
+<h3 id="preserving-anchor-fragments">Preserving Anchor Fragments</h3>
+<p>Anchors/fragments may be lost across redirects as the server-side handler of the form post ignores the client-side anchor, unless appended to the form POST url. This is needed if you want a CAS-authenticated application to be able to use anchors/fragments when bookmarking.</p>
+
+<h4 id="changes-to-casjs">Changes to <code>cas.js</code></h4>
+
+<div class="highlight"><pre><code class="javascript"><span class="cm">/**</span>
+<span class="cm"> * Prepares the login form for submission by appending any URI</span>
+<span class="cm"> * fragment (hash) to the form action in order to propagate it</span>
+<span class="cm"> * through the re-direct (i.e. store it client side).</span>
+<span class="cm"> * @param form The login form object.</span>
+<span class="cm"> * @returns true to allow the form to be submitted.</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">prepareSubmit</span><span class="p">(</span><span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Extract the fragment from the browser&#39;s current location.</span>
+    <span class="kd">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nb">decodeURIComponent</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">);</span>
+ 
+    <span class="c1">// The fragment value may not contain a leading # symbol</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">hash</span> <span class="o">&amp;&amp;</span> <span class="nx">hash</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">hash</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">hash</span><span class="p">;</span>
+    <span class="p">}</span>
+   
+    <span class="c1">// Append the fragment to the current action so that it persists to the redirected URL.</span>
+    <span class="nx">form</span><span class="p">.</span><span class="nx">action</span> <span class="o">=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">action</span> <span class="o">+</span> <span class="nx">hash</span><span class="p">;</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="changes-to-login-form">Changes to Login Form</h4>
+
+<div class="highlight"><pre><code class="jsp"><span class="nt">&lt;form:form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">id=</span><span class="s">&quot;fm1&quot;</span> <span class="na">cssClass=</span><span class="s">&quot;fm-v clearfix&quot;</span> 
+        <span class="na">commandName=</span><span class="s">&quot;${commandName}&quot;</span> <span class="na">htmlEscape=</span><span class="s">&quot;true&quot;</span> 
+        <span class="na">onsubmit=</span><span class="s">&quot;return prepareSubmit(this);&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+
+<h2 id="jsp">JSP</h2>
+<p>The default views are found at <code>WEB-INF/view/jsp/default/ui/</code>.</p>
+
+<p>Notice <code>top.jsp</code> and <code>bottom.jsp</code> include files located in the <code>../includes</code> directory. These serve as the layout template for the other JSP files, which get injected in between during compilation to create a complete HTML page.</p>
+
+<p>The location of these JSP files are configured in <code>WEB-INF/classes/default_views.properties</code>.</p>
+
+<h4 id="tag-libraries">Tag Libraries</h4>
+<p>The following JSP tag libraries are used by the user interface:</p>
+
+<div class="highlight"><pre><code class="jsp"><span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&quot;c&quot;</span> <span class="n">uri</span><span class="o">=</span><span class="s">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> <span class="k">%&gt;</span>
+<span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&quot;spring&quot;</span> <span class="n">uri</span><span class="o">=</span><span class="s">&quot;http://www.springframework.org/tags&quot;</span> <span class="k">%&gt;</span>
+<span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&quot;form&quot;</span> <span class="n">uri</span><span class="o">=</span><span class="s">&quot;http://www.springframework.org/tags/form&quot;</span> <span class="k">%&gt;</span>
+<span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&quot;fn&quot;</span> <span class="n">uri</span><span class="o">=</span><span class="s">&quot;http://java.sun.com/jsp/jstl/functions&quot;</span> <span class="k">%&gt;</span>
+</code></pre></div>
+
+<h4 id="glossary-of-views">Glossary of Views</h4>
+<ul>
+  <li>
+    <p><strong><code>casAccountDisabledView</code></strong><br />
+Specific to Password Policy Enforcement; displayed in the event that authentication encounters an account that is disabled in the underlying account store (i.e. LDAP)</p>
+  </li>
+  <li>
+    <p><strong><code>casAccountLockedView</code></strong><br />
+Specific to Password Policy Enforcement; displayed in the event that authentication encounters an account that is locked in the underlying account store (i.e. LDAP)</p>
+  </li>
+  <li>
+    <p><strong><code>casBadHoursView</code></strong><br />
+Specific to Password Policy Enforcement; displayed in the event that authentication encounters an account that is not allowed authentication within the current time window in the underlying account store (i.e. LDAP)</p>
+  </li>
+  <li>
+    <p><strong><code>casBadWorkstationView</code></strong><br />
+Specific to Password Policy Enforcement; displayed in the event that authentication encounters an account that is not allowed authentication from the current workstation in the underlying account store (i.e. LDAP)</p>
+  </li>
+  <li>
+    <p><strong><code>casExpiredPassView</code></strong><br />
+Specific to Password Policy Enforcement; displayed in the event that authentication encounters an account that has expired in the underlying account store (i.e. LDAP)</p>
+  </li>
+  <li>
+    <p><strong><code>casMustChangePassView</code></strong><br />
+Specific to Password Policy Enforcement; displayed in the event that authentication encounters an account that must change its password in the underlying account store (i.e. LDAP)</p>
+  </li>
+  <li>
+    <p><strong><code>casWarnPassView</code></strong><br />
+Specific to Password Policy Enforcement; displayed when the user account is near expiration based on specified configuration (i.e. LDAP)</p>
+  </li>
+  <li>
+    <p><strong><code>authorizationFailure</code></strong><br />
+Displayed when a user successfully authenticates to the services management web-based administrative UI included with CAS, but the user is not authorized to access that application.</p>
+  </li>
+  <li>
+    <p><strong><code>casConfirmView</code></strong><br />
+Displayed when the user is warned before being redirected to the service.  This allows users to be made aware whenever an application uses CAS to log them in. (If they don’t elect the warning, they may not see any CAS screen when accessing an application that successfully relies upon an existing CAS single sign-on session.) Some CAS adopters remove the ‘warn’ checkbox in the CAS login view and don’t offer this interstitial advisement that single sign-on is happening.</p>
+  </li>
+  <li>
+    <p><strong><code>casGenericSuccess</code></strong><br />
+Displayed when the user has been logged in without providing a service to be redirected to.</p>
+  </li>
+  <li>
+    <p><strong><code>casLoginView</code></strong><br />
+Main login form.</p>
+  </li>
+  <li>
+    <p><strong><code>casLogoutView</code></strong><br />
+Displayed when the user logs out.</p>
+  </li>
+  <li>
+    <p><strong><code>errors</code></strong> 
+Displayed when CAS experiences an error it doesn’t know how to handle (an unhandled Exception). For instance, CAS might be unable to access a database backing the services registry. This is the generic CAS error page. It’s important to brand it to provide an acceptable error experience to your users.</p>
+  </li>
+  <li>
+    <p><strong><code>serviceErrorView</code></strong><br />
+Used in conjunction with the service registry feature, displayed when the service the user is trying to access is not allowed to use CAS. The default in-memory services registry configuration, in ‘deployerConfigContext.xml’, allows all users to obtain a service ticket to access all services.</p>
+  </li>
+  <li>
+    <p><strong><code>serviceErrorSsoView</code></strong> <br />
+Displayed when a user would otherwise have experienced noninteractive single sign-on to a service that is, per services registry configuration, disabled from participating in single sign-on. (In the default services registry registrations, all services are permitted to participate in single sign-on, so this view will not be displayed.)</p>
+  </li>
+</ul>
+
+<h2 id="localization">Localization</h2>
+<p>The CAS Web application includes a number of localized message files:</p>
+
+<ul>
+  <li>English (US)</li>
+  <li>Spanish</li>
+  <li>French</li>
+  <li>Russian</li>
+  <li>Netherlands (Nederlands)</li>
+  <li>Swedish (Svenskt)</li>
+  <li>Italian (Italiano)</li>
+  <li>Urdu</li>
+  <li>Chinese (Simplified)</li>
+  <li>Dutch (Deutsch)</li>
+  <li>Japanese</li>
+  <li>Croatian</li>
+  <li>Czech</li>
+  <li>Slovenian</li>
+  <li>Polish</li>
+  <li>Portuguese (Brazil)</li>
+  <li>Turkish</li>
+  <li>Farsi</li>
+  <li>Arabic</li>
+</ul>
+
+<p>In order to “invoke” a specific language for the UI, the <code>/login</code> endpoint may be passed a <code>locale</code> parameter as such:</p>
+
+<pre><code>https://cas.server.edu/login?locale=it
+</code></pre>
+
+<h3 id="configuration">Configuration</h3>
+<p>All message bundles are marked under <code>messages_xx.properties</code> files at <code>WEB-INF/classes</code>. The default language bundle is for the English language and is thus called <code>messages.properties</code>. If there any custom messages that need to be presented into views, they may also be formatted under <code>custom_messages_xx.properties</code> files.</p>
+
+<p>Messages are parsed and loaded via the following configuration:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;messageSource&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.web.view.CasReloadableMessageBundle&quot;</span>
+          <span class="na">p:basenames-ref=</span><span class="s">&quot;basenames&quot;</span> <span class="na">p:fallbackToSystemLocale=</span><span class="s">&quot;false&quot;</span> <span class="na">p:defaultEncoding=</span><span class="s">&quot;UTF-8&quot;</span>
+          <span class="na">p:cacheSeconds=</span><span class="s">&quot;180&quot;</span> <span class="na">p:useCodeAsDefaultMessage=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+    
+<span class="nt">&lt;util:list</span> <span class="na">id=</span><span class="s">&quot;basenames&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value&gt;</span>classpath:custom_messages<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;value&gt;</span>classpath:messages<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/util:list&gt;</span>
+</code></pre></div>
+
+<p>Messages are then read on each JSP view via the following sample configuration:</p>
+
+<div class="highlight"><pre><code class="jsp"><span class="nt">&lt;spring:message</span> <span class="na">code=</span><span class="s">&quot;message.key&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>In the event that the code is not found in the activated resource bundle, the code itself will be used verbatim.</p>
+
+<h2 id="themes">Themes</h2>
+<p>With the introduction of <a href="Service-Management.html">Service Management application</a>, deployers are now able to switch the themes based on different services. For example, you may want to have different login screens (different styles) for staff applications and student applications. Or, you want to show two layouts for day time and night time. This document could help you go through the basic settings to achieve this.</p>
+
+<h3 id="components">Components</h3>
+<p>Configuration of service-specific themes is backed by the Spring framework and provided by the following component:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;themeResolver&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.web.ServiceThemeResolver&quot;</span>
+    <span class="na">p:defaultThemeName=</span><span class="s">&quot;${cas.themeResolver.defaultThemeName}&quot;</span>
+    <span class="na">p:servicesManager-ref=</span><span class="s">&quot;servicesManager&quot;</span>
+    <span class="na">p:argumentExtractors-ref=</span><span class="s">&quot;argumentExtractors&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>Furthermore, deployers may be able to use the functionality provided by the <code>ThemeChangeInterceptor</code> of Spring framework to provide theme configuration per each request. </p>
+
+<h3 id="configuration-1">Configuration</h3>
+<ul>
+  <li>Add another theme properties file, which must be placed to the root of <code>/WEB-INF/classes</code> folder, name it as <code>theme_name.properties</code>. Contents of this file should match the <code>cas-theme-default.properties</code> file.</li>
+  <li>Add the location of related styling files, such as CSS and Javascript in the file above.</li>
+  <li>Specify the name of your theme for the service definition under the <code>theme</code> property.</li>
+</ul>
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

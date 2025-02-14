@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Service Management</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="service-management">Service Management</h1>
+<p>The CAS service management facility allows CAS server administrators to declare and configure which services
+(CAS clients) may make use of CAS in which ways. The core component of the service management facility is the
+service registry, provided by the <code>ServiceRegistryDao</code> component, that stores one or more registered services
+containing metadata that drives a number of CAS behaviors:</p>
+
+<ul>
+  <li>Authorized services - Control which services may participate in a CAS SSO session.</li>
+  <li>Forced authentication - Provides administrative control for forced authentication.</li>
+  <li>Attribute release - Provide user details to services for authorization and personalization.</li>
+  <li>Proxy control - Further restrict authorized services by granting/denying proxy authentication capability.</li>
+  <li>Theme control - Define alternate CAS themese to be used for particular services.</li>
+</ul>
+
+<p>The service management console is a Web application that may be deployed along side CAS that provides a GUI
+to manage service registry data.</p>
+
+<h2 id="demo">Demo</h2>
+<p>The Service Management web application is available for demo at <a href="https://jasigcasmgmt.herokuapp.com">https://jasigcasmgmt.herokuapp.com</a></p>
+
+<h2 id="considerations">Considerations</h2>
+<p>It is not required to use the service management facility explicitly. CAS ships with a default configuration that is
+suitable for deployments that do not need or want to leverage the capabilities above. The default configuration allows
+any service contacting CAS over https/imaps to use CAS and receive any attribute configured by an <code>IPersonAttributeDao</code>
+bean.</p>
+
+<p>A premier consideration around service management is whether to leverage the user interface. If the service management
+console is used, then a <code>ServiceRegistryDao</code> that provides durable storage (e.g. <code>JpaServiceRegistryDaoImpl</code>) must be
+used to preserve state across restarts.</p>
+
+<p>It is perfectly acceptable to avoid the service management console Web application for managing registered service data.
+In fact, configuration-driven methods (e.g. XML, JSON) may be preferable in environments where strict configuration
+management controls are required.</p>
+
+<h2 id="registered-services">Registered Services</h2>
+
+<p>Registered services present the following metadata:</p>
+
+<ul>
+  <li><em>ID</em> (<code>id</code>) - Required unique identifier. In most cases this is managed automatically by the <code>ServiceRegistryDao</code>.</li>
+  <li><em>Name</em> (<code>name</code>) - Required name (255 characters or less).</li>
+  <li><em>Description</em> (<code>description</code>) - Optional free-text description of the service. (255 characters or less)</li>
+  <li><em>Service URL</em> (<code>serviceId</code>) - Required <a href="http://ant.apache.org/manual/dirtasks.html#patterns">Ant pattern</a> or
+<a href="http://docs.oracle.com/javase/tutorial/essential/regex/">regular expression</a> describing a logical service. A logical
+service defines one or more URLs where a service or services are located. The definition of the url pattern must be <strong>done carefully</strong> because it can open security breaches. For example, using Ant pattern, if you define the following service : <code>http://example.*/myService</code> to match <code>http://example.com/myService</code> and <code>http://example.fr/myService</code>, it’s a bad idea as it can be tricked by <code>http://example.hostattacker.com/myService</code>. The best way to proceed is to define the more precise url patterns.</li>
+  <li><em>Theme Name</em> (<code>theme</code>) - Optional <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-themeresolver">Spring theme</a>
+that may be used to customize the CAS UI when the service requests a ticket.</li>
+  <li><em>Enabled</em> (<code>enabled</code>) - Flag to toggle whether the entry is active; a disabled entry produces behavior equivalent
+to a non-existent entry.</li>
+  <li><em>SSO Participant</em> (<code>ssoEnabled</code>) - Set to false to force users to authenticate to the service regardless of protocol flags (e.g. renew).
+This flag provides some support for centralized application of security policy.</li>
+  <li><em>Anonymous Access</em> (<code>anonymousAccess</code>) - Set to true to provide an opaque identifier for the username instead of
+the principal ID. The default behavior (false) is to release the principal ID. The identifier conforms to the
+requirements of the <a href="http://www.incommon.org/federation/attributesummary.html#eduPersonTargetedID">eduPersonTargetedID</a>
+attribute.</li>
+  <li><em>Allowed to Proxy</em> (<code>allowedToProxy</code>) - True to allow proxy authentication, false otherwise. Note that this determines
+whether the service is able to proxy authentication, not whether the service accepts proxy authentication.</li>
+  <li><em>User Attributes</em> (<code>allowedAttributes</code>) - Optional field that allows restricting the global set of user attributes
+on a per-service basis. Only the attributes specified in this field will be released.</li>
+  <li><em>Ignore Attribute Management</em> (<code>ignoreAttributes</code>) - True to ignore per-service attribute management, which causes the value of <em>User Attributes</em> (<code>allowedAttributes</code>) to be ignored.</li>
+  <li><em>Evaluation Order</em> (<code>evaluationOrder</code>) - Required value that determines relative order of evaluation of registered services. This flag is particularly important in cases where two service URL expressions cover the same services; evaluation order determines which registration is evaluated first.</li>
+  <li><em>Username Attribute</em> (<code>usernameAttribute</code>) - Name of the attribute that would identify the principal for this service definition only. </li>
+  <li><em>Required Handlers</em> (<code>requiredHandlers</code>) - Set of authentication handler names that must successfully authenticate credentials in order to access the service.</li>
+  <li><em>Attribute Filter</em> (<code>attributeFilter</code>) - A filter associated with this service to perform additional processing on the allowed attributes at release time.</li>
+  <li><em>Logout Type</em> (<code>logoutType</code>) - Defines how this service should be treated once the logout protocol is initiated. Acceptable values are <code>LogoutType.BACK_CHANNEL</code> or <code>LogoutType.FRONT_CHANNEL</code>. See <a href="Logout-Single-Signout.html">this guide</a> for more details on logout.</li>
+</ul>
+
+<h2 id="persisting-registered-service-data">Persisting Registered Service Data</h2>
+
+<h6 id="inmemoryserviceregistrydaoimpl"><code>InMemoryServiceRegistryDaoImpl</code></h6>
+<p>CAS uses in-memory services management by default, with the registry seeded from registration beans wired via Spring.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;serviceRegistryDao&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.InMemoryServiceRegistryDaoImpl&quot;</span>
+      <span class="na">p:registeredServices-ref=</span><span class="s">&quot;registeredServicesList&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;util:list</span> <span class="na">id=</span><span class="s">&quot;registeredServicesList&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.RegexRegisteredService&quot;</span>
+          <span class="na">p:id=</span><span class="s">&quot;1&quot;</span>
+          <span class="na">p:name=</span><span class="s">&quot;HTTPS and IMAPS services on example.com&quot;</span>
+          <span class="na">p:serviceId=</span><span class="s">&quot;^(https|imaps)://([A-Za-z0-9_-]+\.)*example\.com/.*&quot;</span>
+          <span class="na">p:evaluationOrder=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/util:list&gt;</span>
+</code></pre></div>
+
+<p>This component is <em>NOT</em> suitable for use with the service management console since it does not persist data.
+On the other hand, it is perfectly acceptable for deployments where the XML configuration is authoritative for
+service registry data and the UI will not be used.</p>
+
+<h6 id="ldapserviceregistrydao"><code>LdapServiceRegistryDao</code></h6>
+<p>Service registry implementation which stores the services in a LDAP Directory. Uses an instance of <code>LdapRegisteredServiceMapper</code>, that by default is <code>DefaultLdapServiceMapper</code> in order to configure settings for retrieval, search and persistence of service definitions. By default, entries are assigned the <code>objectclass</code> <code>casRegisteredService</code> attribute and are looked up by the <code>ui</code> attribute.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;serviceRegistryDao&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.adaptors.ldap.services.LdapServiceRegistryDao&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;pooledLdapConnectionFactory&quot;</span>
+      <span class="na">p:searchRequest-ref=</span><span class="s">&quot;searchRequest&quot;</span>
+      <span class="na">p:ldapServiceMapper-ref=</span><span class="s">&quot;ldapMapper&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapMapper&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.adaptors.ldap.services.DefaultLdapServiceMapper&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p />
+
+<h6 id="defaultldapservicemapper"><code>DefaultLdapServiceMapper</code></h6>
+<p>The default mapper has support for the following items:</p>
+
+<ul>
+  <li><code>objectClass</code>: default -&gt; “casRegisteredService”</li>
+  <li><code>serviceIdAttribute</code>: default -&gt; “casServiceUrlPattern”</li>
+  <li><code>idAttribute</code>: default -&gt; “uid”</li>
+  <li><code>serviceDescriptionAttribute</code>: default -&gt; “description”</li>
+  <li><code>serviceNameAttribute</code>: default -&gt; “cn”</li>
+  <li><code>serviceEnabledAttribute</code>: default -&gt; “casServiceEnabled”</li>
+  <li><code>serviceSsoEnabledAttribute</code>: default -&gt; “casServiceSsoEnabled”</li>
+  <li><code>serviceAnonymousAccessAttribute</code>: default -&gt; “casServiceAnonymousAccess”</li>
+  <li><code>serviceAllowedToProxyAttribute</code>: default -&gt; “casServiceAllowedToProxy”</li>
+  <li><code>serviceThemeAttribute</code>: default -&gt; “casServiceTheme”</li>
+  <li><code>usernameAttribute</code>: default -&gt; “casUsernameAttribute”</li>
+  <li><code>serviceAllowedAttributesAttribute</code>: default -&gt; “casAllowedAttributes”</li>
+  <li><code>ignoreAttributesAttribute</code>: default -&gt; “casIgnoreAttributes”</li>
+  <li><code>evaluationOrderAttribute</code>: default -&gt; “casEvaluationOrder”</li>
+  <li><code>requiredHandlersAttribute</code>: default -&gt; “casRequiredHandlers”</li>
+</ul>
+
+<h6 id="jpaserviceregistrydaoimpl"><code>JpaServiceRegistryDaoImpl</code></h6>
+<p>Stores registered service data in a database; the preferred choice when using the service management console.
+The following configuration template may be applied to <code>deployerConfigContext.xml</code> to provide for persistent
+registered service storage. The configuration assumes a <code>dataSource</code> bean is defined in the context.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;tx:annotation-driven</span> <span class="na">transaction-manager-ref=</span><span class="s">&quot;transactionManager&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;factoryBean&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean&quot;</span>
+      <span class="na">p:dataSource-ref=</span><span class="s">&quot;dataSource&quot;</span>
+      <span class="na">p:jpaVendorAdapter-ref=</span><span class="s">&quot;jpaVendorAdapter&quot;</span>
+      <span class="na">p:packagesToScan-ref=</span><span class="s">&quot;packagesToScan&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;jpaProperties&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;props&gt;</span>
+        <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.dialect&quot;</span><span class="nt">&gt;</span>${database.dialect}<span class="nt">&lt;/prop&gt;</span>
+        <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.hbm2ddl.auto&quot;</span><span class="nt">&gt;</span>update<span class="nt">&lt;/prop&gt;</span>
+        <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.jdbc.batch_size&quot;</span><span class="nt">&gt;</span>${database.batchSize}<span class="nt">&lt;/prop&gt;</span>
+      <span class="nt">&lt;/props&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;jpaVendorAdapter&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter&quot;</span>
+      <span class="na">p:generateDdl=</span><span class="s">&quot;true&quot;</span>
+      <span class="na">p:showSql=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;serviceRegistryDao&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.JpaServiceRegistryDaoImpl&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;transactionManager&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.springframework.orm.jpa.JpaTransactionManager&quot;</span>
+      <span class="na">p:entityManagerFactory-ref=</span><span class="s">&quot;factoryBean&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!--</span>
+<span class="c">   | Injects EntityManager/Factory instances into beans with</span>
+<span class="c">   | @PersistenceUnit and @PersistenceContext</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!--</span>
+<span class="c">   Configuration via JNDI</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dataSource&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.jndi.JndiObjectFactoryBean&quot;</span>
+    <span class="na">p:jndiName=</span><span class="s">&quot;java:comp/env/jdbc/cas-source&quot;</span> <span class="nt">/&gt;</span>   
+</code></pre></div>
+
+<p>If you prefer a direct connection to the database, here’s a sample configuration of the <code>dataSource</code>:</p>
+
+<div class="highlight"><pre><code class="xml"> <span class="nt">&lt;bean</span>
+        <span class="na">id=</span><span class="s">&quot;dataSource&quot;</span>
+        <span class="na">class=</span><span class="s">&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;</span>
+        <span class="na">p:driverClassName=</span><span class="s">&quot;org.hsqldb.jdbcDriver&quot;</span>
+        <span class="na">p:jdbcUrl-ref=</span><span class="s">&quot;database&quot;</span>
+        <span class="na">p:password=</span><span class="s">&quot;&quot;</span>
+        <span class="na">p:username=</span><span class="s">&quot;sa&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>The data source will need to be modified for your particular database (i.e. Oracle, MySQL, etc.), but the name <code>dataSource</code> should be preserved. Here is a MYSQL sample:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span>
+        <span class="na">id=</span><span class="s">&quot;dataSource&quot;</span>
+        <span class="na">class=</span><span class="s">&quot;org.apache.commons.dbcp.BasicDataSource&quot;</span>
+        <span class="na">p:driverClassName=</span><span class="s">&quot;com.mysql.jdbc.Driver&quot;</span>
+        <span class="na">p:url=</span><span class="s">&quot;jdbc:mysql://localhost:3306/test?autoReconnect=true&quot;</span>
+        <span class="na">p:password=</span><span class="s">&quot;&quot;</span>
+        <span class="na">p:username=</span><span class="s">&quot;sa&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>You will also need to change the property <code>hibernate.dialect</code> in adequacy with your database in <code>cas.properties</code> and <code>deployerConfigContext.xml</code>. </p>
+
+<p>For example, for MYSQL the setting would be:</p>
+
+<p>In <code>cas.properties</code>:</p>
+
+<div class="highlight"><pre><code class="bash">database.hibernate.dialect<span class="o">=</span>org.hibernate.dialect.MySQLDialect
+</code></pre></div>
+
+<p>In <code>deployerConfigContext.xml</code>:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.dialect&quot;</span><span class="nt">&gt;</span>org.hibernate.dialect.MySQLDialect<span class="nt">&lt;/prop&gt;</span>
+</code></pre></div>
+
+<p>You will also need to ensure that the xml configuration file contains the <code>tx</code> namespace:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
+       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+       <span class="na">xmlns:tx=</span><span class="s">&quot;http://www.springframework.org/schema/tx&quot;</span>
+       <span class="na">xmlns:p=</span><span class="s">&quot;http://www.springframework.org/schema/p&quot;</span>
+       <span class="na">xsi:schemaLocation=</span><span class="s">&quot;</span>
+<span class="s">       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+
+<p>Finally, when adding a new source new dependencies may be required on Hibernate, commons-dbcp. Be sure to add those to your <code>pom.xml</code>. Below is a sample configuration for MYSQL. Be sure to adjust the version elements for the appropriate version number.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>commons-dbcp<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>commons-dbcp<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${commons.dbcp.version}<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+ 
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>hibernate-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${hibernate.version}<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>compile<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+ 
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>hibernate-entitymanager<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${hibernate.entitymgmr.version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>mysql<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>mysql-connector-java<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${mysql.connector.version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h2 id="installing-the-services-management-webapp">Installing the Services Management Webapp</h2>
+
+<p>The services management webapp is no more part of the CAS server and is a standalone web application: <code>cas-management-webapp</code>.</p>
+
+<p>Nonetheless, one must keep in mind that both applications (the CAS server and the services management webapp) share the <em>same</em> configuration for the CAS services:</p>
+
+<ul>
+  <li>the management webapp is used to add/edit/delete all the CAS services</li>
+  <li>the CAS server loads/relies on all these defined CAS services to process all incoming requests.</li>
+</ul>
+
+<p>You can install the services management webapp in your favourite applications server, there is no restriction.
+Though, you need at first to configure it according to your environment. Towards that goal, the best way to proceed is to create your own services management webapp using a <a href="http://maven.apache.org/plugins/maven-war-plugin/overlays.html">Maven overlay</a> based on the CAS services management webapp:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.jasig.cas<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>cas-management-webapp<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>${cas.version}<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;type&gt;</span>war<span class="nt">&lt;/type&gt;</span>
+  <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h3 id="authentication-method">Authentication method</h3>
+
+<p>By default, the <code>cas-management-webapp</code> is configured to authenticate against a CAS server. We assume that it’s the case in this documentation. However, you could change the authentication method by overriding the <code>WEB-INF/spring-configuration/securityContext.xml</code> file.</p>
+
+<h3 id="securing-access-and-authorization">Securing Access and Authorization</h3>
+<p>Access to the management webapp is controlled via Spring Security. Rules are defined in the <code>/cas-management-webapp/src/main/webapp/WEB-INF/managementConfigContext.xml</code> file.</p>
+
+<h4 id="static-list-of-users">Static List of Users</h4>
+<p>By default, access is limited to a static list of users whose credentials may be specified in a <code>user-details.properties</code> file that should be available on the runtime classpath. </p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;sec:user-service</span> <span class="na">id=</span><span class="s">&quot;userDetailsService&quot;</span> 
+   <span class="na">properties=</span><span class="s">&quot;${user.details.file.location:classpath:user-details.properties}&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>You can change the location of this file, by uncommenting the following key in your <code>cas-management.properties</code> file:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c">##</span>
+<span class="c"># User details file location that contains list of users</span>
+<span class="c"># who are allowed access to the management webapp:</span>
+<span class="c"># </span>
+<span class="c"># user.details.file.location = classpath:user-details.properties</span>
+</code></pre></div>
+
+<p>The format of the file should be as such:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># The syntax of each entry should be in the form of:</span>
+<span class="c"># </span>
+<span class="c"># username=password,grantedAuthority[,grantedAuthority][,enabled|disabled]</span>
+
+<span class="c"># Example:</span>
+<span class="c"># casuser=notused,ROLE_ADMIN</span>
+</code></pre></div>
+
+<h4 id="ldap-managed-list-of-users">LDAP-managed List of Users</h4>
+<p>If you wish allow access to the services management application via an LDAP group/server, open up the <code>deployerConfigContext</code> file of the management web application and adjust for the following:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;sec:ldap-server</span> <span class="na">id=</span><span class="s">&quot;ldapServer&quot;</span> <span class="na">url=</span><span class="s">&quot;ldap://myserver:13060/&quot;</span>
+                 <span class="na">manager-dn=</span><span class="s">&quot;cn=adminusername,cn=Users,dc=london-scottish,dc=com&quot;</span>
+                 <span class="na">manager-password=</span><span class="s">&quot;mypassword&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;sec:ldap-user-service</span> <span class="na">id=</span><span class="s">&quot;userDetailsService&quot;</span> <span class="na">server-ref=</span><span class="s">&quot;ldapServer&quot;</span>
+            <span class="na">group-search-base=</span><span class="s">&quot;cn=Groups,dc=mycompany,dc=com&quot;</span> <span class="na">group-role-attribute=</span><span class="s">&quot;cn&quot;</span>
+            <span class="na">group-search-filter=</span><span class="s">&quot;(uniquemember={0})&quot;</span>
+            <span class="na">user-search-base=</span><span class="s">&quot;cn=Users,dc=mycompany,dc=com&quot;</span>
+            <span class="na">user-search-filter=</span><span class="s">&quot;(uid={0})&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>You will also need to ensure that the <code>spring-security-ldap</code> dependency is available to your build at runtime:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;dependency&gt;</span>
+   <span class="nt">&lt;groupId&gt;</span>org.springframework.security<span class="nt">&lt;/groupId&gt;</span>
+   <span class="nt">&lt;artifactId&gt;</span>spring-security-ldap<span class="nt">&lt;/artifactId&gt;</span>
+   <span class="nt">&lt;version&gt;</span>${spring.security.ldap.version}<span class="nt">&lt;/version&gt;</span>
+   <span class="nt">&lt;exclusions&gt;</span>
+     <span class="nt">&lt;exclusion&gt;</span>
+             <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+             <span class="nt">&lt;artifactId&gt;</span>spring-aop<span class="nt">&lt;/artifactId&gt;</span>
+     <span class="nt">&lt;/exclusion&gt;</span>
+     <span class="nt">&lt;exclusion&gt;</span>
+             <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+             <span class="nt">&lt;artifactId&gt;</span>spring-tx<span class="nt">&lt;/artifactId&gt;</span>
+     <span class="nt">&lt;/exclusion&gt;</span>
+     <span class="nt">&lt;exclusion&gt;</span>
+             <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+             <span class="nt">&lt;artifactId&gt;</span>spring-beans<span class="nt">&lt;/artifactId&gt;</span>
+     <span class="nt">&lt;/exclusion&gt;</span>
+     <span class="nt">&lt;exclusion&gt;</span>
+             <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+             <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
+     <span class="nt">&lt;/exclusion&gt;</span>
+     <span class="nt">&lt;exclusion&gt;</span>
+             <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+             <span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
+     <span class="nt">&lt;/exclusion&gt;</span>
+   <span class="nt">&lt;/exclusions&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h3 id="urls-configuration">Urls configuration</h3>
+
+<p>The urls configuration of the CAS server and management applications can be done by overriding the default <code>WEB-INF/cas-management.properties</code> file:</p>
+
+<pre><code># CAS
+cas.host=http://localhost:8080
+cas.prefix=${cas.host}/cas
+cas.securityContext.casProcessingFilterEntryPoint.loginUrl=${cas.prefix}/login
+cas.securityContext.ticketValidator.casServerUrlPrefix=${cas.prefix}
+# Management
+cas-management.host=${cas.host}
+cas-management.prefix=${cas-management.host}/cas-management
+cas-management.securityContext.serviceProperties.service=${cas-management.prefix}/j_spring_cas_security_check
+cas-management.securityContext.serviceProperties.adminRoles=ROLE_ADMIN
+</code></pre>
+
+<p>When authenticating against a CAS server, the services management webapp will be processed as a regular CAS service and thus, needs to be defined in the services registry (of the CAS server).</p>
+
+<h3 id="services-registry">Services registry</h3>
+
+<p>You also need to define the <em>common</em> services registry by overriding the <code>WEB-INF/managementConfigContext.xml</code> file and set the appropriate <code>serviceRegistryDao</code> (see above: <em>Persisting Registered Service Data</em>). It should be the same configuration you already use in your CAS server (in the <code>WEB-INF/deployerConfigContext.xml</code> file).</p>
+
+<h3 id="ui">UI</h3>
+
+<p>The services management webapp is pretty simple to use:</p>
+
+<ul>
+  <li>use the “Manage Services” link to see the list of all CAS services</li>
+  <li>click the “Add New Service” link to add a new CAS service</li>
+  <li>click the “edit” link with the pen image (on the right of a CAS service definition) to edit a specific CAS service</li>
+  <li>click the “delete” link with the trash image (on the right of a CAS service definition) to delete a specific CAS service (after a confirmation alert).</li>
+  <li>The app takes advantage of the Infusion Javascript framework in order to add drag&amp;drop functionality onto the screen.</li>
+</ul>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

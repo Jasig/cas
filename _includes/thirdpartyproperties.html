@@ -1,0 +1,136 @@
+<!-- fragment:keep -->
+{%- assign thirdPartyPropertiesRandomNumber = include.id -%} 
+{%- assign thirdParty = include.thirdParty | split: "," -%} 
+{%- assign thirdPartyExactMatch = include.thirdPartyExactMatch | split: "," -%} 
+{%- assign thirdPartyStartsWith = include.thirdPartyStartsWith | split: "," -%} 
+{%- assign excludes = include.excludes | split: "," -%} 
+{%- assign forcePropertyTabsOnClick = include.forcePropertyTabsOnClick | default: "false" -%} 
+{%- assign textAreaThirdPartyProperties = blank -%} 
+<table class="cas-datatable properties {{ paginatedClass }}" id='tableThirdPartyProperties{{ thirdPartyPropertiesRandomNumber }}'>
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+
+    {%- for cfg in site.data[siteDataVersion]["third-party"] -%} 
+        {%- assign configBlock = cfg[1] -%} 
+
+        {%- for config in configBlock -%} 
+
+            {%- for tp in thirdParty -%} 
+                {%- if config.name contains tp -%} 
+                    {%- assign foundExcluded = false -%} 
+                    {%- for ex in excludes -%} 
+                        {%- if config.name contains ex -%} 
+                            {%- assign foundExcluded = true -%} 
+                        {%- endif -%} 
+                    {%- endfor -%} 
+                    {%- unless foundExcluded == true -%} 
+                        {%- assign textAreaThirdPartyProperties = textAreaThirdPartyProperties
+                            | append: "# "
+                            | append: config.shortDescription | strip_html
+                            | append: "&#13;&#10;"
+                            | append: "# "
+                            | append: config.name | replace: "[]", "[0]"
+                            | append: "="
+                            | append: config.defaultValue
+                            | append: "&#13;&#10;"
+                            | append: "&#13;&#10;" -%} 
+
+                        {%- capture renderedProperties -%} {% include_cached casproperty.html
+                            name=config.name
+                            owner=config.owner
+                            defaultValue=config.defaultValue
+                            description=config.description
+                            duration=config.duration
+                            expressionLanguage=config.expressionLanguage
+                            deprecationLevel=config.deprecationLevel
+                            deprecationReplacement=config.deprecationReplacement %}{%- endcapture -%} 
+                        {{ renderedProperties | markdownify }}
+
+                    {%- endunless -%} 
+                {%- endif -%} 
+            {%- endfor -%} 
+
+            {%- for exm in thirdPartyExactMatch -%} 
+                {%- if config.name == exm -%} 
+                    {%- assign foundExcluded = false -%} 
+                    {%- for ex in excludes -%} 
+                        {%- if config.name contains ex -%} 
+                            {%- assign foundExcluded = true -%} 
+                        {%- endif -%} 
+                    {%- endfor -%} 
+                    {%- unless foundExcluded == true -%} 
+                        {%- assign textAreaThirdPartyProperties = textAreaThirdPartyProperties
+                            | append: "# "
+                            | append: config.shortDescription | strip_html
+                            | append: "&#13;&#10;"
+                            | append: "# "
+                            | append: config.name | replace: "[]", "[0]"
+                            | append: "="
+                            | append: config.defaultValue
+                            | append: "&#13;&#10;"
+                            | append: "&#13;&#10;" -%} 
+
+                        {%- capture renderedProperties -%} {% include_cached casproperty.html
+                            name=config.name
+                            owner=config.owner
+                            defaultValue=config.defaultValue
+                            description=config.description
+                            duration=config.duration
+                            expressionLanguage=config.expressionLanguage
+                            deprecationLevel=config.deprecationLevel
+                            deprecationReplacement=config.deprecationReplacement %}{%- endcapture -%} 
+                        {{ renderedProperties | markdownify }}
+
+                    {%- endunless -%} 
+                {%- endif -%} 
+            {%- endfor -%} 
+
+            {%- for exm in thirdPartyStartsWith -%} 
+                           
+                {%- assign startsWithResults = config.name | split: exm -%} 
+
+                {%- if startsWithResults[0].size == 0 or config.name == exm[0] -%} 
+            
+                    {%- assign foundExcluded = false -%} 
+                    {%- for ex in excludes -%} 
+                        {%- if config.name contains ex -%} 
+                            {%- assign foundExcluded = true -%} 
+                        {%- endif -%} 
+                    {%- endfor -%} 
+                    {%- unless foundExcluded == true -%} 
+                    
+                        {%- assign textAreaThirdPartyProperties = textAreaThirdPartyProperties
+                            | append: "# "
+                            | append: config.shortDescription | strip_html
+                            | append: "&#13;&#10;"
+                            | append: "# "
+                            | append: config.name | replace: "[]", "[0]"
+                            | append: "="
+                            | append: config.defaultValue
+                            | append: "&#13;&#10;"
+                            | append: "&#13;&#10;" -%} 
+                        {%- capture renderedProperties -%} {% include_cached casproperty.html
+                            name=config.name
+                            owner=config.owner
+                            defaultValue=config.defaultValue
+                            description=config.description
+                            duration=config.duration
+                            expressionLanguage=config.expressionLanguage
+                            deprecationLevel=config.deprecationLevel
+                            deprecationReplacement=config.deprecationReplacement %}{%- endcapture -%} 
+                        {{ renderedProperties | markdownify }}
+
+                    {%- endunless -%} 
+                {%- endif -%} 
+
+            {%- endfor -%} 
+
+        {%- endfor -%} 
+
+    {%- endfor -%} 
+
+    </tbody>
+</table>
+
+<textarea style="position:absolute; left: -10000px;"
+id="copyAreaThirdPartyProperties{{ thirdPartyPropertiesRandomNumber }}">{{ textAreaThirdPartyProperties }}</textarea>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Vulnerability Response</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    <h1 id="security-vulnerability-response">Security Vulnerability Response</h1>
+
+<p>Members involved in <a href="/cas/Mailing-Lists.html">CAS application security</a>:</p>
+
+<ul>
+  <li>Proactively work to improve the security of CAS focusing on the Apereo CAS server, the protocols and various CAS clients.</li>
+  <li>Respond to potential vulnerabilities and create, maintain, and execute on vulnerability triage and notification policy, fielding handoffs from the Apereo security and otherwise.</li>
+  <li>Issue vulnerability reports and work to coordinate workarounds and fix responses to security concerns that arise.</li>
+  <li>Produce artifacts that help potential CAS adopters to evaluate the security of CAS both as open source product and as they intend to locally implement the product. This includes threat modeling, data flow diagrams, etc.</li>
+  <li>Create and maintain recommendations on good practices for CAS implementation around hardening, configuration, failing safe, security by default, etc.</li>
+</ul>
+
+<p>To review the old archives of the application security working group, <a href="https://wiki.jasig.org/display/CAS/CAS+AppSec+Working+Group">please see this guide</a>.</p>
+
+<h2 id="response-model">Response Model</h2>
+
+<ul>
+  <li>Security issues are <a href="/cas/Mailing-Lists.html">privately reported to Apereo</a> via <code class="language-plaintext highlighter-rouge">cas-appsec-private@apereo.org</code>.</li>
+  <li>Project members acknowledge the issue and ascertain its merits. All discussion <strong>MUST</strong> happen privately on the <a href="/cas/Mailing-Lists.html">appropriate mailing list</a>.</li>
+  <li>A fix is planned, produced and made available privately as a <em>direct commit</em> to the codebase.</li>
+  <li>Project members or the original reporter <strong>SHOULD</strong> verify and confirm that the produced patch does indeed fix the issue.</li>
+  <li>A patch release is made available to the wider public.</li>
+</ul>
+
+<div class="alert alert-warning"><strong>List Etiquette</strong><p>The security team asks that you please <strong>DO NOT</strong> create publicly-viewable issues or posts to address the problem. There is no good sense in creating panic and chaos. All community members <strong>SHOULD</strong> ignore all such public announcements and reports.</p></div>
+
+<h3 id="dependency-upgrades">Dependency Upgrades</h3>
+
+<p>Given the amount of effort involved in planning and releasing a security patch and disclosing the issue, communicating descriptions, intent,
+attack window and fixes, etc it is generally best to keep security releases reserved for issues that actually can be reproduced based on
+a concrete use case or those that truly and in practice affect the inner workings of the CAS software in a real way. If you could have such a
+use case at some point, please be sure to supply details and steps to reproduce issues. Supposed <em>vulnerabilities</em> that are picked up and reported by security scanners, static code analyzers and such affecting a third party library used by CAS generally do not qualify, unless there is solid evidence provided by the reporter to indicate a real, practical issue affecting CAS daily ops. Such warnings often appear superficial in the context of a CAS deployment. Usually, the best course of action would be to make the upgrades either locally to the installation script or switch to a more recent CAS version that might remove such warnings.</p>
+
+<h3 id="security-bounty">Security Bounty</h3>
+
+<p>Apereo CAS project does <em>not</em> provide a bounty or reward for discovering and reporting security issues. Security reports are received
+on an as-is basis without any warranties, guarantees, or promises of any kind.</p>
+
+<h3 id="report-format">Report Format</h3>
+
+<p>When you are preparing to communicate a security issue to the appropriate channel privately, please make sure your 
+report contains enough diagnostics data to expedite reviews and feedback:</p>
+
+<ul>
+  <li>Indicate the <em>exact CAS version numbers</em> that exhibit the seemingly-faulty behavior.</li>
+  <li>Describe your deployment/development environment in sufficient relevant detail.</li>
+  <li>Include error logs, debug logs, screenshots and other useful snippets of your configuration.</li>
+  <li>Include steps to explain how the issue might be reproduced.</li>
+  <li>Include an overlay project that can duplicate the issue in practice.</li>
+  <li>If possible, prepare and share unit/integration tests to recreate the issue.</li>
+</ul>
+
+<p>Before posting a possible security issue, please make sure the affected CAS release 
+line is still <a href="/cas/developer/Maintenance-Policy.html">under maintenance</a>. Releases
+that are considered EOL will not receive further updates and/or attention from designated project members.</p>
+
+<h3 id="time-to-fix">Time to Fix</h3>
+
+<p>Remember that activity on the mailing lists and all other support channels is entirely voluntary. There is no official meaning or sense of urgency built into the response model and as such, fixes to potential security issues are 100% dependent on individuals’ availability and willingness. We strongly recommend that you study the project’s license for more information on this matter. If you are interested in contractual obligations, SLAs and a response model based on calculated levels of urgency, please consider negotiating a professional support agreement with Apereo commercial <a href="/cas/Support.html">service/support providers</a>.</p>
+
+<h3 id="security-fixes">Security Fixes</h3>
+
+<p>The CAS application security group encourages all reporters to not include instructions and steps to reproduce and verify a reported issue, but
+to also include and propose fixes in form of patch files that are shared privately with the group in the same issue report. Most, if not all, security 
+fixes that are applied to the CAS codebase, regardless of contribution type (i.e. direct developer commit or outsider contribution), are almost always
+made privately. The details of the fix and application of the patch are kept privately, and are not exposed in the public 
+commit log, until due time. Security fixes and contributions in form of publicly-viewable pull requests are <em>automatically closed</em> 
+with a cautious warning to the contributor to follow due process to get a patch fix applied and verified correctly.</p>
+
+<h2 id="cves">CVEs</h2>
+
+<p>The CAS project does not request or provide CVEs when handling security issues. This is a task that must entirely be handled by you,
+should you need to obtain a CVE in order to justify an unplanned upgrade, etc. The CAS project, generally speaking, moves much quicker
+to announce and disclose security issues than any CVE procurement process; we simply cannot delay security notifications and announcements
+for as long as it could take to receive a CVE.</p>
+
+<p>If you wish to volunteer to become a point person to get the CVE creation process going, by all means, speak up.</p>
+
+<h2 id="community-notification">Community Notification</h2>
+
+<p>Once the release is made available, the following procedure may be observed:</p>
+
+<ul>
+  <li>Community members <a href="/cas/Mailing-Lists.html">are notified</a> about the release availability.</li>
+  <li>The notification message SHOULD discuss:
+    <ul>
+      <li>The security issue in generic terms providing only enough detail to cause concern and attract community attention, but not to cause chaos or create an opportunity for adversaries to take advantage of the issue.</li>
+      <li>The severity of the security issue and nature of the patch release.</li>
+      <li>Affected CAS versions</li>
+      <li>Recommended guidelines for upgrades and applications of the patch.</li>
+    </ul>
+  </li>
+  <li>At the end of a four-week grace period, a public security announcement is posted that should fully disclose the issue and nuances of the security patch or workarounds.</li>
+</ul>
+
+<div class="alert alert-info"><strong>Be Careful</strong><p>At the risk of stating the obvious, remember to only heed and accept community notifications about security fixes from <a href="/cas/developer/Project-Commitee.html">trusted project contacts</a> and members. Posts detailing <i>security fixes</i> from random folks should entirely be ignored.</p></div>
+
+<h3 id="trusted-contacts">Trusted Contacts</h3>
+
+<p>Please note that the CAS project cannot disclose details about the security issue and its effects to private individuals without first verifying
+their identity and Apereo foundation membership status. If you consider yourself a trusted contact for your institution who is registered and vetted
+by the Apereo foundation, please provide the project with enough background information so we can happily proceed to explain the details in a relaxed
+and trusted environment. If you are not a trusted member yet, please be patient during the grace period and allow other trusted contacts to properly
+and securely take action to remedy the issue before the issue publicly disclosed to the wider user community.</p>
+
+<p>To learn more about how to become an Apereo foundation member and a registered trusted contact, please <a href="https://www.apereo.org">contact Apereo directly</a>.</p>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = '';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+exclude:
+  - .idea
+  - .history
+  - 6.6.x
+  - 6.5.x
+  - 6.4.x
+  - 6.3.x
+  - 6.2.x
+  - 6.1.x
+  - 6.0.x
+  - 5.3.x
+  - 5.2.x
+  - 5.1.x
+  - 5.0.x
+  - 4.2.x
+  - 4.1.x
+  - 4.0.x
+markdown: kramdown
+plugins:
+  - jekyll-sitemap
+  - jekyll-include-cache
+  - jekyll-tabs
+  - jemoji
+relative_links:
+  enabled:     true
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  hard_wrap: false
+  syntax_highlighter_opts:
+    # Rouge Options › https://github.com/jneen/rouge#full-options
+    css_class: 'highlight'
+    #line_numbers: true # bad idea, spans don't need linenos and would inherit this option
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1

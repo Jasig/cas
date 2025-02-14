@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Overlay Installation</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    
+<h1 id="war-overlay-installation">WAR Overlay Installation</h1>
+
+<p>CAS installation is a fundamentally source-oriented process, and we recommend a WAR overlay (1) 
+project to organize customizations such as component configuration and UI design.
+The output of a WAR overlay build is a <code class="language-plaintext highlighter-rouge">cas.war</code> file that can be deployed 
+to a servlet container like <a href="Configuring-Servlet-Container.html">Apache Tomcat</a>.</p>
+
+<h2 id="requirements">Requirements</h2>
+
+<p><a href="../planning/Installation-Requirements.html">See this guide</a> to learn more.</p>
+
+<h2 id="what-is-a-war-overlay">What is a WAR Overlay?</h2>
+
+<p>Overlays are a strategy to combat repetitive code and/or resources. Rather than downloading 
+the CAS codebase and building from source,
+overlays allow you to download a pre-built vanilla CAS web application server provided by the project itself and override/insert specific behavior into it. At build time, the build 
+installation process will attempt to download the provided 
+binary artifact first. Then the tool will locate your configuration files and settings made available 
+inside the same project directory and will merge those into the downloaded artifact in order to produce
+one wholesome archive (i.e. <code class="language-plaintext highlighter-rouge">cas.war</code>) . Overridden artifacts may include 
+resources, java classes, images, CSS and javascript files. In order for the merge
+process to successfully execute, the location and names of the overridden artifacts 
+locally must <strong>EXACTLY</strong> match that of those provided by the project
+inside the originally downloaded archive. Java code in the overlay project’s <code class="language-plaintext highlighter-rouge">src/main/java</code> 
+folder and resources in <code class="language-plaintext highlighter-rouge">src/main/resources</code> will end up in the <code class="language-plaintext highlighter-rouge">WEB-INF\classes</code> 
+folder of cas.war and they will be loaded by the classloader instead of 
+resources with the same names in jar files inside <code class="language-plaintext highlighter-rouge">WEB-INF\lib</code>.</p>
+
+<p>It goes without saying that while up-front ramp-up time could be slightly complicated, there are significant advantages to this approach:</p>
+
+<ol>
+  <li>There is no need to download/build from the source.</li>
+  <li>Upgrades are tremendously easier in most cases by adjusting the build script to download the newer CAS release.</li>
+  <li>Rather than hosting the entire software source code, as the deployer you <strong>ONLY</strong> keep your own local customizations which makes change tracking much easier.</li>
+  <li>Tracking changes inside a source control repository is very lightweight, again because only relevant changes (and not the entire software) is managed.</li>
+</ol>
+
+<h3 id="managing-overlays">Managing Overlays</h3>
+
+<p>Most if not all aspects of CAS can be controlled by adding, removing, or 
+modifying files in the overlay; it’s also possible and indeed common to customize the behavior of
+CAS by adding third-party components that implement CAS APIs as Java source files or dependency references.</p>
+
+<p>The process of working with an overlay can be summarized in the following steps:</p>
+
+<ul>
+  <li>Start with and build the provided basic vanilla build/deployment.</li>
+  <li>Identify the artifacts from the produced build that need changes. These artifacts are generally produced by the build in the <code class="language-plaintext highlighter-rouge">build</code> directory for Gradle. Use the gradle <code class="language-plaintext highlighter-rouge">unzip</code> task.</li>
+  <li>Copy the identified artifacts from the identified above directories over to the <code class="language-plaintext highlighter-rouge">src/main/resources</code> directory.
+    <ol>
+      <li>Create the <code class="language-plaintext highlighter-rouge">src/main/resources</code> directories, if they don’t already exist.</li>
+      <li>Copied paths and file names <strong>MUST EXACTLY MATCH</strong> their build counterparts, or the change won’t take effect. See the table below to understand how to map folders and files from the build to <code class="language-plaintext highlighter-rouge">src</code>.</li>
+    </ol>
+  </li>
+  <li>After changes, rebuild and repeat the process as many times as possible.</li>
+  <li>Double check your changes inside the built binary artifact to make sure the overlay process is working.</li>
+</ul>
+
+<div class="alert alert-warning"><strong>Be Exact</strong><p>Do NOT copy everything produced by 
+the build. Attempt to keep changes and customizations to a 
+minimum and only grab what you actually need. Make sure the deployment environment 
+is kept clean and precise, or you incur the risk of terrible upgrade issues and painful headaches.</p></div>
+
+<h2 id="cas-war-overlays">CAS WAR Overlays</h2>
+
+<p>CAS WAR overlay projects described below are provided for reference and study.</p>
+
+<h3 id="cas-overlay-initializr">CAS Overlay Initializr</h3>
+
+<p>Apereo CAS Initializr is a relatively new addition to the Apereo CAS ecosystem that allows you 
+as the deployer to generate CAS WAR Overlay projects on the fly with just what you need to start quickly.</p>
+
+<p>To learn more about the initializr, please <a href="WAR-Overlay-Initializr.html">review this guide</a>.</p>
+
+<h3 id="cas-overlay-template">CAS Overlay Template</h3>
+
+<p>The CAS WAR overlay template project can be bootstrapped and generated via the <a href="WAR-Overlay-Initializr.html">CAS Initializr</a>.</p>
+
+<p>The WAR overlay also provides additional tasks to explode the binary artifact first before re-assembling it again.
+You may need to do that step manually yourself to learn what files/directories need to be copied over to the source directory.</p>
+
+<p>Note: Do <strong>NOT</strong> ever make changes in the <code class="language-plaintext highlighter-rouge">build</code> directory. The changeset will be cleaned out and 
+set back to defaults every time you do a build. Put overlaid components inside the <code class="language-plaintext highlighter-rouge">src</code> directory
+and/or other instructed locations to avoid surprises.</p>
+
+<h2 id="dockerized-deployment">Dockerized Deployment</h2>
+
+<p>See <a href="Docker-Installation.html">this guide</a> for more info.</p>
+
+<h2 id="servlet-container">Servlet Container</h2>
+
+<p>CAS can be deployed to a number of servlet containers. See <a href="Configuring-Servlet-Container.html">this guide</a> for more info.</p>
+
+<h2 id="dependency-management">Dependency Management</h2>
+
+<p>Each release of CAS provides a curated list of dependencies it supports. In practice, you do not need to provide a version for any of
+these dependencies in your build configuration as the CAS distribution is managing that for you. When you upgrade CAS itself, these dependencies will be upgraded as well in a consistent way.</p>
+
+<p>The curated list of dependencies contains a refined list of third party libraries. The list is 
+available as a standard Bills of Materials (BOM). Not everyone likes inheriting from the BOM.
+You may have your own corporate standard parent that you need to use, or you may just prefer to explicitly declare all your configuration.</p>
+
+<p>To take advantage of the CAS BOM, please see <a href="BOM-Dependency-Management.html">this guide</a>.</p>
+
+<p><sub>(1) <a href="http://maven.apache.org/plugins/maven-war-plugin/overlays.html">WAR Overlays</a></sub></p>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = 'Installation';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

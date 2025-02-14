@@ -1,0 +1,41 @@
+<div id="propertiesToolbarDiv{{ include.searchTarget }}" style="display:none;" role="toolbar">
+	<div class="input-group search-properties-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text" style="display: block;"><i class="fas fa-search"> </i></div>
+          </div>
+	    <input type="text" id="input{{ include.searchTarget }}" class="form-control" onkeyup="search{{ include.searchTarget  }}(this)" placeholder="Search...">
+        <div class="input-group-append">
+            <div class="btn-group copy-button-group" role="group">
+                <button class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placment="top"
+                    type="button" data-clipboard-target="{{ include.copyTarget  }}"
+                    class="btn btn-primary copy-button" title="Copy Properties"><i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    window.addEventListener('load', (event) => {
+        // console.log('Loaded page');
+        $("#propertiesToolbarDiv{{ include.searchTarget }}").show();
+    });
+    
+    function search{{ include.searchTarget  }}(input) {
+        let filter = input.value.toUpperCase();
+        if (filter === "") {
+            $("#{{ include.searchTarget }} tr").css("display", "none");
+            $("#{{ include.searchTarget }} tr").slice(0, ROWS).css("display", "block");
+        } else {
+            console.log("Search target: #{{ include.searchTarget }}");
+            $("#{{ include.searchTarget }} li.property-name code").each(function(i) {
+                let txtValue = $(this).text();
+                let result = txtValue.toUpperCase().indexOf(filter) > -1;
+                // if (result) {
+                //     console.log("Found " + txtValue);
+                // }
+                $(this).parents("tr").css("display", result ? "block" : "none");
+            });
+        }
+    }
+</script>

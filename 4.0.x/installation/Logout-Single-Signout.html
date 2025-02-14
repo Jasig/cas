@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Logout & Single Logout</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="logout-and-single-logout-slo">Logout and Single Logout (SLO)</h1>
+
+<p>There are potentially many active application sessions during a CAS single sign-on session, and the distinction between
+logout and single logout is based on the number of sessions that are ended upon a <em>logout</em> operation. The scope of logout
+is determined by where the action takes place:</p>
+
+<ol>
+  <li>Application logout - ends a single application session</li>
+  <li>CAS logout - ends the CAS SSO session</li>
+</ol>
+
+<p>Note that the logout action in each case has no effect on the other in the simple case. Ending an application session
+does not end the CAS session and ending the CAS session does not affect application sessions. This is a common cause of
+confusion for new users and deployers of an SSO system.</p>
+
+<p>The single logout support in CAS attempts to reconcile the dispartity between CAS logout and application logout. When
+CAS is configured for SLO, it attempts to send logout messages to every application that requested authentication to
+CAS during the SSO session. While this is a best-effort process, in many cases it works well and provides a consistent
+user experience by creating symmetry between login and logout.</p>
+
+<h2 id="cas-logout">CAS Logout</h2>
+
+<p>Per the <a href="../protocol/CAS-Protocol.html">CAS Protocol</a>, the <code>/logout</code> endpoint is responsible for destroying the current SSO session. Upon logout, it may also be desirable to redirect back to a service. This is controlled via specifying the redirect link via the <code>service</code> parameter. </p>
+
+<p>The redirect behavior is turned off by default, and is activated via the following setting in <code>cas.properties</code>:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># Specify whether CAS should redirect to the specified service parameter on /logout requests</span>
+<span class="c"># cas.logout.followServiceRedirects=false</span>
+</code></pre></div>
+
+<p>The specified url must be registered in the service registry of CAS and enabled.</p>
+
+<h2 id="single-logout-slo">Single Logout (SLO)</h2>
+<p>CAS is designed to support single sign out: it means that it will be able to invalidate client application sessions in addition to its own SSO session.<br />
+Whenever a ticket-granting ticket is explicitly expired, the logout protocol will be initiated. Clients that do not support the logout protocol may notice extra requests in their access logs that appear not to do anything.</p>
+
+<div class="alert alert-warning"><strong>Usage Warning!</strong><p>Single Logout is turned on by default.</p></div>
+
+<p>When a CAS session ends, it notifies each of the services that requested authentiation to CAS during the SSO session.</p>
+
+<p>This can happen in two ways:
+1. the CAS sends an HTTP POST message directly to the service ( <em>back channel</em> communication): this is the traditional way of performing notification to the service
+2. the CAS redirects (HTTP 302) to the service with a message and a <em>RelayState</em> parameter ( <em>front channel</em> communication): this is a new <strong>experimental</strong> implementation (inspired by SAML SLO), needed if the client application is composed of several servers and use session affinity. The expected behaviour of the CAS client is to invalidate the application web session and redirect back to the CAS server with the <em>RelayState</em> parameter.</p>
+
+<p>The way the notification is done ( <em>back</em> or <em>front</em> channel) is configured at a service level through the <code>logoutType</code> property. This value is set to <code>LogoutType.BACK_CHANNEL</code> by default and cannot be changed through the services management webapp UI at the moment.</p>
+
+<p>The message is delivered or the redirection is sent to the URL presented in the <em>service</em> parameter of the original CAS protocol ticket request.</p>
+
+<p>A sample SLO message:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;samlp:LogoutRequest</span>
+    <span class="na">xmlns:samlp=</span><span class="s">&quot;urn:oasis:names:tc:SAML:2.0:protocol&quot;</span>
+    <span class="na">xmlns:saml=</span><span class="s">&quot;urn:oasis:names:tc:SAML:2.0:assertion&quot;</span>
+    <span class="na">ID=</span><span class="s">&quot;[RANDOM ID]&quot;</span>
+    <span class="na">Version=</span><span class="s">&quot;2.0&quot;</span>
+    <span class="na">IssueInstant=</span><span class="s">&quot;[CURRENT DATE/TIME]&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;saml:NameID&gt;</span>@NOT_USED@<span class="nt">&lt;/saml:NameID&gt;</span>
+    <span class="nt">&lt;samlp:SessionIndex&gt;</span>[SESSION IDENTIFIER]<span class="nt">&lt;/samlp:SessionIndex&gt;</span>
+<span class="nt">&lt;/samlp:LogoutRequest&gt;</span>
+</code></pre></div>
+
+<p>The session identifier is the CAS service ticket ID that was provided to the serivce when it originally authenticated
+to CAS. The session identifier is used to correlate a CAS session with an application session; for example, the SLO
+session identifier maps to a servlet session that can subsequently be destroyed to terminate the application session.</p>
+
+<p>Logout protocol is effectively managed by the <code>LogoutManagerImpl</code> component:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;logoutManager&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.logout.LogoutManagerImpl&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;servicesManager&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;1&quot;</span> <span class="na">ref=</span><span class="s">&quot;noRedirectHttpClient&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;disableSingleSignOut&quot;</span> <span class="na">value=</span><span class="s">&quot;${slo.callbacks.disabled:false}&quot;</span> <span class="nt">/&gt;</span>         
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h3 id="turning-off-single-logout">Turning Off Single Logout</h3>
+<p>To disable single logout, adjust the following setting in <code>cas.properties</code> file:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># To turn off all back channel SLO requests set slo.disabled to true</span>
+<span class="c"># slo.callbacks.disabled=false</span>
+</code></pre></div>
+
+<h3 id="ticket-registry-cleaner-behavior">Ticket Registry Cleaner Behavior</h3>
+<p>Furthermore, the default behavior is to issue single sign out callbacks in response to a logout request or when a TGT is expired via expiration policy when a <code>TicketRegistryCleaner</code> runs.  If you are using ticket registry cleaner and you want to enable the single sign out callback only when CAS receives a logout request, you can configure your <code>TicketRegistryCleaner</code> as such:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistryCleaner&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner&quot;</span>
+      <span class="na">p:ticketRegistry-ref=</span><span class="s">&quot;ticketRegistry&quot;</span>
+      <span class="na">p:lock-ref=</span><span class="s">&quot;cleanerLock&quot;</span>
+      <span class="na">p:logUserOutOfServices=</span><span class="s">&quot;${slo.callbacks.disabled:false}&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>Note that certain ticket registries don’t use or need a registry cleaner. For such registries, the option of having a ticker registry cleaner is entirely done away with and is currently not implemented. With that being absent, you will no longer receive automatic SLO callbacks upon TGT expiration. As such, the only thing that would reach back to the should then be explicit logout requests per the CAS protocol.</p>
+
+<h4 id="with-ticketregistrycleaner">With <code>TicketRegistryCleaner</code></h4>
+<ol>
+  <li>Single Logout is turned on</li>
+  <li>The cleaner runs to detect the ticket that are automatically expired. It will query the tickets in the ticket registry, and will accumulate those that are expired. </li>
+  <li>For the collection of expired tickets, the cleaner will again ask them to “expire” which triggers the SLO callback to be issued.</li>
+  <li>The cleaner subsequently removes the TGT from the registry. Note that simply removing a ticket by itself from the registry does not issue the SLO callback. A ticket needs to be explicitly told one way or another, to “expire” itself:
+    <ul>
+      <li>If the ticket is already expired, the mechanism will issue the SLO callback.</li>
+      <li>If the ticket is not already expired, it will be marked as expired and the SLO callback will be issued.</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="without-ticketregistrycleaner">Without <code>TicketRegistryCleaner</code></h4>
+<ol>
+  <li>Single Logout is turned on</li>
+  <li>There is no cleaner, so nothing runs in the background or otherwise to “expire” and delete tickets from the registry and thus, no SLO callbacks will be issued automatically. </li>
+  <li>A logout request is received by CAS</li>
+  <li>CAS will locate the TGT and will attempt to destroy the SSO session.</li>
+  <li>In destroying the ticket, CAS will:
+    <ul>
+      <li>Ask the ticket to expire itself, which will issue SLO callbacks.</li>
+      <li>Delete the ticket from the registry</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="sso-session-vs-application-session">SSO Session vs. Application Session</h2>
+<p>In order to better understand the SSO session management of CAS and how it regards application sessions, one important note is to be first and foremost considered:</p>
+
+<div class="alert alert-info"><strong>CAS is NOT a session manager</strong><p>Application session is the responsibility of the application.</p></div>
+
+<p>CAS wants to maintain and control the SSO session in the form of
+the <code>TicketGrantingTicket</code> and a TGT id which is shared between the
+user-agent and the CAS server in the form of a secure cookie.</p>
+
+<p>CAS is not an application session manager in that it is the
+responsibility of the applications to maintain and control their own
+application sessions.  Once authentication is completed, CAS is
+typically out of the picture in terms of the application sessions. Therefore, the expiration policy
+of the application session itself is entirely independent of CAS and may be loosely coordinated
+and adjusted depending on the ideal user experience in the event that the application session expires.</p>
+
+<p>In the event that Single Logout is not activated, typically, application may expose a logout endpoint in order to destroy the session and next, redirect
+the agent to the CAS <code>logout</code> endpoint in order to completely destroy the SSO session as well. </p>
+
+<p>Here’s a brief diagram that demonstrates various application session configuration and interactions with CAS:</p>
+
+<p><img src="http://i.imgur.com/0XyuLgz.png" alt="" /></p>
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

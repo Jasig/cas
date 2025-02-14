@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen" href='/cas/stylesheets/stylesheet.css'>
+    <link rel="stylesheet" type="text/css" media="print" href='/cas/stylesheets/print.css'>
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Getting Started Guide</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="/cas/images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/development/">Development</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.1.x/">v7.1.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+
+            
+                <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+                <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+            
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+                
+                
+                <div id="dev-doc-info" class="alert alert-danger" role="alert">
+                    <h3>WORKERS AHEAD!</h3>
+                    <p>You are viewing the <strong>development</strong> documentation for the Apereo CAS server. <strong>The
+                        functionality presented here <a href="https://github.com/apereo/cas/milestones">is not officially released yet</a></strong>.
+                        This is a work in progress and will be continually updated as development moves forward.
+                        <strong>You are most encouraged to test the changes presented.</strong>
+                    </p>
+                </div>
+                
+
+                <section>
+                    
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+                    
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="getting-started">Getting Started</h1>
+
+<p>We want to start by saying thank you for using CAS.</p>
+
+<p>This document provides a high-level guide on how to get started with a CAS server deployment. 
+The sole focus of the guide is describe the process
+that must be followed and adopted by CAS deployers in order to arrive at a successful 
+and sustainable architecture and deployment.</p>
+
+<h2 id="before-you-begin">Before You Begin</h2>
+
+<p>It is very important that you start with <a href="/cas/developer/Contributor-Guidelines.html">this document</a> first. This will help you understand how
+the CAS project runs and operates. You will learn how to get involved with the project, how to ask for help, 
+how changes are managed and released, what the project expects from you and what you can expect from CAS itself.</p>
+
+<h2 id="ask-for-help">Ask for Help</h2>
+
+<p>A CAS deployment is often seen as mission critical. Its deployment success, health status and general upkeep is vital to an organization’s
+daily routine and business. Furthermore, as an identity provider that operates in the domain of access management, it plays an important
+and sensitive role in the overall security architecture of one’s deployment. Therefore, you may need <em>extra expert</em> help
+from specialists and experts that know the software in and out and can help you with gotchas, deployment best practices and practical upgrade guidelines.
+Free support only works up to a certain degree, and generally is best for personal use and/or hobbyists.</p>
+
+<p>For best results, <a href="/cas/Support.html">ask for help</a>.</p>
+
+<h2 id="collect-use-cases">Collect Use Cases</h2>
+
+<p>It is very important that you document, catalog and analyze your desired use cases and requirements prior to the deployment.
+Once you have a few ideas, please discuss and share those with the <a href="/cas/Support.html">CAS community</a>
+to learn about common trends, practices and patterns
+that may already have solved the same issues you face today.</p>
+
+<div class="alert alert-warning">
+<img class="emoji" title=":warning:" alt=":warning:" src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png" height="20" width="20"> <strong>KISS</strong><p>In general, avoid designing and/or adopting
+use cases and workflows that heavily alter the CAS internal components, induce a heavy burden on your management
+and maintenance of the configuration or re-invent the CAS software and its supported protocols. All options 
+add to maintenance cost and headache.</p>
+</div>
+
+<h2 id="study-architecture">Study Architecture</h2>
+
+<p>Understand what CAS is and can do. This will help you develop a foundation to realize which of your use cases 
+and requirements may already be possible with CAS. Take a look at the fundamentals 
+of the <a href="Architecture.html">CAS architecture</a>
+to see what options and choices might be available for deployments and application integrations.</p>
+
+<p>Likewise, it’s equally important that you study the list of 
+CAS <a href="../protocol/Protocol-Overview.html">supported protocols and specifications</a>.</p>
+
+<h2 id="review-blog">Review Blog</h2>
+
+<p>From time to time, blog posts appears on the <a href="https://apereo.github.io/">Apereo Blog</a>
+that might become useful as you are thinking about requirements and evaluating features.
+It is generally recommended that you follow the blog and keep up with project news and 
+announcements as much as possible, and do not shy away from writing and contributing your own blog posts, 
+experiences and updates throughout your CAS deployment.</p>
+
+<h2 id="prepare-environment">Prepare Environment</h2>
+
+<p>Study the <a href="Installation-Requirements.html">installation requirements</a> for the deployment environment.</p>
+
+<h2 id="deploy-cas">Deploy CAS</h2>
+
+<p>It is recommended to build and deploy CAS locally using the <a href="../installation/WAR-Overlay-Installation.html">WAR Overlay method</a>. 
+This approach does not require the adopter to <em>explicitly</em> download any version of CAS, but 
+rather utilizes the overlay mechanism to combine CAS original artifacts and local 
+customizations to further ease future upgrades and maintenance.</p>
+
+<p><strong>Note</strong>: Do NOT clone or download the CAS codebase directly. That is ONLY required if you
+wish to contribute to the development of the project.</p>
+
+<p>It is <strong>VERY IMPORTANT</strong> that you try to get a functional baseline working before doing anything else.
+Avoid making ad-hoc changes right away to customize the deployment. Stick with the CAS-provided defaults
+and settings and make changes <strong>one step at a time</strong>. Keep track of process and applied changes
+in source control and tag changes as you make progress.</p>
+
+<h2 id="customize">Customize</h2>
+
+<p>This is where use cases get mapped to CAS features. Browse the documentation to find the closest match and apply.
+Again, it is important that you stick with the CAS baseline as much as possible:</p>
+
+<ul>
+  <li>Avoid making ad-hoc changes to the software internals.</li>
+  <li>Avoid making manual changes to core configuration components such as Spring and Spring Webflow.</li>
+  <li>Avoid making one-off bug fixes to the deployment, should you encounter an issue.</li>
+</ul>
+
+<p>As noted previously, all such strategies lead to headache and cost.</p>
+
+<p>Instead, try to warm up to the following suggestions:</p>
+
+<ul>
+  <li>Bug fixes and small improvements belong to the core CAS software. Not your deployment. Make every attempt to report issues, 
+contribute fixes and patches and work with the CAS community to solve issues once and for all.</li>
+  <li>Certain number of internal CAS components are made difficult to augment and modify. In most cases, this approach is
+done on purpose to steer you away from dangerous and needlessly complicated changes. If you come across a need
+and have a feature or use case in mind whose configuration and implementation requires modifications to the core internals
+of the software, discuss that with the CAS community and attempt to build the enhancement directly into the CAS software,
+rather than treating it as a snowflake.</li>
+</ul>
+
+<p>To summarize, only make changes to the deployment configuration if they are truly and completely specific to your needs.
+Otherwise, try to generalize and contribute back to keep maintenance costs down. 
+Repeatedly, failure to comply with this strategy
+will likely lead to disastrous results in the long run.</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<p>The <a href="../installation/Troubleshooting-Guide.html">troubleshooting guide</a> might have some answers 
+for issues you may have run into and it generally tries to describe a strategy useful for troubleshooting
+and diagnostics. You may also seek assistance from the <a href="/cas/Mailing-Lists.html">CAS community</a>.</p>
+
+<h2 id="test">Test</h2>
+
+<p>Invest in test automation. A lot. It can be boring and redundant and yet, it will bring you peace of mind, 
+fewer sleepless nights, and an overall healthier and more agile attitude towards upgrades. Furthermore, 
+don’t test too late. Many CAS deployment projects proceed such that by the time the deployment and/or upgrade and its testing have finished, 
+the CAS software itself has become EOL. Try not to go to production with a version that is declared dead for maintenance. 
+Remember that the CAS project puts out release candidates in the hopes of getting early feedback, allowing you to test early.</p>
+
+<p>If you wait too long, then you will have waited too long. So, don’t wait long.</p>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tether@2.0.0/dist/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="/cas/javascripts/URI.js"></script>
+    <script src="/cas/javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/js/lightbox.min.js"></script>
+
+    <script>
+        let pageSection = 'Planning';
+        let siteUrl = '';
+        let basePath = '/cas';
+
+        
+    </script>
+</body>
+
+</html>

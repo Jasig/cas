@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Database Authentication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="database-authentication">Database Authentication</h1>
+<p>Database authentication components are enabled by including the following dependencies in the Maven WAR overlay:</p>
+
+<div class="highlight"><pre><code class="xml">    <span class="nt">&lt;dependency&gt;</span>
+         <span class="nt">&lt;groupId&gt;</span>org.jasig.cas<span class="nt">&lt;/groupId&gt;</span>
+         <span class="nt">&lt;artifactId&gt;</span>cas-server-support-jdbc<span class="nt">&lt;/artifactId&gt;</span>
+         <span class="nt">&lt;version&gt;</span>${cas.version}<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>c3p0<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>c3p0<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>0.9.1.2<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h2 id="connection-pooling">Connection Pooling</h2>
+<p>All database authentication components require a <code>DataSource</code> for acquiring connections to the underlying database.
+The use of connection pooling is <em>strongly</em> recommended, and the <a href="http://www.mchange.com/projects/c3p0/">c3p0 library</a>
+is a good choice that we discuss here.
+<a href="http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html">Tomcat JDBC Pool</a> is another competent alternative.
+Note that the connection pool dependency mentioned above should be modified according to the choice of connection pool
+components.</p>
+
+<h3 id="pooled-data-source-example">Pooled Data Source Example</h3>
+<p>A bean named <code>dataSource</code> must be defined for CAS components that use a database. A bean like the following should be
+defined in <code>deployerConfigContext.xml</code>.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dataSource&quot;</span>
+  <span class="na">class=</span><span class="s">&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;</span>
+  <span class="na">p:driverClass=</span><span class="s">&quot;${database.driverClass}&quot;</span>
+  <span class="na">p:jdbcUrl=</span><span class="s">&quot;${database.url}&quot;</span>
+  <span class="na">p:user=</span><span class="s">&quot;${database.user}&quot;</span>
+  <span class="na">p:password=</span><span class="s">&quot;${database.password}&quot;</span>
+  <span class="na">p:initialPoolSize=</span><span class="s">&quot;${database.pool.minSize}&quot;</span>
+  <span class="na">p:minPoolSize=</span><span class="s">&quot;${database.pool.minSize}&quot;</span>
+  <span class="na">p:maxPoolSize=</span><span class="s">&quot;${database.pool.maxSize}&quot;</span>
+  <span class="na">p:maxIdleTimeExcessConnections=</span><span class="s">&quot;${database.pool.maxIdleTime}&quot;</span>
+  <span class="na">p:checkoutTimeout=</span><span class="s">&quot;${database.pool.maxWait}&quot;</span>
+  <span class="na">p:acquireIncrement=</span><span class="s">&quot;${database.pool.acquireIncrement}&quot;</span>
+  <span class="na">p:acquireRetryAttempts=</span><span class="s">&quot;${database.pool.acquireRetryAttempts}&quot;</span>
+  <span class="na">p:acquireRetryDelay=</span><span class="s">&quot;${database.pool.acquireRetryDelay}&quot;</span>
+  <span class="na">p:idleConnectionTestPeriod=</span><span class="s">&quot;${database.pool.idleConnectionTestPeriod}&quot;</span>
+  <span class="na">p:preferredTestQuery=</span><span class="s">&quot;${database.pool.connectionHealthQuery}&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>The following properties may be used as a starting point for connection pool configuration/tuning.</p>
+
+<pre><code># == Basic database connection pool configuration ==
+database.driverClass=org.postgresql.Driver
+database.url=jdbc:postgresql://database.example.com/cas?ssl=true
+database.user=somebody
+database.password=meaningless
+database.pool.minSize=6
+database.pool.maxSize=18
+ 
+# Maximum amount of time to wait in ms for a connection to become
+# available when the pool is exhausted
+database.pool.maxWait=10000
+ 
+# Amount of time in seconds after which idle connections
+# in excess of minimum size are pruned.
+database.pool.maxIdleTime=120
+ 
+# Number of connections to obtain on pool exhaustion condition.
+# The maximum pool size is always respected when acquiring
+# new connections.
+database.pool.acquireIncrement=6
+ 
+# == Connection testing settings ==
+ 
+# Period in s at which a health query will be issued on idle
+# connections to determine connection liveliness.
+database.pool.idleConnectionTestPeriod=30
+ 
+# Query executed periodically to test health
+database.pool.connectionHealthQuery=select 1
+ 
+# == Database recovery settings ==
+ 
+# Number of times to retry acquiring a _new_ connection
+# when an error is encountered during acquisition.
+database.pool.acquireRetryAttempts=5
+ 
+# Amount of time in ms to wait between successive aquire retry attempts.
+database.pool.acquireRetryDelay=2000
+</code></pre>
+
+<h2 id="database-components">Database Components</h2>
+<p>CAS provides 3 components to accommodate different database authentication needs.</p>
+
+<h6 id="querydatabaseauthenticationhandler"><code>QueryDatabaseAuthenticationHandler</code></h6>
+<p>Authenticates a user by comparing the (hashed) user password against the password on record determined by a
+configurable database query. <code>QueryDatabaseAuthenticationHandler</code> is by far the most flexible and easiest to
+configure for anyone proficient with SQL, but <code>SearchModeSearchDatabaseAuthenticationHandler</code> provides an alternative
+for simple queries based solely on username and password and builds the SQL query using straightforward inputs.</p>
+
+<p>The following database schema for user data is assumed in the following two examples that leverage SQL queries
+to authenticate users.</p>
+
+<pre><code>create table users (
+    username varchar(50) not null,
+    password varchar(50) not null,
+    active bit not null );
+</code></pre>
+
+<p>The following example uses an MD5 hash algorithm and searches exclusively for <em>active</em> users.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;passwordEncoder&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.handler.DefaultPasswordEncoder&quot;</span>
+      <span class="na">c:encodingAlgorithm=</span><span class="s">&quot;MD5&quot;</span>
+      <span class="na">p:characterEncoding=</span><span class="s">&quot;UTF-8&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dbAuthHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.adaptors.jdbc.QueryDatabaseAuthenticationHandler&quot;</span>
+      <span class="na">p:dataSource-ref=</span><span class="s">&quot;dataSource&quot;</span>
+      <span class="na">p:passwordEncoder-ref=</span><span class="s">&quot;passwordEncoder&quot;</span>
+      <span class="na">p:sql=</span><span class="s">&quot;select password from users where username=? and active=1&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h6 id="searchmodesearchdatabaseauthenticationhandler"><code>SearchModeSearchDatabaseAuthenticationHandler</code></h6>
+<p>Searches for a user record by querying against a username and (hashed) password; the user is authenticated if at
+least one result is found.</p>
+
+<p>The following example uses a SHA1 hash algorithm to authenticate users.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;passwordEncoder&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.handler.DefaultPasswordEncoder&quot;</span>
+      <span class="na">c:encodingAlgorithm=</span><span class="s">&quot;SHA1&quot;</span>
+      <span class="na">p:characterEncoding=</span><span class="s">&quot;UTF-8&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dbAuthHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.adaptors.jdbc.SearchModeSearchDatabaseAuthenticationHandler&quot;</span>
+      <span class="na">p:dataSource-ref=</span><span class="s">&quot;dataSource&quot;</span>
+      <span class="na">p:passwordEncoder-ref=</span><span class="s">&quot;passwordEncoder&quot;</span>
+      <span class="na">p:tableUsers=</span><span class="s">&quot;users&quot;</span>
+      <span class="na">p:fieldUser=</span><span class="s">&quot;username&quot;</span>
+      <span class="na">p:fieldPassword=</span><span class="s">&quot;password&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h6 id="bindmodesearchdatabaseauthenticationhandler"><code>BindModeSearchDatabaseAuthenticationHandler</code></h6>
+<p>Authenticates a user by attempting to create a database connection using the username and (hashed) password.</p>
+
+<p>The following example does not perform any password encoding since most JDBC drivers natively encode plaintext
+passwords to the appropriate format required by the underlying database. Note authentication is equivalent to the
+ability to establish a connection with username/password credentials. This handler is the easiest to configure
+(usually none required), but least flexible, of the database authentication components.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dbAuthHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.adaptors.jdbc.BindModeSearchDatabaseAuthenticationHandler&quot;</span>
+      <span class="na">p:dataSource-ref=</span><span class="s">&quot;dataSource&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

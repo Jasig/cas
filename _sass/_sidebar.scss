@@ -1,0 +1,174 @@
+.row-offcanvas {
+  position: relative;
+  -webkit-transition: all 0.25s ease-out;
+  -moz-transition: all 0.25s ease-out;
+  transition: all 0.25s ease-out;
+}
+
+.row-offcanvas-right {
+  right: 0;
+}
+
+.row-offcanvas-right.active {
+  right: 168px;
+}
+
+.row-offcanvas-right.active .sidebar-offcanvas {
+  position: absolute;
+  top: 0;
+  margin-right: 5px;
+
+  right: -173px;
+  width: 203px;
+}
+
+#pageContents {
+  padding: 10px;
+  height: 100%;
+
+  h2 {
+    font-size: 1.25rem;
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+  }
+  ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0px;
+
+    li {
+      list-style: none;
+      margin-bottom: 5px;
+    }
+  }
+
+  a {
+    color: inherit;
+    font-size: 13px;
+  }
+
+}
+
+#sidebar, .sidebar {
+  padding: 0px;
+  padding-top: 15px;
+  overflow: hidden;
+  color: white;
+  background-color: #333;
+
+  a {
+    color: inherit;
+  }
+
+  .nav {
+    font-size: 13px;
+
+    li {
+      & > a {
+        position: relative;
+        display: block;
+        padding: 5px 15px;
+        &:hover, &:focus {
+          background-color: #393939;
+          text-decoration: none;
+        }
+
+      }
+
+    }
+  }
+}
+
+/**
+ * Collapse menu
+ */
+
+#lg-menu li.active a {
+  background-color: transparent;
+}
+
+#lg-menu a i.expand {
+  float: right;
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size: 12px;
+  padding-right: 0.5em;
+}
+
+#lg-menu a.collapsed i.expand:before {
+  content: "\f105";
+}
+
+#lg-menu li > a {
+}
+
+#lg-menu li > a.collapsed {
+  background-color: transparent;
+}
+
+#lg-menu a i.expand:before {
+  content: "\f107";
+}
+
+#lg-menu a ul, #lg-menu ul li {
+  list-style: none;
+}
+
+#lg-menu ul {
+  li {
+    margin-bottom: 5px;
+    margin-left: 20px;
+
+    & > ul {
+      margin-right: -4px;
+
+      li {
+        padding-left: 20px;
+
+        a {
+          margin-left: -15px;
+        }
+
+        > ul {
+          padding-left: 0;
+
+          li {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 34em) {
+  .row-offcanvas-right.active .sidebar-offcanvas {
+    width: 223px;
+  }
+}
+
+@media (min-width: 48em) {
+  .row-offcanvas-right.active .sidebar-offcanvas {
+    width: 223px;
+  }
+  #sidebar {
+    .nav {
+      li {
+        > a {
+          padding: 5px 15px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 62em) {
+
+}
+
+@media (min-width: 75em) {
+
+}

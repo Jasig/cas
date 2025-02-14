@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Installation Requirements</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="installation-requirements">Installation Requirements</h1>
+
+<p>Requirements at a glance:</p>
+
+<ol>
+  <li><a href="http://www.java.com">Java</a> &gt;=1.6</li>
+  <li><a href="http://tomcat.apache.org/">Servlet container</a> supporting servlet specification &gt;=2.5</li>
+  <li><a href="http://maven.apache.org/">Apache Maven</a> &gt;=3.0</li>
+  <li>Familiarity with the <a href="http://www.springsource.org/">Spring Framework</a></li>
+  <li>Internet connectivity</li>
+</ol>
+
+<p>Depending on choice of configuration components, there may be additional requirements such as LDAP directory,
+database, and caching infrastructure. In most cases, however, requirements should be self evident to deployers who
+choose components with clear hardware and software dependencies. In any case where additional requirements are
+not obvious, the discussion of component configuration should mention system, software, hardware, and other
+requirements.</p>
+
+<h2 id="servlet-containers">Servlet Containers</h2>
+<p>There is no officially supported servlet container for CAS, but <a href="http://tomcat.apache.org/">Apache Tomcat</a> is the most
+commonly used. Support for a particular servlet container depends on the expertise of community members, but the
+following are known to work well and should receive first-class support on the
+<a href="../Mailing-Lists.html">Community Discussion Mailing List</a>:</p>
+
+<ul>
+  <li><a href="http://www.jboss.org/">JBoss</a></li>
+  <li><a href="http://www.eclipse.org/jetty/">Jetty</a></li>
+  <li><a href="http://glassfish.java.net/">GlassFish</a></li>
+  <li><a href="http://www.ibm.com/software/websphere/">WebSphere</a></li>
+</ul>
+
+<h2 id="apache-maven">Apache Maven</h2>
+<p>CAS uses Maven for building and creating a deployable package for instllation into a Java servlet container. Maven is
+also strongly recommended for configuration management required for the CAS installation process. CAS is fundamentally
+a complex software product that becomes embedded and tighly integrated into the software environment of an institution.
+For this reason it tends to require customization well beyond turnkey solutions, and the integration requirements tend
+to change over time. A source-based installation process like
+<a href="../installation/Maven-Overlay-Installation.html">Maven WAR overlay</a> provides a straightforward and flexible solution
+to complex and dynamic requirements. While it admittedly requires a high up-front cost in learning, it reaps numerous
+benefits in the long run</p>
+
+<h2 id="spring-framework">Spring Framework</h2>
+<p>CAS uses the many aspects of the Spring Framework; most notably,
+<a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html">Spring MVC</a> and
+<a href="http://www.springsource.org/spring-web-flow">Spring Webflow</a>. Spring provides a complete and extensible framework for
+the core CAS codebase as well as for deployers; it’s straightforward to customize or extend CAS behavior by hooking
+CAS and Spring API extension points. General knowledge of Spring is beneficial to understanding the interplay among
+some framework compoents, but it’s not strictly required. The XML-based configuration used to configure CAS and Spring
+components, however, is a core concern for installation, customization, and extension. Competence with XML generally
+and the
+<a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/beans.html">Spring IOC Container</a>
+in particular are prerequisites to CAS installation.</p>
+
+<h2 id="internet-connectivity">Internet Connectivity</h2>
+<p>Internet connectivity is generally required for the build phase of any Maven-based project, including the recommended
+Maven WAR overlays used to install CAS. Maven resolves dependencies by searching online repositories containing
+artifacts (jar files in most cases) that are downloaded and installed locally. While it is possible to override this
+behavior by alterning Maven configuration settings, it is considered advanced usage and not supported.</p>
+
+<p>A common solution to overcoming lack of Internet connectivity on a CAS server is to build CAS on a dedicated build
+host with internet connectivity. The <code>cas.war</code> file produced by the build is subsequently copied to the CAS server
+for deployment.</p>
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

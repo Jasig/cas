@@ -1,0 +1,462 @@
+---
+---
+
+/*******************************************************************************
+Slate Theme for GitHub Pages
+by Jason Costello, @jsncostello
+*******************************************************************************/
+
+@import "variables";
+@import "mixins/mixins";
+
+//@import url(pygment_monokai.css);
+@import url(pygment_material.css);
+
+
+html, body {
+  font-family: 'Lato','Roboto Slab','Tahoma';
+  height: 100%;
+  text-align: justify;
+  font-size: 14pt;
+  //background: #333;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+#sidebarTopics a {
+  text-align: left;
+}
+
+header {
+  background: linear-gradient(to bottom right, #053752 20%, #09679a 80%);
+  color: #fff;
+  padding: 10px;
+
+  h1 {
+    font-weight: 300;
+    font-size: 16px;
+    margin-top: 1rem;
+  }
+
+  img {
+    max-width: 70%;
+    height: auto;
+  }
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+/*
+.cas-docs-container {
+  padding-top: 5px;
+  margin-top: 30px;
+}
+*/
+
+.img-cloud {
+  text-align: center;
+  background-color: white;
+  border-radius: 5px;
+  a {
+    display: inline-block;
+    margin: 15px;
+
+    img {
+      display: inline;
+    }
+
+  }
+}
+
+.header-link {
+  position: relative;
+  margin-right: 0.25em;
+  color: gainsboro;
+  font-size: 1.25rem;
+}
+
+h2:hover .header-link,
+h3:hover .header-link,
+h4:hover .header-link,
+h5:hover .header-link,
+h6:hover .header-link {
+  opacity: 1;
+}
+
+pre {
+  white-space: pre-wrap;
+}
+
+@import "navbar";
+
+#toolbarIcons {
+  display: none;
+  padding-top:0.4em;
+}
+
+@import "syntax-highlighting";
+
+footer {
+  border-top: 1px solid #333;
+  background: #06476a;
+  clear: both;
+  padding: 10px;
+  color: #f2f2f2;
+
+  a {
+    color: #fff;
+
+    &:hover {
+      color: #43adff;
+      text-shadow: #0090ff 0 0 2px;
+    }
+  }
+
+}
+
+.box {
+  //bottom: 0; /* increase for footer use */
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: #333;
+}
+
+.capitalize {
+  text-transform:capitalize;
+}
+
+#main {
+  background-color: white;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.wrapper, .row {
+  height: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
+.wrapper, .row {
+  height: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.wrapper:before, .wrapper:after {
+  content: "";
+  display: table;
+}
+
+.wrapper:after {
+  clear: both;
+}
+
+
+.column {
+  height: 100%;
+  overflow: auto;
+  *zoom: 1;
+
+  &:before, &:after {
+    content: "";
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+
+  .padding {
+    padding: 20px;
+  }
+}
+
+//@import "sidebar";
+
+@import "docsearch";
+
+@import "page_toc";
+
+#sidebar {
+  overflow-y: auto;
+
+  a i.expand {
+    color: #cccccc;
+    float: right;
+    font-family: 'Font Awesome\ 5 Free';
+    font-style: normal;
+    font-weight: 900;
+    text-decoration: inherit;
+    font-size: 1rem;
+
+    &:before {
+      content: "\f107";
+    }
+  }
+
+
+  li > a {
+  }
+
+  li > a.collapsed {
+    background-color: transparent;
+
+    & i.expand:before {
+      content: "\f105";
+    }
+  }
+
+}
+
+
+a i.expand:before {
+  content: "\f107";
+}
+
+
+
+
+/* Extra small devices (portrait phones, less than 34em)*/
+/* No media query since this is the default in Bootstrap*/
+
+/* Small devices (landscape phones, 34em and up) */
+@media (min-width: 34em) {
+  html {
+    font-size: 16px;
+  }
+
+  header {
+    padding: 5px;
+
+    h1 {
+      font-size: 1.85rem;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+}
+
+/* Medium devices (tablets, 48em and up)*/
+@media (min-width: 48em) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.75rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+  }
+
+  html {
+    font-size: 16px;
+  }
+
+  header {
+    padding: 19px;
+  }
+
+  #docsNavBar {
+    position: relative;
+  }
+  #toolbarIcons {
+    display: inline-block;
+    //float: right;
+    text-align: right;
+    position: absolute;
+    top: 2px;
+    right: 10px;
+
+    a {
+      margin: 2px 5px;
+      font-size: 1.25rem;
+      color: #999999;
+
+      &:hover {
+        color: #000000;
+      }
+    }
+  }
+  .cas-docs-container {
+    margin-top: 0;
+  }
+
+  .cas-docs-sidebar {
+    padding-left: 20px;
+  }
+
+  #forkme_banner {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    z-index: 10;
+    padding: 10px 50px 10px 10px;
+    color: #fff;
+    background: url('../images/blacktocat.png') #0b7ebd no-repeat 95% 50%;
+    // font-weight: 300;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    // margin-top: -20px;
+  }
+}
+
+/*Large devices (desktops, 62em and up)*/
+@media (min-width: 62em) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/*Extra large devices (large desktops, 75em and up)*/
+@media (min-width: 75em) {
+
+}
+
+@import "overrides";
+
+
+.collapsing {
+  -webkit-transition: none;
+  transition: none;
+  display: none;
+}
+
+.table td:first-child {
+  white-space: nowrap;
+}
+
+.small {
+  font-size: 88%;
+}
+
+.properties {
+  position: relative;
+  // top: -30px;
+}
+
+.paginated-table tr {
+  //   display: none;
+}
+
+.table td, .table th {
+  border-top: none !important;
+  // border-bottom: none !important;
+}
+
+.table-responsive {
+  display: inline-table;
+}
+
+.tooltip-inner {
+  max-width: 850px;
+  text-align: left;
+}
+
+sup {
+  cursor: pointer;
+}
+
+.zoom {
+  transition: transform .2s;
+}
+
+.zoom:hover {
+  transform: scale(1.2);
+}
+
+/* markdown tabs using a jekyll plugin */
+
+.tab {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -20px;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+
+.tab > * {
+  flex: none;
+  padding-left: 20px;
+  position: relative;
+}
+
+.tab > * > a  {
+  display: block;
+  text-align: center;
+  padding: 9px 20px;
+  color: #999;
+  border-bottom: 3px solid transparent;
+  border-bottom-color: transparent;
+  font-size: 11pt;
+  text-transform: uppercase;
+  transition: color .1s ease-in-out;
+  line-height: 20px;
+}
+
+.tab > .active > a  {
+  color:#222;
+  border-color: #30a8e8;
+}
+
+.tab li:not(.property-name):not(.property-tab) a  {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ul.tab-content {
+  padding: 10px;
+}
+
+ul.tab-content li:not(.property-name):not(.property-tab):not(.cas-module) {
+  display: none;
+}
+
+ul.tab-content li.active:not(.property-name):not(.property-tab)  {
+  display: initial;
+}
+
+#sidebarNavButton {
+  //font-size: 32px;
+  cursor: pointer;
+  background-color: inherit;
+  border: none;
+  padding-left: 1.25rem;
+}
+
+@media (max-width: 850px) {
+  #sidebarNavButton, #navigationNavButton {
+    display: none;
+  }
+}
+

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - CAS Protocol</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    
+<h1 id="cas-protocol">CAS Protocol</h1>
+
+<p>The CAS protocol is a simple and powerful ticket-based protocol. The complete protocol specification may be found <a href="CAS-Protocol-Specification.html">here</a>.</p>
+
+<p>It involves one or many clients and one server. Clients are embedded in <em>CASified</em> applications (called “CAS services”) whereas the CAS server is a standalone component:</p>
+
+<ul>
+  <li>The <a href="../authentication/Configuring-Authentication-Components.html">CAS server</a> is responsible for authenticating users and granting accesses to applications</li>
+  <li>The <a href="../integration/CAS-Clients.html">CAS clients</a> protect the CAS applications and retrieve the identity of the granted users from the CAS server.</li>
+</ul>
+
+<p>The key concepts are:</p>
+
+<ul>
+  <li>The <code class="language-plaintext highlighter-rouge">TGT</code> (Ticket Granting Ticket), stored in the <code class="language-plaintext highlighter-rouge">TGC</code> cookie, represents a SSO session for a user.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">ST</code> (Service Ticket), transmitted as a <code class="language-plaintext highlighter-rouge">GET</code> parameter in urls, stands for the access granted by the CAS server to the <em>CASified</em> application for a specific user.</li>
+</ul>
+
+<h2 id="specification-versions">Specification Versions</h2>
+
+<p>The following specification versions are recognized and implemented by Apereo CAS.</p>
+
+<h3 id="303">3.0.3</h3>
+
+<p>The current CAS protocol specification is <code class="language-plaintext highlighter-rouge">3.0.3</code>. The actual protocol specification <a href="CAS-Protocol-Specification.html">is available here</a>, which is hereby implemented by the Apereo CAS Server as the official reference implementation. It’s mainly a capture of the most common enhancements built on top of the CAS protocol revision <code class="language-plaintext highlighter-rouge">2.0</code>. Among other features, the most noticeable update between versions <code class="language-plaintext highlighter-rouge">2.0</code> and <code class="language-plaintext highlighter-rouge">3.0</code> is the ability to return the authentication/user attributes through the new <code class="language-plaintext highlighter-rouge">/p3/serviceValidate</code> endpoint.</p>
+
+<h3 id="20">2.0</h3>
+
+<p>The version <code class="language-plaintext highlighter-rouge">2.0</code> protocol specification is available at <a href="CAS-Protocol-V2-Specification.html">CAS-Protocol-Specification</a>.</p>
+
+<h2 id="web-flow-diagram">Web flow diagram</h2>
+
+<p><a href="../images/cas_flow_diagram.png" target="_blank"><img src="../images/cas_flow_diagram.png" alt="CAS Web flow diagram" title="CAS Web flow diagram" /></a></p>
+
+<h2 id="proxy-web-flow-diagram">Proxy web flow diagram</h2>
+<p>One of the most powerful feature of the CAS protocol is the ability for a CAS service to act as a proxy for another CAS service, transmitting the user identity.</p>
+
+<p><a href="../images/cas_proxy_flow_diagram.jpg" target="_blank"><img src="../images/cas_proxy_flow_diagram.jpg" alt="CAS Proxy web flow diagram" title="CAS Proxy web flow diagram" /></a></p>
+
+<h2 id="other-protocols">Other Protocols</h2>
+
+<p>Even if the primary goal of the CAS server is to implement the CAS protocol, other protocols are also supported as extensions:</p>
+
+<ul>
+  <li><a href="../protocol/OpenID-Protocol.html">OpenID</a></li>
+  <li><a href="../protocol/OAuth-Protocol.html">OAuth2</a></li>
+  <li><a href="../protocol/SAML-Protocol.html">SAML</a></li>
+  <li><a href="../protocol/OIDC-Protocol.html">OpenID Connect</a></li>
+  <li><a href="../protocol/REST-Protocol.html">REST</a></li>
+  <li><a href="../protocol/WS-Federation-Protocol.html">WsFederation</a></li>
+</ul>
+
+<hr />
+
+<h1 id="delegated-authentication">Delegated Authentication</h1>
+<p>Using the CAS protocol, the CAS server can also be configured to <a href="../integration/Delegate-Authentication.html">delegate the authentication</a> to another CAS server.</p>
+
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = 'Protocols';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

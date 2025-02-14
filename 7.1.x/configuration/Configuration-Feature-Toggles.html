@@ -1,0 +1,2394 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen" href='/cas/stylesheets/stylesheet.css'>
+    <link rel="stylesheet" type="text/css" media="print" href='/cas/stylesheets/print.css'>
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Configuration Feature Toggles</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="/cas/images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/development/">Development</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.1.x/">v7.1.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+
+            
+                <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+                <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+            
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+                
+                
+
+                <section>
+                    
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+                    
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="configuration-feature-toggles">Configuration Feature Toggles</h1>
+
+<p>You can control the list of auto-configuration classes to exclude them in the <code class="language-plaintext highlighter-rouge">cas.properties</code> file:</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="py">spring.autoconfigure.exclude</span><span class="p">=</span><span class="s">org.apereo.cas.custom.config.SomethingConfigurationClass</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>While the above allows control over individual auto-configuration classes, in some cases it may be desirable
+to entirely disable a feature altogether by excluding all applicable auto-configuration classes without having to
+identify all of them. This can be done using the following feature toggles:</p>
+
+<table class="cas-datatable" data-page-length="15">
+    <thead>
+    <th>Feature</th>
+    <th>Property</th>
+    </thead>
+    <tbody>
+        
+            
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAcmeAutoConfiguration&lt;/code&gt;">ACME</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ACME.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAcceptableUsagePolicyJdbcAutoConfiguration&lt;/code&gt;">AcceptableUsagePolicy</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AcceptableUsagePolicy.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAcceptableUsagePolicyLdapAutoConfiguration&lt;/code&gt;">AcceptableUsagePolicy</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AcceptableUsagePolicy.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAcceptableUsagePolicyMongoDbAutoConfiguration&lt;/code&gt;">AcceptableUsagePolicy</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AcceptableUsagePolicy.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAcceptableUsagePolicyRedisAutoConfiguration&lt;/code&gt;">AcceptableUsagePolicy</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AcceptableUsagePolicy.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAcceptableUsagePolicyRestAutoConfiguration&lt;/code&gt;">AcceptableUsagePolicy</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AcceptableUsagePolicy.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAcceptableUsagePolicyWebflowAutoConfiguration&lt;/code&gt;">AcceptableUsagePolicy</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AcceptableUsagePolicy.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsentWebflowAutoConfiguration&lt;/code&gt;">AccountManagement</code>
+                    </td>
+                    <td>
+                        
+                        <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="If selected, this configuration feature toggle must be enabled explicitly and defined in CAS configuration sources.">
+                        </i>
+                        
+                        <code>CasFeatureModule.AccountManagement.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAccountManagementWebflowAutoConfiguration&lt;/code&gt;">AccountRegistration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AccountRegistration.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAccountManagementWebflowAutoConfiguration&lt;/code&gt;">AccountRegistration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AccountRegistration.captcha.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAccountManagementWebflowAutoConfiguration&lt;/code&gt;">AccountRegistration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.AccountRegistration.scim.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreAuditAutoConfiguration&lt;/code&gt;">Audit</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Audit.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJaversAutoConfiguration&lt;/code&gt;">Audit</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Audit.javers.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJdbcAuditAutoConfiguration&lt;/code&gt;">Audit</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Audit.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSupportDynamoDbAuditAutoConfiguration&lt;/code&gt;">Audit</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Audit.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSupportMongoDbAuditAutoConfiguration&lt;/code&gt;">Audit</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Audit.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSupportRedisAuditAutoConfiguration&lt;/code&gt;">Audit</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Audit.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSupportRestAuditAutoConfiguration&lt;/code&gt;">Audit</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Audit.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonCognitoAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.aws-cognito.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAzureActiveDirectoryAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.azuread.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasBasicAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.basic.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCloudDirectoryAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.cloud-directory.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGenericAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.generic.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGraphicalUserAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.gua.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJdbcAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasOktaAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.okta.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasQRAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.qr.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRemoteAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.remote.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRestAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSoapAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.soap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSyncopeAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.syncope.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasTokenAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.token.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasTrustedAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.trusted.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CassandraAuthenticationAutoConfiguration&lt;/code&gt;">Authentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Authentication.cassandra.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCaptchaAutoConfiguration&lt;/code&gt;">CAPTCHA</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CAPTCHA.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonS3BucketsCloudConfigBootstrapAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.aws-s3.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonSecretsManagerCloudConfigBootstrapAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.aws-secretsmanager.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonSimpleSystemsManagementCloudConfigBootstrapAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.aws-ssm.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreCloudBusEventsConfigEnvironmentAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDynamoDbCloudConfigBootstrapAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleCloudSecretsManagerCloudConfigBootstrapAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.gcp-secretsmanager.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJdbcCloudConfigBootstrapAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbCloudConfigBootstrapAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRestfulCloudConfigBootstrapAutoConfiguration&lt;/code&gt;">CasConfiguration</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.CasConfiguration.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsentCoreAutoConfiguration&lt;/code&gt;">Consent</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Consent.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsentDynamoDbAutoConfiguration&lt;/code&gt;">Consent</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Consent.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsentJdbcAutoConfiguration&lt;/code&gt;">Consent</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Consent.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsentLdapAutoConfiguration&lt;/code&gt;">Consent</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Consent.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsentMongoDbAutoConfiguration&lt;/code&gt;">Consent</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Consent.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsentRedisAutoConfiguration&lt;/code&gt;">Consent</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Consent.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsentRestAutoConfiguration&lt;/code&gt;">Consent</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Consent.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonCoreAutoConfiguration&lt;/code&gt;">Core</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Core.aws.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreAutoConfiguration&lt;/code&gt;">Core</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Core.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDynamoDbCoreAutoConfiguration&lt;/code&gt;">Core</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Core.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJmxAutoConfiguration&lt;/code&gt;">Core</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Core.jmx.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDelegatedAuthenticationAutoConfiguration&lt;/code&gt;">DelegatedAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.DelegatedAuthentication.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDelegatedAuthenticationCasAutoConfiguration&lt;/code&gt;">DelegatedAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.DelegatedAuthentication.cas.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDelegatedAuthenticationOidcAutoConfiguration&lt;/code&gt;">DelegatedAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.DelegatedAuthentication.oidc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDelegatedAuthenticationSaml2AutoConfiguration&lt;/code&gt;">DelegatedAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.DelegatedAuthentication.saml.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConsulDiscoveryClientAutoConfiguration&lt;/code&gt;">Discovery</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Discovery.consul.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDiscoveryProfileAutoConfiguration&lt;/code&gt;">Discovery</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Discovery.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasEurekaDiscoveryClientAutoConfiguration&lt;/code&gt;">Discovery</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Discovery.eureka.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasElectronicFenceAutoConfiguration&lt;/code&gt;">Electrofence</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Electrofence.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreEventsAutoConfiguration&lt;/code&gt;">Events</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Events.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasEventsDynamoDbRepositoryAutoConfiguration&lt;/code&gt;">Events</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Events.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasEventsInMemoryRepositoryAutoConfiguration&lt;/code&gt;">Events</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Events.memory.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasEventsInfluxDbRepositoryAutoConfiguration&lt;/code&gt;">Events</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Events.influxdb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJpaEventsAutoConfiguration&lt;/code&gt;">Events</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Events.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbEventsAutoConfiguration&lt;/code&gt;">Events</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Events.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisEventsAutoConfiguration&lt;/code&gt;">Events</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Events.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGeoLocationAutoConfiguration&lt;/code&gt;">GeoLocation</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GeoLocation.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGeoLocationAzureMapsAutoConfiguration&lt;/code&gt;">GeoLocation</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GeoLocation.azure.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGeoLocationMaxmindAutoConfiguration&lt;/code&gt;">GeoLocation</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GeoLocation.maxmind.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleMapsGeoCodingAutoConfiguration&lt;/code&gt;">GeoLocation</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GeoLocation.googlemaps.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasIPGeoLocationAutoConfiguration&lt;/code&gt;">GeoLocation</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GeoLocation.ip.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleAuthenticatorAutoConfiguration&lt;/code&gt;">GoogleAuthenticator</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GoogleAuthenticator.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleAuthenticatorDynamoDbAutoConfiguration&lt;/code&gt;">GoogleAuthenticator</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GoogleAuthenticator.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleAuthenticatorJpaAutoConfiguration&lt;/code&gt;">GoogleAuthenticator</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GoogleAuthenticator.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleAuthenticatorLdapAutoConfiguration&lt;/code&gt;">GoogleAuthenticator</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GoogleAuthenticator.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleAuthenticatorMongoDbAutoConfiguration&lt;/code&gt;">GoogleAuthenticator</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GoogleAuthenticator.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleAuthenticatorRedisAutoConfiguration&lt;/code&gt;">GoogleAuthenticator</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.GoogleAuthenticator.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasInterruptAutoConfiguration&lt;/code&gt;">InterruptNotifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.InterruptNotifications.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasConditionalDataSourceAutoConfiguration&lt;/code&gt;">JDBC</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.JDBC.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasEmbeddedContainerJettyAutoConfiguration&lt;/code&gt;">Jetty</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Jetty.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasLdapAuthenticationAutoConfiguration&lt;/code&gt;">LDAP</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.LDAP.authentication.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleCloudLoggingAutoConfiguration&lt;/code&gt;">Logging</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Logging.gcp.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreLogoutAutoConfiguration&lt;/code&gt;">Logout</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Logout.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleAnalyticsAutoConfiguration&lt;/code&gt;">Metrics</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Metrics.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonCloudWatchAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.aws.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreMonitorAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasElasticApmAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.elastic.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasHazelcastMonitorAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.hazelcast.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJavaMelodyAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.javamelody.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJdbcMonitorAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasLdapMonitorAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMemcachedMonitorAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.memcached.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbMonitoringAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisCoreAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSentryAutoConfiguration&lt;/code&gt;">Monitoring</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Monitoring.sentry.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreMultifactorAuthenticationAutoConfiguration&lt;/code&gt;">MultifactorAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthentication.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasInweboMultifactorAuthenticationAutoConfiguration&lt;/code&gt;">MultifactorAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthentication.inwebo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasOneTimeTokenAuthenticationAutoConfiguration&lt;/code&gt;">MultifactorAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthentication.otp.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDynamoDbMultifactorAuthenticationTrustAutoConfiguration&lt;/code&gt;">MultifactorAuthenticationTrustedDevices</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthenticationTrustedDevices.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleAuthenticatorAutoConfiguration&lt;/code&gt;">MultifactorAuthenticationTrustedDevices</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthenticationTrustedDevices.gauth.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJdbcMultifactorAuthnTrustAutoConfiguration&lt;/code&gt;">MultifactorAuthenticationTrustedDevices</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthenticationTrustedDevices.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbMultifactorAuthenticationTrustAutoConfiguration&lt;/code&gt;">MultifactorAuthenticationTrustedDevices</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthenticationTrustedDevices.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMultifactorAuthnTrustAutoConfiguration&lt;/code&gt;">MultifactorAuthenticationTrustedDevices</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthenticationTrustedDevices.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRadiusMultifactorAuthenticationAutoConfiguration&lt;/code&gt;">MultifactorAuthenticationTrustedDevices</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthenticationTrustedDevices.radius.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisMultifactorAuthenticationTrustAutoConfiguration&lt;/code&gt;">MultifactorAuthenticationTrustedDevices</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthenticationTrustedDevices.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRestMultifactorAuthenticationTrustAutoConfiguration&lt;/code&gt;">MultifactorAuthenticationTrustedDevices</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.MultifactorAuthenticationTrustedDevices.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonSimpleEmailServiceAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.ses.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonSimpleNotificationServiceSmsAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.aws-sns.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasClickatellSmsAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.clickatell.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreNotificationsAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleFirebaseCloudMessagingAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.fcm.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMailjetEmailSenderAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.mailjet.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasNexmoSmsAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.nexmo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSendGridAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.sendgrid.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSlackMessagingAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.slack.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSmsModeSmsAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.smsmode.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasTextMagicSmsAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.textmagic.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasTwilioAutoConfiguration&lt;/code&gt;">Notifications</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Notifications.twilio.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasOAuth20AutoConfiguration&lt;/code&gt;">OAuth</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.OAuth.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasOAuthUmaAutoConfiguration&lt;/code&gt;">OAuth</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.OAuth.uma.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasOidcAutoConfiguration&lt;/code&gt;">OpenIDConnect</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.OpenIDConnect.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasOidcJwksJpaAutoConfiguration&lt;/code&gt;">OpenIDConnect</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.OpenIDConnect.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasPalantirAutoConfiguration&lt;/code&gt;">Palantir</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Palantir.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJdbcPasswordManagementAutoConfiguration&lt;/code&gt;">PasswordManagement</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordManagement.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasLdapPasswordManagementAutoConfiguration&lt;/code&gt;">PasswordManagement</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordManagement.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasPasswordManagementAutoConfiguration&lt;/code&gt;">PasswordManagement</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordManagement.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRestPasswordManagementAutoConfiguration&lt;/code&gt;">PasswordManagement</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordManagement.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJpaPasswordlessAuthenticationAutoConfiguration&lt;/code&gt;">PasswordlessAuthn</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordlessAuthn.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasLdapPasswordlessAuthenticationAutoConfiguration&lt;/code&gt;">PasswordlessAuthn</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordlessAuthn.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbPasswordlessAuthenticationAutoConfiguration&lt;/code&gt;">PasswordlessAuthn</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordlessAuthn.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasPasswordlessAuthenticationAutoConfiguration&lt;/code&gt;">PasswordlessAuthn</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordlessAuthn.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasPasswordlessAuthenticationWebflowAutoConfiguration&lt;/code&gt;">PasswordlessAuthn</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PasswordlessAuthn.captcha.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.SurrogateAuthenticationPasswordlessConfiguration$BaseSurrogateAuthenticationPasswordlessConfiguration&lt;/code&gt;">PasswordlessAuthnSurrogateAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SurrogateAuthentication.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasPersonDirectoryAutoConfiguration&lt;/code&gt;">PersonDirectory</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.PersonDirectory.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRadiusAutoConfiguration&lt;/code&gt;">Radius</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Radius.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRadiusMultifactorAuthenticationAutoConfiguration&lt;/code&gt;">RadiusMFA</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.RadiusMFA.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasReportsAutoConfiguration&lt;/code&gt;">Reports</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Reports.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreRestAutoConfiguration&lt;/code&gt;">RestProtocol</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.RestProtocol.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRestTokensAutoConfiguration&lt;/code&gt;">RestProtocol</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.RestProtocol.tokens.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreSamlAutoConfiguration&lt;/code&gt;">SAML</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SAML.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSamlIdPAutoConfiguration&lt;/code&gt;">SAMLIdentityProvider</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SAMLIdentityProvider.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasScimAutoConfiguration&lt;/code&gt;">SCIM</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SCIM.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSpnegoAutoConfiguration&lt;/code&gt;">SPNEGO</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SPNEGO.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreScriptingAutoConfiguration&lt;/code&gt;">Scripting</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Scripting.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAmazonS3ServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.s3.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreServicesAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCosmosDbServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.cosmosdb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDynamoDbServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGitServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.git.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleCloudFirestoreServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.gcp.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJpaServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJsonServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.json.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasLdapServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRestServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasYamlServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.yaml.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CassandraServiceRegistryAutoConfiguration&lt;/code&gt;">ServiceRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistry.cassandra.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasServicesStreamingAutoConfiguration&lt;/code&gt;">ServiceRegistryStreaming</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistryStreaming.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasServicesStreamingKafkaAutoConfiguration&lt;/code&gt;">ServiceRegistryStreaming</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.ServiceRegistryStreaming.kafka.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasHazelcastSessionAutoConfiguration&lt;/code&gt;">SessionManagement</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SessionManagement.hazelcast.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoSessionAutoConfiguration&lt;/code&gt;">SessionManagement</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SessionManagement.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisSessionAutoConfiguration&lt;/code&gt;">SessionManagement</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SessionManagement.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSimpleMultifactorAuthenticationAutoConfiguration&lt;/code&gt;">SimpleMFA</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SimpleMFA.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSpringBootAdminAutoConfiguration&lt;/code&gt;">SpringBootAdmin</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SpringBootAdmin.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSurrogateJdbcAuthenticationAutoConfiguration&lt;/code&gt;">SurrogateAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SurrogateAuthentication.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSurrogateLdapAuthenticationAutoConfiguration&lt;/code&gt;">SurrogateAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SurrogateAuthentication.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasSurrogateRestAuthenticationAutoConfiguration&lt;/code&gt;">SurrogateAuthentication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.SurrogateAuthentication.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasBucket4jThrottlingAutoConfiguration&lt;/code&gt;">Throttling</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Throttling.bucket4j.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasHazelcastThrottlingAutoConfiguration&lt;/code&gt;">Throttling</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Throttling.hazelcast.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJdbcThrottlingAutoConfiguration&lt;/code&gt;">Throttling</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Throttling.jdbc.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasLdapThrottlingAutoConfiguration&lt;/code&gt;">Throttling</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Throttling.ldap.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbThrottlingAutoConfiguration&lt;/code&gt;">Throttling</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Throttling.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisThrottlingAutoConfiguration&lt;/code&gt;">Throttling</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Throttling.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasThrottlingAutoConfiguration&lt;/code&gt;">Throttling</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Throttling.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasThemesAutoConfiguration&lt;/code&gt;">Thymeleaf</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Thymeleaf.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasAMQPTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.amqp.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreTicketsAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCosmosDbTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.cosmosdb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDynamoDbTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasGoogleCloudFirestoreTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.gcp.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasHazelcastTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.hazelcast.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasIgniteTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.ignite.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJpaTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMemcachedTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.memcached.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.redis-messaging.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasStatelessTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.stateless.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CassandraTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistry</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistry.cassandra.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJpaTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistryLocking</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistryLocking.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisTicketRegistryAutoConfiguration&lt;/code&gt;">TicketRegistryLocking</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.TicketRegistryLocking.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasTokenCoreAutoConfiguration&lt;/code&gt;">Tokens</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Tokens.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasOAuthUmaJpaAutoConfiguration&lt;/code&gt;">UMA</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.UMA.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasEmbeddedContainerUndertowAutoConfiguration&lt;/code&gt;">Undertow</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Undertow.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreValidationAutoConfiguration&lt;/code&gt;">Validation</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Validation.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasWebAppAutoConfiguration&lt;/code&gt;">WebApplication</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.WebApplication.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDynamoDbWebAuthnAutoConfiguration&lt;/code&gt;">WebAuthn</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.WebAuthn.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasCoreMultifactorAuthenticationWebflowAutoConfiguration&lt;/code&gt;">Webflow</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.Webflow.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasWsFederationAuthenticationAutoConfiguration&lt;/code&gt;">WsFederation</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.WsFederation.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasWsSecurityIdentityProviderAutoConfiguration&lt;/code&gt;">WsFederationIdentityProvider</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.WsFederationIdentityProvider.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasX509AuthenticationAutoConfiguration&lt;/code&gt;">X509</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.X509.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasX509RestAutoConfiguration&lt;/code&gt;">X509</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.X509.rest.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasDynamoDbYubiKeyAutoConfiguration&lt;/code&gt;">YubiKey</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.YubiKey.dynamodb.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasJpaYubiKeyAutoConfiguration&lt;/code&gt;">YubiKey</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.YubiKey.jpa.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasMongoDbYubiKeyAutoConfiguration&lt;/code&gt;">YubiKey</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.YubiKey.mongo.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasRedisYubiKeyAutoConfiguration&lt;/code&gt;">YubiKey</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.YubiKey.redis.enabled</code>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+<code data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;code&gt;org.apereo.cas.config.CasYubiKeyAutoConfiguration&lt;/code&gt;">YubiKey</code>
+                    </td>
+                    <td>
+                        
+                        <code>CasFeatureModule.YubiKey.enabled</code>
+                    </td>
+                </tr>
+            
+        
+    </tbody>
+</table>
+
+<div class="alert alert-info mt-3">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Usage</strong><p>Note that not every single CAS feature 
+may be registered in the <i>Feature Catalog</i> and as such regarded as a standalone feature. The catalog continues to grow throughout the 
+CAS release lifecycle to recognize more modules as grouped distinct features, allowing for a one-shop store to disable or enable a given CAS feature.</p>
+</div>
+
+<p>Note that the above setting enforces conditional access to the auto-configuration class where a whole suite of <code class="language-plaintext highlighter-rouge">@Bean</code>s would be 
+included or excluded in the application context upon initialization and startup. Conditional inclusion or exclusion of beans 
+generally has consequences when it comes to <code class="language-plaintext highlighter-rouge">@RefreshScope</code> and <a href="Configuration-Management-Reload.html">supporting refreshable beans</a>. 
+Note that feature modules are <em>not refreshable</em> at this point; they are processed on startup and will either be included in the assembled 
+application context or skipped entirely, depending on the result of the enforced condition.</p>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tether@2.0.0/dist/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="/cas/javascripts/URI.js"></script>
+    <script src="/cas/javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+    <script>
+        let pageSection = 'Configuration';
+        let siteUrl = '';
+        let basePath = '/cas';
+
+        
+    </script>
+</body>
+
+</html>

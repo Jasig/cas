@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - LDAP Authentication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="ldap-authentication">LDAP Authentication</h1>
+<p>LDAP integration is enabled by including the following dependency in the Maven WAR overlay:</p>
+
+<div class="highlight"><pre><code class="xml">    <span class="nt">&lt;dependency&gt;</span>
+         <span class="nt">&lt;groupId&gt;</span>org.jasig.cas<span class="nt">&lt;/groupId&gt;</span>
+         <span class="nt">&lt;artifactId&gt;</span>cas-server-support-ldap<span class="nt">&lt;/artifactId&gt;</span>
+         <span class="nt">&lt;version&gt;</span>${cas.version}<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<p><code>LdapAuthenticationHandler</code> authenticates a username/password against an LDAP directory such as Active Directory
+or OpenLDAP. There are numerous directory architectures and we provide configuration for four common cases:</p>
+
+<ol>
+  <li><a href="#active_directory_authentication">Active Directory</a> - Users authenticate with <em>sAMAAccountName</em>.</li>
+  <li><a href="#ldap_requiring_authenticated_search">Authenticated Search</a> - Manager bind/search followed by user simple bind.</li>
+  <li><a href="#ldap_supporting_anonymous_search">Anonymous Search</a> - Anonymous search followed by user simple bind.</li>
+  <li><a href="#ldap_supporting_direct_bind">Direct Bind</a> - Compute user DN from format string and perform simple bind.</li>
+</ol>
+
+<p>See the <a href="http://www.ldaptive.org/">ldaptive documentation</a> for more information or to accommodate other situations.</p>
+
+<h2 id="active-directory-authentication">Active Directory Authentication</h2>
+<p>The following configuration authenticates users by <em>sAMAccountName</em> without performing a search,
+which requires manager/administrator credentials in most cases. It is therefore the most performant and secure
+solution for the typical Active Directory deployment. Note that the resolved principal ID, which becomes the NetID
+passed to CAS client applications, is the <em>sAMAccountName</em> in the following example.
+Simply copy the configuration to <code>deployerConfigContext.xml</code> and provide values for property placeholders.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="c">&lt;!--</span>
+<span class="c">   | Change principalIdAttribute to use another directory attribute,</span>
+<span class="c">   | e.g. userPrincipalName, for the NetID</span>
+<span class="c">   --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapAuthenticationHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.LdapAuthenticationHandler&quot;</span>
+      <span class="na">p:principalIdAttribute=</span><span class="s">&quot;sAMAccountName&quot;</span>
+      <span class="na">c:authenticator-ref=</span><span class="s">&quot;authenticator&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;principalAttributeMap&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;map&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">               | This map provides a simple attribute resolution mechanism.</span>
+<span class="c">               | Keys are LDAP attribute names, values are CAS attribute names.</span>
+<span class="c">               | Use this facility instead of a PrincipalResolver if LDAP is</span>
+<span class="c">               | the only attribute source.</span>
+<span class="c">               --&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;displayName&quot;</span> <span class="na">value=</span><span class="s">&quot;displayName&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;mail&quot;</span> <span class="na">value=</span><span class="s">&quot;mail&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;memberOf&quot;</span> <span class="na">value=</span><span class="s">&quot;memberOf&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/map&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.Authenticator&quot;</span>
+      <span class="na">c:resolver-ref=</span><span class="s">&quot;dnResolver&quot;</span>
+      <span class="na">c:handler-ref=</span><span class="s">&quot;authHandler&quot;</span>
+      <span class="na">p:entryResolver-ref=</span><span class="s">&quot;entryResolver&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!-- Active Directory UPN format. --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dnResolver&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.FormatDnResolver&quot;</span>
+      <span class="na">c:format=</span><span class="s">&quot;%s@${ldap.domain}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.PooledBindAuthenticationHandler&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;pooledLdapConnectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;pooledLdapConnectionFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PooledConnectionFactory&quot;</span>
+      <span class="na">p:connectionPool-ref=</span><span class="s">&quot;connectionPool&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;connectionPool&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.BlockingConnectionPool&quot;</span>
+      <span class="na">init-method=</span><span class="s">&quot;initialize&quot;</span>
+      <span class="na">p:poolConfig-ref=</span><span class="s">&quot;ldapPoolConfig&quot;</span>
+      <span class="na">p:blockWaitTime=</span><span class="s">&quot;${ldap.pool.blockWaitTime}&quot;</span>
+      <span class="na">p:validator-ref=</span><span class="s">&quot;searchValidator&quot;</span>
+      <span class="na">p:pruneStrategy-ref=</span><span class="s">&quot;pruneStrategy&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;connectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapPoolConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PoolConfig&quot;</span>
+      <span class="na">p:minPoolSize=</span><span class="s">&quot;${ldap.pool.minSize}&quot;</span>
+      <span class="na">p:maxPoolSize=</span><span class="s">&quot;${ldap.pool.maxSize}&quot;</span>
+      <span class="na">p:validateOnCheckOut=</span><span class="s">&quot;${ldap.pool.validateOnCheckout}&quot;</span>
+      <span class="na">p:validatePeriodically=</span><span class="s">&quot;${ldap.pool.validatePeriodically}&quot;</span>
+      <span class="na">p:validatePeriod=</span><span class="s">&quot;${ldap.pool.validatePeriod}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;connectionFactory&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.DefaultConnectionFactory&quot;</span>
+      <span class="na">p:connectionConfig-ref=</span><span class="s">&quot;connectionConfig&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;connectionConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ConnectionConfig&quot;</span>
+      <span class="na">p:ldapUrl=</span><span class="s">&quot;${ldap.url}&quot;</span>
+      <span class="na">p:connectTimeout=</span><span class="s">&quot;${ldap.connectTimeout}&quot;</span>
+      <span class="na">p:useStartTLS=</span><span class="s">&quot;${ldap.useStartTLS}&quot;</span>
+      <span class="na">p:sslConfig-ref=</span><span class="s">&quot;sslConfig&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;sslConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ssl.SslConfig&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;credentialConfig&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ssl.X509CredentialConfig&quot;</span>
+              <span class="na">p:trustCertificates=</span><span class="s">&quot;${ldap.trustedCert}&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;pruneStrategy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.IdlePruneStrategy&quot;</span>
+      <span class="na">p:prunePeriod=</span><span class="s">&quot;${ldap.pool.prunePeriod}&quot;</span>
+      <span class="na">p:idleTime=</span><span class="s">&quot;${ldap.pool.idleTime}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchValidator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.SearchValidator&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;entryResolver&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.support.UpnSearchEntryResolver&quot;</span>
+      <span class="na">p:baseDn=</span><span class="s">&quot;${ldap.baseDn}&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h4 id="ldap-requiring-authenticated-search">LDAP Requiring Authenticated Search</h4>
+<p>The following configuration snippet provides a template for LDAP authentication performed with manager credentials
+followed by a bind. Copy the configuration to <code>deployerConfigContext.xml</code> and provide values for property placeholders.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapAuthenticationHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.LdapAuthenticationHandler&quot;</span>
+      <span class="na">p:principalIdAttribute=</span><span class="s">&quot;mail&quot;</span>
+      <span class="na">c:authenticator-ref=</span><span class="s">&quot;authenticator&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;principalAttributeMap&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;map&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">               | This map provides a simple attribute resolution mechanism.</span>
+<span class="c">               | Keys are LDAP attribute names, values are CAS attribute names.</span>
+<span class="c">               | Use this facility instead of a PrincipalResolver if LDAP is</span>
+<span class="c">               | the only attribute source.</span>
+<span class="c">               --&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;member&quot;</span> <span class="na">value=</span><span class="s">&quot;member&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;mail&quot;</span> <span class="na">value=</span><span class="s">&quot;mail&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;displayName&quot;</span> <span class="na">value=</span><span class="s">&quot;displayName&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/map&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.Authenticator&quot;</span>
+      <span class="na">c:resolver-ref=</span><span class="s">&quot;dnResolver&quot;</span>
+      <span class="na">c:handler-ref=</span><span class="s">&quot;authHandler&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dnResolver&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.PooledSearchDnResolver&quot;</span>
+      <span class="na">p:baseDn=</span><span class="s">&quot;${ldap.baseDn}&quot;</span>
+      <span class="na">p:subtreeSearch=</span><span class="s">&quot;true&quot;</span>
+      <span class="na">p:allowMultipleDns=</span><span class="s">&quot;false&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;searchPooledLdapConnectionFactory&quot;</span>
+      <span class="na">p:userFilter=</span><span class="s">&quot;${ldap.authn.searchFilter}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchPooledLdapConnectionFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PooledConnectionFactory&quot;</span>
+      <span class="na">p:connectionPool-ref=</span><span class="s">&quot;searchConnectionPool&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchConnectionPool&quot;</span> <span class="na">parent=</span><span class="s">&quot;abstractConnectionPool&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;searchConnectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchConnectionFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.DefaultConnectionFactory&quot;</span>
+      <span class="na">p:connectionConfig-ref=</span><span class="s">&quot;searchConnectionConfig&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchConnectionConfig&quot;</span> <span class="na">parent=</span><span class="s">&quot;abstractConnectionConfig&quot;</span>
+      <span class="na">p:connectionInitializer-ref=</span><span class="s">&quot;bindConnectionInitializer&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;bindConnectionInitializer&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.BindConnectionInitializer&quot;</span>
+      <span class="na">p:bindDn=</span><span class="s">&quot;${ldap.managerDn}&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;bindCredential&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.Credential&quot;</span>
+              <span class="na">c:password=</span><span class="s">&quot;${ldap.managerPassword}&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;abstractConnectionPool&quot;</span> <span class="na">abstract=</span><span class="s">&quot;true&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.BlockingConnectionPool&quot;</span>
+      <span class="na">init-method=</span><span class="s">&quot;initialize&quot;</span>
+      <span class="na">p:poolConfig-ref=</span><span class="s">&quot;ldapPoolConfig&quot;</span>
+      <span class="na">p:blockWaitTime=</span><span class="s">&quot;${ldap.pool.blockWaitTime}&quot;</span>
+      <span class="na">p:validator-ref=</span><span class="s">&quot;searchValidator&quot;</span>
+      <span class="na">p:pruneStrategy-ref=</span><span class="s">&quot;pruneStrategy&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;abstractConnectionConfig&quot;</span> <span class="na">abstract=</span><span class="s">&quot;true&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.ConnectionConfig&quot;</span>
+      <span class="na">p:ldapUrl=</span><span class="s">&quot;${ldap.url}&quot;</span>
+      <span class="na">p:connectTimeout=</span><span class="s">&quot;${ldap.connectTimeout}&quot;</span>
+      <span class="na">p:useStartTLS=</span><span class="s">&quot;${ldap.useStartTLS}&quot;</span>
+      <span class="na">p:sslConfig-ref=</span><span class="s">&quot;sslConfig&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapPoolConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PoolConfig&quot;</span>
+      <span class="na">p:minPoolSize=</span><span class="s">&quot;${ldap.pool.minSize}&quot;</span>
+      <span class="na">p:maxPoolSize=</span><span class="s">&quot;${ldap.pool.maxSize}&quot;</span>
+      <span class="na">p:validateOnCheckOut=</span><span class="s">&quot;${ldap.pool.validateOnCheckout}&quot;</span>
+      <span class="na">p:validatePeriodically=</span><span class="s">&quot;${ldap.pool.validatePeriodically}&quot;</span>
+      <span class="na">p:validatePeriod=</span><span class="s">&quot;${ldap.pool.validatePeriod}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;sslConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ssl.SslConfig&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;credentialConfig&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ssl.X509CredentialConfig&quot;</span>
+              <span class="na">p:trustCertificates=</span><span class="s">&quot;${ldap.trustedCert}&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;pruneStrategy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.IdlePruneStrategy&quot;</span>
+      <span class="na">p:prunePeriod=</span><span class="s">&quot;${ldap.pool.prunePeriod}&quot;</span>
+      <span class="na">p:idleTime=</span><span class="s">&quot;${ldap.pool.idleTime}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchValidator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.SearchValidator&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.PooledBindAuthenticationHandler&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;bindPooledLdapConnectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;bindPooledLdapConnectionFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PooledConnectionFactory&quot;</span>
+      <span class="na">p:connectionPool-ref=</span><span class="s">&quot;bindConnectionPool&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;bindConnectionPool&quot;</span> <span class="na">parent=</span><span class="s">&quot;abstractConnectionPool&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;bindConnectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;bindConnectionFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.DefaultConnectionFactory&quot;</span>
+      <span class="na">p:connectionConfig-ref=</span><span class="s">&quot;bindConnectionConfig&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;bindConnectionConfig&quot;</span> <span class="na">parent=</span><span class="s">&quot;abstractConnectionConfig&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h2 id="ldap-supporting-anonymous-search">LDAP Supporting Anonymous Search</h2>
+<p>The following configuration snippet provides a template for LDAP authentication performed with an anonymous search
+followed by a bind. Copy the configuration to <code>deployerConfigContext.xml</code> and provide values for property placeholders.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapAuthenticationHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.LdapAuthenticationHandler&quot;</span>
+      <span class="na">p:principalIdAttribute=</span><span class="s">&quot;mail&quot;</span>
+      <span class="na">c:authenticator-ref=</span><span class="s">&quot;authenticator&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;principalAttributeMap&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;map&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">               | This map provides a simple attribute resolution mechanism.</span>
+<span class="c">               | Keys are LDAP attribute names, values are CAS attribute names.</span>
+<span class="c">               | Use this facility instead of a PrincipalResolver if LDAP is</span>
+<span class="c">               | the only attribute source.</span>
+<span class="c">               --&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;member&quot;</span> <span class="na">value=</span><span class="s">&quot;member&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;mail&quot;</span> <span class="na">value=</span><span class="s">&quot;mail&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;displayName&quot;</span> <span class="na">value=</span><span class="s">&quot;displayName&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/map&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.Authenticator&quot;</span>
+      <span class="na">c:resolver-ref=</span><span class="s">&quot;dnResolver&quot;</span>
+      <span class="na">c:handler-ref=</span><span class="s">&quot;authHandler&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dnResolver&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.PooledSearchDnResolver&quot;</span>
+      <span class="na">p:baseDn=</span><span class="s">&quot;${ldap.baseDn}&quot;</span>
+      <span class="na">p:subtreeSearch=</span><span class="s">&quot;true&quot;</span>
+      <span class="na">p:allowMultipleDns=</span><span class="s">&quot;false&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;searchPooledLdapConnectionFactory&quot;</span>
+      <span class="na">p:userFilter=</span><span class="s">&quot;${ldap.authn.searchFilter}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchPooledLdapConnectionFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PooledConnectionFactory&quot;</span>
+      <span class="na">p:connectionPool-ref=</span><span class="s">&quot;searchConnectionPool&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchConnectionPool&quot;</span> <span class="na">parent=</span><span class="s">&quot;abstractConnectionPool&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;abstractConnectionPool&quot;</span> <span class="na">abstract=</span><span class="s">&quot;true&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.BlockingConnectionPool&quot;</span>
+      <span class="na">init-method=</span><span class="s">&quot;initialize&quot;</span>
+      <span class="na">p:poolConfig-ref=</span><span class="s">&quot;ldapPoolConfig&quot;</span>
+      <span class="na">p:blockWaitTime=</span><span class="s">&quot;${ldap.pool.blockWaitTime}&quot;</span>
+      <span class="na">p:validator-ref=</span><span class="s">&quot;searchValidator&quot;</span>
+      <span class="na">p:pruneStrategy-ref=</span><span class="s">&quot;pruneStrategy&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;connectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapPoolConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PoolConfig&quot;</span>
+      <span class="na">p:minPoolSize=</span><span class="s">&quot;${ldap.pool.minSize}&quot;</span>
+      <span class="na">p:maxPoolSize=</span><span class="s">&quot;${ldap.pool.maxSize}&quot;</span>
+      <span class="na">p:validateOnCheckOut=</span><span class="s">&quot;${ldap.pool.validateOnCheckout}&quot;</span>
+      <span class="na">p:validatePeriodically=</span><span class="s">&quot;${ldap.pool.validatePeriodically}&quot;</span>
+      <span class="na">p:validatePeriod=</span><span class="s">&quot;${ldap.pool.validatePeriod}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;connectionFactory&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.DefaultConnectionFactory&quot;</span>
+      <span class="na">p:connectionConfig-ref=</span><span class="s">&quot;connectionConfig&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;connectionConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ConnectionConfig&quot;</span>
+      <span class="na">p:ldapUrl=</span><span class="s">&quot;${ldap.url}&quot;</span>
+      <span class="na">p:connectTimeout=</span><span class="s">&quot;${ldap.connectTimeout}&quot;</span>
+      <span class="na">p:useStartTLS=</span><span class="s">&quot;${ldap.useStartTLS}&quot;</span>
+      <span class="na">p:sslConfig-ref=</span><span class="s">&quot;sslConfig&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;sslConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ssl.SslConfig&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;credentialConfig&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ssl.X509CredentialConfig&quot;</span>
+              <span class="na">p:trustCertificates=</span><span class="s">&quot;${ldap.trustedCert}&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;pruneStrategy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.IdlePruneStrategy&quot;</span>
+      <span class="na">p:prunePeriod=</span><span class="s">&quot;${ldap.pool.prunePeriod}&quot;</span>
+      <span class="na">p:idleTime=</span><span class="s">&quot;${ldap.pool.idleTime}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchValidator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.SearchValidator&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.PooledBindAuthenticationHandler&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;bindPooledLdapConnectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;bindPooledLdapConnectionFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PooledConnectionFactory&quot;</span>
+      <span class="na">p:connectionPool-ref=</span><span class="s">&quot;bindConnectionPool&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;bindConnectionPool&quot;</span> <span class="na">parent=</span><span class="s">&quot;abstractConnectionPool&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h2 id="ldap-supporting-direct-bind">LDAP Supporting Direct Bind</h2>
+<p>The following configuration snippet provides a template for LDAP authentication where no search is required to
+compute the DN needed for a bind operation. There are two requirements for this use case:</p>
+
+<ol>
+  <li>All users are under a single branch in the directory, e.g. <code>ou=Users,dc=example,dc=org</code>.</li>
+  <li>The username provided on the CAS login form is part of the DN, e.g. <code>uid=%s,ou=Users,dc=exmaple,dc=org</code>.</li>
+</ol>
+
+<p>Copy the configuration to <code>deployerConfigContext.xml</code> and provide values for property placeholders.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapAuthenticationHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.LdapAuthenticationHandler&quot;</span>
+      <span class="na">p:principalIdAttribute=</span><span class="s">&quot;uid&quot;</span>
+      <span class="na">c:authenticator-ref=</span><span class="s">&quot;authenticator&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;principalAttributeMap&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;map&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">               | This map provides a simple attribute resolution mechanism.</span>
+<span class="c">               | Keys are LDAP attribute names, values are CAS attribute names.</span>
+<span class="c">               | Use this facility instead of a PrincipalResolver if LDAP is</span>
+<span class="c">               | the only attribute source.</span>
+<span class="c">               --&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;member&quot;</span> <span class="na">value=</span><span class="s">&quot;member&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;mail&quot;</span> <span class="na">value=</span><span class="s">&quot;mail&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;displayName&quot;</span> <span class="na">value=</span><span class="s">&quot;displayName&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/map&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.Authenticator&quot;</span>
+      <span class="na">c:resolver-ref=</span><span class="s">&quot;dnResolver&quot;</span>
+      <span class="na">c:handler-ref=</span><span class="s">&quot;authHandler&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!--</span>
+<span class="c">   | The following DN format works for many directories, but may need to be</span>
+<span class="c">   | customized.</span>
+<span class="c">   --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dnResolver&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.FormatDnResolver&quot;</span>
+      <span class="na">c:format=</span><span class="s">&quot;uid=%s,${ldap.baseDn}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.PooledBindAuthenticationHandler&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;pooledLdapConnectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;pooledLdapConnectionFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PooledConnectionFactory&quot;</span>
+      <span class="na">p:connectionPool-ref=</span><span class="s">&quot;connectionPool&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;connectionPool&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.BlockingConnectionPool&quot;</span>
+      <span class="na">init-method=</span><span class="s">&quot;initialize&quot;</span>
+      <span class="na">p:poolConfig-ref=</span><span class="s">&quot;ldapPoolConfig&quot;</span>
+      <span class="na">p:blockWaitTime=</span><span class="s">&quot;${ldap.pool.blockWaitTime}&quot;</span>
+      <span class="na">p:validator-ref=</span><span class="s">&quot;searchValidator&quot;</span>
+      <span class="na">p:pruneStrategy-ref=</span><span class="s">&quot;pruneStrategy&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;connectionFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapPoolConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.PoolConfig&quot;</span>
+      <span class="na">p:minPoolSize=</span><span class="s">&quot;${ldap.pool.minSize}&quot;</span>
+      <span class="na">p:maxPoolSize=</span><span class="s">&quot;${ldap.pool.maxSize}&quot;</span>
+      <span class="na">p:validateOnCheckOut=</span><span class="s">&quot;${ldap.pool.validateOnCheckout}&quot;</span>
+      <span class="na">p:validatePeriodically=</span><span class="s">&quot;${ldap.pool.validatePeriodically}&quot;</span>
+      <span class="na">p:validatePeriod=</span><span class="s">&quot;${ldap.pool.validatePeriod}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;connectionFactory&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.DefaultConnectionFactory&quot;</span>
+      <span class="na">p:connectionConfig-ref=</span><span class="s">&quot;connectionConfig&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;connectionConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ConnectionConfig&quot;</span>
+      <span class="na">p:ldapUrl=</span><span class="s">&quot;${ldap.url}&quot;</span>
+      <span class="na">p:connectTimeout=</span><span class="s">&quot;${ldap.connectTimeout}&quot;</span>
+      <span class="na">p:useStartTLS=</span><span class="s">&quot;${ldap.useStartTLS}&quot;</span>
+      <span class="na">p:sslConfig-ref=</span><span class="s">&quot;sslConfig&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;sslConfig&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ssl.SslConfig&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;credentialConfig&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.ssl.X509CredentialConfig&quot;</span>
+              <span class="na">p:trustCertificates=</span><span class="s">&quot;${ldap.trustedCert}&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;pruneStrategy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.IdlePruneStrategy&quot;</span>
+      <span class="na">p:prunePeriod=</span><span class="s">&quot;${ldap.pool.prunePeriod}&quot;</span>
+      <span class="na">p:idleTime=</span><span class="s">&quot;${ldap.pool.idleTime}&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;searchValidator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.pool.SearchValidator&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h2 id="ldap-properties-starter">LDAP Properties Starter</h2>
+<p>The following LDAP configuration properties provide a reasonable starting point for configuring the LDAP
+authentication handler. The <code>ldap.url</code> property must be changed at a minumum. LDAP properties may be added to the
+<code>cas.properties</code> configuration file; alternatively they may be isolated in an <code>ldap.properties</code> file and loaded
+into the Spring application context by modifying the <code>propertyFileConfigurer.xml</code> configuration file.</p>
+
+<pre><code>#========================================
+# General properties
+#========================================
+ldap.url=ldap://directory.ldaptive.org
+
+# LDAP connection timeout in milliseconds
+ldap.connectTimeout=3000
+
+# Whether to use StartTLS (probably needed if not SSL connection)
+ldap.useStartTLS=true
+
+#========================================
+# LDAP connection pool configuration
+#========================================
+ldap.pool.minSize=3
+ldap.pool.maxSize=10
+ldap.pool.validateOnCheckout=false
+ldap.pool.validatePeriodically=true
+
+# Amount of time in milliseconds to block on pool exhausted condition
+# before giving up.
+ldap.pool.blockWaitTime=3000
+
+# Frequency of connection validation in seconds
+# Only applies if validatePeriodically=true
+ldap.pool.validatePeriod=300
+
+# Attempt to prune connections every N seconds
+ldap.pool.prunePeriod=300
+
+# Maximum amount of time an idle connection is allowed to be in
+# pool before it is liable to be removed/destroyed
+ldap.pool.idleTime=600
+
+#========================================
+# Authentication
+#========================================
+
+# Base DN of users to be authenticated
+ldap.authn.baseDn=ou=Users,dc=example,dc=org
+
+# Manager DN for authenticated searches
+ldap.authn.managerDN=uid=manager,ou=Users,dc=example,dc=org
+
+# Manager password for authenticated searches
+ldap.authn.managerPassword=nonsense
+
+# Search filter used for configurations that require searching for DNs
+#ldap.authn.searchFilter=(&amp;(uid={user})(accountState=active))
+ldap.authn.searchFilter=(uid={user})
+
+# Search filter used for configurations that require searching for DNs
+#ldap.authn.format=uid=%s,ou=Users,dc=example,dc=org
+ldap.authn.format=%s@example.com
+</code></pre>
+
+<h2 id="principalresolver-vs-authenticationhandler">PrincipalResolver vs. AuthenticationHandler</h2>
+<p>The principal resolution machinery provided by <code>AuthenticationHandler</code> components should be used in preference to
+<code>PrincipalResolver</code> in any situation where the former provides adequate functionality.
+If the principal that is resolved by the authentication handler
+suffices, then a <code>null</code> value may be passed in place of the resolver bean id:</p>
+
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticationManager&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.PolicyBasedAuthenticationManager&quot;</span>
+      <span class="na">p:authenticationPolicy-ref=</span><span class="s">&quot;authenticationPolicy&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;constructor-arg&gt;</span>
+      <span class="nt">&lt;map&gt;</span>
+          <span class="nt">&lt;entry</span> <span class="na">key-ref=</span><span class="s">&quot;passwordHandler&quot;</span> <span class="na">value=</span><span class="s">&quot;#{null}&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/map&gt;</span>
+  <span class="nt">&lt;/constructor-arg&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre></div>
+
+<h2 id="ldap-password-policy-enforcement">LDAP Password Policy Enforcement</h2>
+<p>The purpose of the LPPE is twofold:</p>
+
+<ul>
+  <li>Detect a number of scenarios that would otherwise prevent user authentication, specifically using an Ldap instance as the primary source of user accounts.</li>
+  <li>Warn users whose account status is near a configurable expiration date and redirect the flow to an external identity management system.</li>
+</ul>
+
+<h3 id="reflecting-ldap-account-status">Reflecting LDAP Account Status</h3>
+<p>The below scenarios are by default considered errors preventing authentication in a generic manner through the normal CAS login flow. LPPE intercepts the authentication flow, detecting the above standard error codes. Error codes are then translated into proper messages in the CAS login flow and would allow the user to take proper action, fully explaining the nature of the problem. </p>
+
+<ul>
+  <li><code>ACCOUNT_LOCKED</code>         </li>
+  <li><code>ACCOUNT_DISABLED</code>        </li>
+  <li><code>INVALID_LOGON_HOURS</code>    </li>
+  <li><code>INVALID_WORKSTATION</code>    </li>
+  <li><code>PASSWORD_MUST_CHANGE</code>   </li>
+  <li><code>PASSWORD_EXPIRED</code></li>
+</ul>
+
+<p>The translation of LDAP errors into CAS workflow is all handled by <a href="http://www.ldaptive.org/docs/guide/authentication/accountstate">ldaptive</a>.</p>
+
+<h3 id="account-expiration-notification">Account Expiration Notification</h3>
+<p>LPPE is also able to warn the user when the account is about to expire. The expiration policy is determined through pre-configured Ldap attributes with default values in place.</p>
+
+<div class="alert alert-danger"><strong>No Password Management!</strong><p>LPPE is not about password management. If you are looking for that sort of capability integrating with CAS, you might be interested in:
+
+<ul>
+    <li><a href="https://github.com/Unicon/cas-password-manager">https://github.com/Unicon/cas-password-manager</a></li>
+    <li><a href="http://code.google.com/p/pwm/">http://code.google.com/p/pwm/</a></li>‎
+</ul></p></div>
+
+<h2 id="configuration">Configuration</h2>
+<p>LPPE is by default turned off. To enable the functionally, navigate to <code>src/main/webapp/WEB-INF/unused-spring-configuration</code> and move the <code>lppe-configuration.xml</code> xml file over to the <code>spring-configuration</code> directory.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;passwordPolicy&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.support.LdapPasswordPolicyConfiguration&quot;</span>
+        <span class="na">p:alwaysDisplayPasswordExpirationWarning=</span><span class="s">&quot;${password.policy.warnAll}&quot;</span>
+        <span class="na">p:passwordWarningNumberOfDays=</span><span class="s">&quot;${password.policy.warningDays}&quot;</span>
+        <span class="na">p:passwordPolicyUrl=</span><span class="s">&quot;${password.policy.url}&quot;</span>
+        <span class="na">p:accountStateHandler-ref=</span><span class="s">&quot;accountStateHandler&quot;</span> <span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- This component is suitable for most cases but can be replaced with a custom component for special cases. --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;accountStateHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.support.DefaultAccountStateHandler&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>Next, in your <code>ldapAuthenticationHandler</code> bean, configure the password policy configuration above:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapAuthenticationHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.LdapAuthenticationHandler&quot;</span>
+      <span class="na">p:passwordPolicyConfiguration-ref=</span><span class="s">&quot;passwordPolicy&quot;</span><span class="nt">&gt;</span>
+
+      ...
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<p>Next, you have to explicitly define an LDAP-specific response handler in your <code>Authenticator</code>.
+For instance, for an OpenLDAP directory (use <code>ActiveDirectoryAuthenticationResponseHandler</code> instead for Active Directory):</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticator&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.Authenticator&quot;</span>
+        <span class="na">c:resolver-ref=</span><span class="s">&quot;dnResolver&quot;</span>
+        <span class="na">c:handler-ref=</span><span class="s">&quot;authHandler&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;authenticationResponseHandlers&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;util:list&gt;</span>
+                        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.ext.PasswordPolicyAuthenticationResponseHandler&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;/util:list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<p>Last, for OpenLDAP, you have to handle PasswordPolicy controls in the <code>BindAuthenticationHandler</code>:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.auth.PooledBindAuthenticationHandler&quot;</span>
+        <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;bindPooledLdapConnectionFactory&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;authenticationControls&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;util:list&gt;</span>
+                        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.ldaptive.control.PasswordPolicyControl&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;/util:list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h3 id="components">Components</h3>
+
+<h4 id="defaultaccountstatehandler"><code>DefaultAccountStateHandler</code></h4>
+<p>The default account state handler, that calculates the password expiration warning period, maps LDAP errors to the CAS workflow.</p>
+
+<h4 id="optionalwarningaccountstatehandler"><code>OptionalWarningAccountStateHandler</code></h4>
+<p>Supports both opt-in and opt-out warnings on a per-user basis.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;accountStateHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.support.OptionalWarningAccountStateHandler&quot;</span>
+        <span class="na">p:warningAttributeName=</span><span class="s">&quot;${password.warning.attr.name}&quot;</span>
+        <span class="na">p:warningAttributeValue=</span><span class="s">&quot;${password.warning.attr.value}&quot;</span>
+        <span class="na">p:displayWarningOnMatch=</span><span class="s">&quot;${password.warning.display.match}&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>The first two parameters define an attribute on the user entry to match on, and the third parameter determines
+whether password expiration warnings should be displayed on match.</p>
+
+<p><strong>Note:</strong> Deployers MUST configure LDAP components to provide <code>warningAttributeName</code> in the set of attributes returned from the LDAP query for user details.</p>
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

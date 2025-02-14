@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Web Flow Customization</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="webflow-customization">Webflow Customization</h1>
+<p>CAS uses <a href="projects.spring.io/spring-webflow">Spring Web Flow</a> to do “script” processing of login and logout protocols. Spring Web Flow builds on Spring MVC and allows implementing the “flows” of a web application. A flow encapsulates a sequence of steps that guide a user through the execution of some business task. It spans multiple HTTP requests, has state, deals with transactional data, is reusable, and may be dynamic and long-running in nature. Each flow may contain among many other settings the following major elements:</p>
+
+<ul>
+  <li>Actions: components that describe an executable task and return back a result</li>
+  <li>Transitions: Routing the flow from one state to another; Transitions may be global to the entire flow.</li>
+  <li>Views: Components that describe the presentation layer displayed back to the client</li>
+  <li>Decisions: Components that conditionally route to other areas of flow and can make logical decisions</li>
+</ul>
+
+<p>Spring Web Flow presents CAS with a pluggable architecture where custom actions, views and decisions may be injected into the flow to account for additional use cases and processes. Note that to customize the weblow, one must possess a reasonable level of understanding of the webflow’s internals and injection policies. The intention of this document is not to describe Spring Web Flow, but merely to demonstrate how the framework is used by CAS to carry out various aspects of the protocol and business logic execution.</p>
+
+<h2 id="login-flow">Login Flow</h2>
+<p>The flow in CAS is given a unique id that is registered inside a <code>flowRegistry</code> component. Support is enabled via the following configuration snippets in <code>cas-servlet.xml</code>: </p>
+
+<h3 id="components">Components</h3>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;webflow:flow-executor</span> <span class="na">id=</span><span class="s">&quot;loginFlowExecutor&quot;</span> <span class="na">flow-registry=</span><span class="s">&quot;loginFlowRegistry&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;webflow:flow-execution-attributes&gt;</span>
+	  <span class="nt">&lt;webflow:always-redirect-on-pause</span> <span class="na">value=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+	  <span class="nt">&lt;webflow:redirect-in-same-state</span> <span class="na">value=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/webflow:flow-execution-attributes&gt;</span>
+	<span class="nt">&lt;webflow:flow-execution-listeners&gt;</span>
+	  <span class="nt">&lt;webflow:listener</span> <span class="na">ref=</span><span class="s">&quot;terminateWebSessionListener&quot;</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/webflow:flow-execution-listeners&gt;</span>
+<span class="nt">&lt;/webflow:flow-executor&gt;</span>
+
+...
+
+<span class="nt">&lt;webflow:flow-registry</span> <span class="na">id=</span><span class="s">&quot;loginFlowRegistry&quot;</span> <span class="na">flow-builder-services=</span><span class="s">&quot;builder&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;webflow:flow-location</span> <span class="na">path=</span><span class="s">&quot;/WEB-INF/login-webflow.xml&quot;</span> <span class="na">id=</span><span class="s">&quot;login&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/webflow:flow-registry&gt;</span>
+</code></pre></div>
+
+<h3 id="login-flowxml-overview">login-flow.xml Overview</h3>
+<p>The login flow is at a high level composed of the following phases:</p>
+
+<ul>
+  <li>Initialization of the flow</li>
+  <li>Validation of Ticket Granting Ticket (TGT) </li>
+  <li>Validation of requesting service and ensuring that it is authorized to use CAS</li>
+  <li>Generation of the Login Ticket (LT)</li>
+  <li>Presentation of the Login Form</li>
+  <li>Generation of TGT upon successful authentication</li>
+  <li>Generation of Service Ticket (ST) for the requesting service</li>
+  <li>Issuing a redirect back to the authenticating web service</li>
+</ul>
+
+<p>A high-level diagram detailing major states in the flow is presented here:</p>
+
+<p><img src="http://i.imgur.com/SBDUGbH.png" alt="" /></p>
+
+<p>Acceptance of user credentials and invoking the authentication handler components is carried out by:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticationViaFormAction&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.web.flow.AuthenticationViaFormAction&quot;</span>
+        <span class="na">p:centralAuthenticationService-ref=</span><span class="s">&quot;centralAuthenticationService&quot;</span>
+        <span class="na">p:warnCookieGenerator-ref=</span><span class="s">&quot;warnCookieGenerator&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>Handling authentication failures, mapping the result of which event to a new state is carried out by:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticationExceptionHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.web.flow.AuthenticationExceptionHandler&quot;</span> <span class="nt">/&gt;</span>
+
+...
+
+<span class="nt">&lt;action-state</span> <span class="na">id=</span><span class="s">&quot;realSubmit&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;evaluate</span> <span class="na">expression=</span><span class="s">&quot;authenticationViaFormAction.submit(flowRequestContext, flowScope.credential, messageContext)&quot;</span> <span class="nt">/&gt;</span>
+
+  	<span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;success&quot;</span> <span class="na">to=</span><span class="s">&quot;sendTicketGrantingTicket&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;authenticationFailure&quot;</span> <span class="na">to=</span><span class="s">&quot;handleAuthenticationFailure&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;error&quot;</span> <span class="na">to=</span><span class="s">&quot;generateLoginTicket&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/action-state&gt;</span>
+
+....
+<span class="nt">&lt;action-state</span> <span class="na">id=</span><span class="s">&quot;handleAuthenticationFailure&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;evaluate</span> <span class="na">expression=</span><span class="s">&quot;authenticationExceptionHandler.handle(currentEvent.attributes.error, messageContext)&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;AccountDisabledException&quot;</span> <span class="na">to=</span><span class="s">&quot;casAccountDisabledView&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;AccountLockedException&quot;</span> <span class="na">to=</span><span class="s">&quot;casAccountLockedView&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;CredentialExpiredException&quot;</span> <span class="na">to=</span><span class="s">&quot;casExpiredPassView&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;InvalidLoginLocationException&quot;</span> <span class="na">to=</span><span class="s">&quot;casBadWorkstationView&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;InvalidLoginTimeException&quot;</span> <span class="na">to=</span><span class="s">&quot;casBadHoursView&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;FailedLoginException&quot;</span> <span class="na">to=</span><span class="s">&quot;generateLoginTicket&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;AccountNotFoundException&quot;</span> <span class="na">to=</span><span class="s">&quot;generateLoginTicket&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;UNKNOWN&quot;</span> <span class="na">to=</span><span class="s">&quot;generateLoginTicket&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/action-state&gt;</span>
+</code></pre></div>
+
+<p>Certain error conditions are also classified as global transitions, particularly in cases of unauthorized services attempting to use CAS:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;global-transitions&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">to=</span><span class="s">&quot;viewLoginForm&quot;</span> <span class="na">on-exception=</span><span class="s">&quot;org.jasig.cas.services.UnauthorizedSsoServiceException&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">to=</span><span class="s">&quot;viewServiceErrorView&quot;</span> <span class="na">on-exception=</span><span class="s">&quot;org.springframework.webflow.execution.repository.NoSuchFlowExecutionException&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;transition</span> <span class="na">to=</span><span class="s">&quot;viewServiceErrorView&quot;</span> <span class="na">on-exception=</span><span class="s">&quot;org.jasig.cas.services.UnauthorizedServiceException&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/global-transitions&gt;</span>
+</code></pre></div>
+
+<h2 id="logout-flow">Logout Flow</h2>
+<p>The flow in CAS is given a unique id that is registered inside a <code>flowRegistry</code> component. Support is enabled via the following configuration snippets in <code>cas-servlet.xml</code>: </p>
+
+<h3 id="components-1">Components</h3>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;webflow:flow-executor</span> <span class="na">id=</span><span class="s">&quot;logoutFlowExecutor&quot;</span> <span class="na">flow-registry=</span><span class="s">&quot;logoutFlowRegistry&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;webflow:flow-execution-attributes&gt;</span>
+      <span class="nt">&lt;webflow:always-redirect-on-pause</span> <span class="na">value=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;webflow:redirect-in-same-state</span> <span class="na">value=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/webflow:flow-execution-attributes&gt;</span>
+    <span class="nt">&lt;webflow:flow-execution-listeners&gt;</span>
+      <span class="nt">&lt;webflow:listener</span> <span class="na">ref=</span><span class="s">&quot;terminateWebSessionListener&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/webflow:flow-execution-listeners&gt;</span>
+<span class="nt">&lt;/webflow:flow-executor&gt;</span>
+
+...
+
+<span class="nt">&lt;webflow:flow-registry</span> <span class="na">id=</span><span class="s">&quot;logoutFlowRegistry&quot;</span> <span class="na">flow-builder-services=</span><span class="s">&quot;builder&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;webflow:flow-location</span> <span class="na">path=</span><span class="s">&quot;/WEB-INF/logout-webflow.xml&quot;</span> <span class="na">id=</span><span class="s">&quot;logout&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/webflow:flow-registry&gt;</span>
+</code></pre></div>
+
+<h3 id="logout-flowxml-overview">logout-flow.xml Overview</h3>
+<p>The logout flow is at a high level composed of the following phases:</p>
+
+<ul>
+  <li>Termination of the SSO session and destruction of the TGT</li>
+  <li>Initiating the Logout protocol </li>
+  <li>Handling various methods of logout (front-channel, back-channel, etc)</li>
+</ul>
+
+<p>The Logout protocol is initiated by the following component:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;logoutAction&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.web.flow.LogoutAction&quot;</span>
+        <span class="na">p:servicesManager-ref=</span><span class="s">&quot;servicesManager&quot;</span>
+        <span class="na">p:followServiceRedirects=</span><span class="s">&quot;${cas.logout.followServiceRedirects:false}&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>Front-channel method of logout is specifically handled by the following component:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;frontChannelLogoutAction&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.web.flow.FrontChannelLogoutAction&quot;</span>
+        <span class="na">c:logoutManager-ref=</span><span class="s">&quot;logoutManager&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h2 id="termination-of-web-flow-sessions">Termination of Web Flow Sessions</h2>
+<p>Each flow is registered with a <code>TerminateWebSessionListener</code> whose job is expire the web session as soon as the webflow is ended. The goal is to decrease memory consumption by deleting as soon as possible the web sessions created mainly for login and logout processes. By default, the webflow session is configured to be destroyed in 2 seconds, once the session has ended.</p>
+
+<h2 id="extending-the-webflow">Extending the Webflow</h2>
+<p>The CAS webflow provides discrete points to inject new functionality. Thus, the only thing to modify is the flow definition where new beans and views can be added easily with the Maven overlay build method.</p>
+
+<h3 id="adding-actions">Adding Actions</h3>
+<p>Adding Spring Web Flow actions typically involves the following steps:</p>
+
+<ul>
+  <li>Adding a SWF-specific Spring bean type that extends <code>org.springframework.webflow.action.AbstractAction</code></li>
+  <li>Access to the flow scope object also accessible in the flow definition file</li>
+  <li><code>doExecute()</code> method contains business logic and returns <code>success()</code> or <code>error()</code> Event types</li>
+  <li>Returned Event types are evaluated in the flow definition file</li>
+</ul>
+
+<p>Once the action bean is configured, you may define it inside the <code>login-webflow.xml</code>:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;action-state</span> <span class="na">id=</span><span class="s">&quot;actionStateId&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;action</span> <span class="na">bean=</span><span class="s">&quot;customActionBeanId&quot;</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;success&quot;</span> <span class="na">to=</span><span class="s">&quot;doThis&quot;</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;error&quot;</span> <span class="na">to=</span><span class="s">&quot;doThat&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/action-state&gt;</span>
+</code></pre></div>
+
+<h3 id="adding-views">Adding Views</h3>
+<p>Adding Spring Web Flow views involves the following steps:</p>
+
+<ul>
+  <li>Add to <code>default_views.properties</code></li>
+  <li>The name of the view directly referenced from the flow definition file</li>
+</ul>
+
+<p>A sample is presented here:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c">### View for password update</span>
+passwordUpdateView.<span class="o">(</span>class<span class="o">)=</span>org.springframework.web.servlet.view.JstlView
+passwordUpdateView.url<span class="o">=</span>/WEB-INF/view/jsp/default/ui/passwordUpdateView.jsp
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,5712 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen" href='/cas/stylesheets/stylesheet.css'>
+    <link rel="stylesheet" type="text/css" media="print" href='/cas/stylesheets/print.css'>
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Dependency Versions</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="/cas/images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/development/">Development</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.1.x/">v7.1.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+
+            
+                <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+                <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+            
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+                
+                
+
+                <section>
+                    
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+                    
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="dependency-versions">Dependency Versions</h1>
+
+<p>The following libraries and modules are used by CAS:</p>
+
+<div>
+
+
+
+<table class="cas-datatable paginated-table">
+	<thead>
+		<tr>
+			<th>Group</th>
+			<th>Name</th>
+			<th>Version</th>
+		</tr>
+	</thead>
+	<tbody>
+		
+		
+		
+			<tr>
+				<td>
+					<code>com.zaxxer</code>
+				</td>
+				<td>
+					<code>HikariCP</code>
+				</td>
+				<td>
+					<code>5.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>ace-builds</code>
+				</td>
+				<td>
+					<code>1.35.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.shredzone.acme4j</code>
+				</td>
+				<td>
+					<code>acme4j-client</code>
+				</td>
+				<td>
+					<code>3.4.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.dax</code>
+				</td>
+				<td>
+					<code>amazon-dax-client</code>
+				</td>
+				<td>
+					<code>2.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.eclipse.angus</code>
+				</td>
+				<td>
+					<code>angus-mail</code>
+				</td>
+				<td>
+					<code>2.0.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>animate.css</code>
+				</td>
+				<td>
+					<code>4.1.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>apache-client</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apiguardian</code>
+				</td>
+				<td>
+					<code>apiguardian-api</code>
+				</td>
+				<td>
+					<code>1.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>co.elastic.apm</code>
+				</td>
+				<td>
+					<code>apm-agent-api</code>
+				</td>
+				<td>
+					<code>1.51.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>co.elastic.apm</code>
+				</td>
+				<td>
+					<code>apm-agent-attach</code>
+				</td>
+				<td>
+					<code>1.51.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.aspectj</code>
+				</td>
+				<td>
+					<code>aspectjrt</code>
+				</td>
+				<td>
+					<code>1.9.22.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.aspectj</code>
+				</td>
+				<td>
+					<code>aspectjweaver</code>
+				</td>
+				<td>
+					<code>1.9.22.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.awaitility</code>
+				</td>
+				<td>
+					<code>awaitility</code>
+				</td>
+				<td>
+					<code>4.2.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>aws-core</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.azure</code>
+				</td>
+				<td>
+					<code>azure-cosmos</code>
+				</td>
+				<td>
+					<code>4.63.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.azure</code>
+				</td>
+				<td>
+					<code>azure-identity</code>
+				</td>
+				<td>
+					<code>1.13.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.azure</code>
+				</td>
+				<td>
+					<code>azure-maps-geolocation</code>
+				</td>
+				<td>
+					<code>1.0.0-beta.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.azure</code>
+				</td>
+				<td>
+					<code>azure-maps-search</code>
+				</td>
+				<td>
+					<code>1.0.0-beta.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.azure</code>
+				</td>
+				<td>
+					<code>azure-spring-data-cosmos</code>
+				</td>
+				<td>
+					<code>5.15.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>base64-js</code>
+				</td>
+				<td>
+					<code>1.5.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.bouncycastle</code>
+				</td>
+				<td>
+					<code>bcpkix-jdk18on</code>
+				</td>
+				<td>
+					<code>1.78.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.bouncycastle</code>
+				</td>
+				<td>
+					<code>bcprov-jdk18on</code>
+				</td>
+				<td>
+					<code>1.78.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>bootstrap</code>
+				</td>
+				<td>
+					<code>5.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>bootstrap-select</code>
+				</td>
+				<td>
+					<code>1.13.18</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.mongodb</code>
+				</td>
+				<td>
+					<code>bson</code>
+				</td>
+				<td>
+					<code>5.1.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.bucket4j</code>
+				</td>
+				<td>
+					<code>bucket4j-core</code>
+				</td>
+				<td>
+					<code>8.10.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.ben-manes.caffeine</code>
+				</td>
+				<td>
+					<code>caffeine</code>
+				</td>
+				<td>
+					<code>3.1.8</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.upokecenter</code>
+				</td>
+				<td>
+					<code>cbor</code>
+				</td>
+				<td>
+					<code>4.5.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>chart.js</code>
+				</td>
+				<td>
+					<code>4.4.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.github.classgraph</code>
+				</td>
+				<td>
+					<code>classgraph</code>
+				</td>
+				<td>
+					<code>4.8.175</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.nexmo</code>
+				</td>
+				<td>
+					<code>client</code>
+				</td>
+				<td>
+					<code>5.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>clientjs</code>
+				</td>
+				<td>
+					<code>0.2.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>clouddirectory</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>cloudwatch</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>cloudwatchlogs</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>cognitoidentity</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>cognitoidentityprovider</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>commons-beanutils</code>
+				</td>
+				<td>
+					<code>commons-beanutils</code>
+				</td>
+				<td>
+					<code>1.9.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>commons-cli</code>
+				</td>
+				<td>
+					<code>commons-cli</code>
+				</td>
+				<td>
+					<code>1.9.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>commons-codec</code>
+				</td>
+				<td>
+					<code>commons-codec</code>
+				</td>
+				<td>
+					<code>1.17.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>commons-collections</code>
+				</td>
+				<td>
+					<code>commons-collections</code>
+				</td>
+				<td>
+					<code>3.2.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.commons</code>
+				</td>
+				<td>
+					<code>commons-collections4</code>
+				</td>
+				<td>
+					<code>4.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.commons</code>
+				</td>
+				<td>
+					<code>commons-compress</code>
+				</td>
+				<td>
+					<code>1.27.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>commons-io</code>
+				</td>
+				<td>
+					<code>commons-io</code>
+				</td>
+				<td>
+					<code>2.16.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.commons</code>
+				</td>
+				<td>
+					<code>commons-jexl3</code>
+				</td>
+				<td>
+					<code>3.4.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>commons-lang</code>
+				</td>
+				<td>
+					<code>commons-lang</code>
+				</td>
+				<td>
+					<code>2.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.commons</code>
+				</td>
+				<td>
+					<code>commons-lang3</code>
+				</td>
+				<td>
+					<code>3.17.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.commons</code>
+				</td>
+				<td>
+					<code>commons-pool2</code>
+				</td>
+				<td>
+					<code>2.12.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.commons</code>
+				</td>
+				<td>
+					<code>commons-text</code>
+				</td>
+				<td>
+					<code>1.12.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>commons-validator</code>
+				</td>
+				<td>
+					<code>commons-validator</code>
+				</td>
+				<td>
+					<code>1.9.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.squareup.retrofit2</code>
+				</td>
+				<td>
+					<code>converter-moshi</code>
+				</td>
+				<td>
+					<code>2.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.zxing</code>
+				</td>
+				<td>
+					<code>core</code>
+				</td>
+				<td>
+					<code>3.5.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>core</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.googlecode.cqengine</code>
+				</td>
+				<td>
+					<code>cqengine</code>
+				</td>
+				<td>
+					<code>3.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.cryptacular</code>
+				</td>
+				<td>
+					<code>cryptacular</code>
+				</td>
+				<td>
+					<code>1.2.7</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>css-vars-ponyfill</code>
+				</td>
+				<td>
+					<code>2.4.7</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.curator</code>
+				</td>
+				<td>
+					<code>curator-client</code>
+				</td>
+				<td>
+					<code>5.7.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.curator</code>
+				</td>
+				<td>
+					<code>curator-framework</code>
+				</td>
+				<td>
+					<code>5.7.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.curator</code>
+				</td>
+				<td>
+					<code>curator-recipes</code>
+				</td>
+				<td>
+					<code>5.7.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-frontend-jaxrs</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-frontend-jaxws</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-rs-client</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-rs-extension-providers</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-rs-extension-search</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-rs-security-sso-saml</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-rs-service-description</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-transports-http</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-ws-addr</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-ws-policy</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf</code>
+				</td>
+				<td>
+					<code>cxf-rt-ws-security</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf.services.sts</code>
+				</td>
+				<td>
+					<code>cxf-services-sts-core</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>datatables</code>
+				</td>
+				<td>
+					<code>2.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.lmax</code>
+				</td>
+				<td>
+					<code>disruptor</code>
+				</td>
+				<td>
+					<code>4.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.dom4j</code>
+				</td>
+				<td>
+					<code>dom4j</code>
+				</td>
+				<td>
+					<code>2.1.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.duosecurity</code>
+				</td>
+				<td>
+					<code>duo-client</code>
+				</td>
+				<td>
+					<code>0.6.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.duosecurity</code>
+				</td>
+				<td>
+					<code>duo-universal-sdk</code>
+				</td>
+				<td>
+					<code>1.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>dynamodb</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.amazonaws</code>
+				</td>
+				<td>
+					<code>elasticache-java-cluster-client</code>
+				</td>
+				<td>
+					<code>1.2.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>es5-shim</code>
+				</td>
+				<td>
+					<code>4.5.9</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.netflix.eureka</code>
+				</td>
+				<td>
+					<code>eureka-client</code>
+				</td>
+				<td>
+					<code>2.0.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.glassfish.expressly</code>
+				</td>
+				<td>
+					<code>expressly</code>
+				</td>
+				<td>
+					<code>5.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cxf.fediz</code>
+				</td>
+				<td>
+					<code>fediz-core</code>
+				</td>
+				<td>
+					<code>1.6.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.firebase</code>
+				</td>
+				<td>
+					<code>firebase-admin</code>
+				</td>
+				<td>
+					<code>9.3.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.fluentd</code>
+				</td>
+				<td>
+					<code>fluent-logger</code>
+				</td>
+				<td>
+					<code>0.3.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.github.technologize</code>
+				</td>
+				<td>
+					<code>fluentd-log4j-appender</code>
+				</td>
+				<td>
+					<code>1.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>font-awesome</code>
+				</td>
+				<td>
+					<code>6.5.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.maxmind.geoip2</code>
+				</td>
+				<td>
+					<code>geoip2</code>
+				</td>
+				<td>
+					<code>4.2.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.api-client</code>
+				</td>
+				<td>
+					<code>google-api-client</code>
+				</td>
+				<td>
+					<code>2.7.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.cloud</code>
+				</td>
+				<td>
+					<code>google-cloud-logging</code>
+				</td>
+				<td>
+					<code>3.20.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.cloud</code>
+				</td>
+				<td>
+					<code>google-cloud-monitoring</code>
+				</td>
+				<td>
+					<code>3.49.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.jclouds.labs</code>
+				</td>
+				<td>
+					<code>google-compute-engine</code>
+				</td>
+				<td>
+					<code>1.9.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.maps</code>
+				</td>
+				<td>
+					<code>google-maps-services</code>
+				</td>
+				<td>
+					<code>2.2.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.warrenstrange</code>
+				</td>
+				<td>
+					<code>googleauth</code>
+				</td>
+				<td>
+					<code>1.5.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.graalvm.sdk</code>
+				</td>
+				<td>
+					<code>graal-sdk</code>
+				</td>
+				<td>
+					<code>24.0.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy-datetime</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy-groovysh</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy-json</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy-jsr223</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy-sql</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy-templates</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy-xml</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.groovy</code>
+				</td>
+				<td>
+					<code>groovy-yaml</code>
+				</td>
+				<td>
+					<code>4.0.22</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>edu.internet2.middleware.grouper</code>
+				</td>
+				<td>
+					<code>grouperClient</code>
+				</td>
+				<td>
+					<code>5.12.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.code.gson</code>
+				</td>
+				<td>
+					<code>gson</code>
+				</td>
+				<td>
+					<code>2.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.ben-manes.caffeine</code>
+				</td>
+				<td>
+					<code>guava</code>
+				</td>
+				<td>
+					<code>3.1.8</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.guava</code>
+				</td>
+				<td>
+					<code>guava</code>
+				</td>
+				<td>
+					<code>33.2.1-jre</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.h2database</code>
+				</td>
+				<td>
+					<code>h2</code>
+				</td>
+				<td>
+					<code>1.4.197</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.hazelcast</code>
+				</td>
+				<td>
+					<code>hazelcast</code>
+				</td>
+				<td>
+					<code>5.5.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.hazelcast</code>
+				</td>
+				<td>
+					<code>hazelcast-jclouds</code>
+				</td>
+				<td>
+					<code>3.7.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.hazelcast</code>
+				</td>
+				<td>
+					<code>hazelcast-sql</code>
+				</td>
+				<td>
+					<code>5.5.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.hazelcast</code>
+				</td>
+				<td>
+					<code>hazelcast-zookeeper</code>
+				</td>
+				<td>
+					<code>4.0.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.hibernate.orm</code>
+				</td>
+				<td>
+					<code>hibernate-ant</code>
+				</td>
+				<td>
+					<code>6.6.0.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.hibernate.orm</code>
+				</td>
+				<td>
+					<code>hibernate-community-dialects</code>
+				</td>
+				<td>
+					<code>6.6.0.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.hibernate.orm</code>
+				</td>
+				<td>
+					<code>hibernate-core</code>
+				</td>
+				<td>
+					<code>6.6.0.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.hibernate.orm</code>
+				</td>
+				<td>
+					<code>hibernate-graalvm</code>
+				</td>
+				<td>
+					<code>6.6.0.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.hibernate.orm</code>
+				</td>
+				<td>
+					<code>hibernate-hikaricp</code>
+				</td>
+				<td>
+					<code>6.6.0.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.hibernate.validator</code>
+				</td>
+				<td>
+					<code>hibernate-validator</code>
+				</td>
+				<td>
+					<code>8.0.1.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>highlightjs</code>
+				</td>
+				<td>
+					<code>11.5.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.hjson</code>
+				</td>
+				<td>
+					<code>hjson</code>
+				</td>
+				<td>
+					<code>3.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.hsqldb</code>
+				</td>
+				<td>
+					<code>hsqldb</code>
+				</td>
+				<td>
+					<code>2.7.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.httpcomponents</code>
+				</td>
+				<td>
+					<code>httpclient</code>
+				</td>
+				<td>
+					<code>4.5.14</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.httpcomponents.client5</code>
+				</td>
+				<td>
+					<code>httpclient5</code>
+				</td>
+				<td>
+					<code>5.3.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.httpcomponents</code>
+				</td>
+				<td>
+					<code>httpcore</code>
+				</td>
+				<td>
+					<code>4.4.16</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.httpcomponents.core5</code>
+				</td>
+				<td>
+					<code>httpcore5</code>
+				</td>
+				<td>
+					<code>5.2.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.httpcomponents.core5</code>
+				</td>
+				<td>
+					<code>httpcore5-h2</code>
+				</td>
+				<td>
+					<code>5.2.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.hypersistence</code>
+				</td>
+				<td>
+					<code>hypersistence-utils-hibernate-63</code>
+				</td>
+				<td>
+					<code>3.8.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.ignite</code>
+				</td>
+				<td>
+					<code>ignite-core</code>
+				</td>
+				<td>
+					<code>2.16.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.ignite</code>
+				</td>
+				<td>
+					<code>ignite-indexing</code>
+				</td>
+				<td>
+					<code>2.16.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.ignite</code>
+				</td>
+				<td>
+					<code>ignite-log4j2</code>
+				</td>
+				<td>
+					<code>2.16.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.ignite</code>
+				</td>
+				<td>
+					<code>ignite-spring</code>
+				</td>
+				<td>
+					<code>2.16.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.influxdb</code>
+				</td>
+				<td>
+					<code>influxdb-client-java</code>
+				</td>
+				<td>
+					<code>7.2.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.ipgeolocation</code>
+				</td>
+				<td>
+					<code>ipgeolocation</code>
+				</td>
+				<td>
+					<code>1.0.16</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.core</code>
+				</td>
+				<td>
+					<code>jackson-annotations</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.core</code>
+				</td>
+				<td>
+					<code>jackson-core</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.codehaus.jackson</code>
+				</td>
+				<td>
+					<code>jackson-core-asl</code>
+				</td>
+				<td>
+					<code>1.9.13</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.core</code>
+				</td>
+				<td>
+					<code>jackson-databind</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.dataformat</code>
+				</td>
+				<td>
+					<code>jackson-dataformat-cbor</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.dataformat</code>
+				</td>
+				<td>
+					<code>jackson-dataformat-properties</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.dataformat</code>
+				</td>
+				<td>
+					<code>jackson-dataformat-xml</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.dataformat</code>
+				</td>
+				<td>
+					<code>jackson-dataformat-yaml</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.datatype</code>
+				</td>
+				<td>
+					<code>jackson-datatype-guava</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.datatype</code>
+				</td>
+				<td>
+					<code>jackson-datatype-jdk8</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.datatype</code>
+				</td>
+				<td>
+					<code>jackson-datatype-jsr310</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.codehaus.jackson</code>
+				</td>
+				<td>
+					<code>jackson-mapper-asl</code>
+				</td>
+				<td>
+					<code>1.9.13</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.module</code>
+				</td>
+				<td>
+					<code>jackson-module-blackbird</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.module</code>
+				</td>
+				<td>
+					<code>jackson-module-jakarta-xmlbind-annotations</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.fasterxml.jackson.module</code>
+				</td>
+				<td>
+					<code>jackson-module-parameter-names</code>
+				</td>
+				<td>
+					<code>2.17.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.activation</code>
+				</td>
+				<td>
+					<code>jakarta.activation-api</code>
+				</td>
+				<td>
+					<code>2.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.annotation</code>
+				</td>
+				<td>
+					<code>jakarta.annotation-api</code>
+				</td>
+				<td>
+					<code>3.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.el</code>
+				</td>
+				<td>
+					<code>jakarta.el-api</code>
+				</td>
+				<td>
+					<code>6.0.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.eclipse.angus</code>
+				</td>
+				<td>
+					<code>jakarta.mail</code>
+				</td>
+				<td>
+					<code>2.0.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.persistence</code>
+				</td>
+				<td>
+					<code>jakarta.persistence-api</code>
+				</td>
+				<td>
+					<code>3.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.servlet</code>
+				</td>
+				<td>
+					<code>jakarta.servlet-api</code>
+				</td>
+				<td>
+					<code>6.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.servlet.jsp.jstl</code>
+				</td>
+				<td>
+					<code>jakarta.servlet.jsp.jstl-api</code>
+				</td>
+				<td>
+					<code>3.0.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.transaction</code>
+				</td>
+				<td>
+					<code>jakarta.transaction-api</code>
+				</td>
+				<td>
+					<code>2.0.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.validation</code>
+				</td>
+				<td>
+					<code>jakarta.validation-api</code>
+				</td>
+				<td>
+					<code>3.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.xml.bind</code>
+				</td>
+				<td>
+					<code>jakarta.xml.bind-api</code>
+				</td>
+				<td>
+					<code>4.0.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.xml.soap</code>
+				</td>
+				<td>
+					<code>jakarta.xml.soap-api</code>
+				</td>
+				<td>
+					<code>3.0.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jakarta.xml.ws</code>
+				</td>
+				<td>
+					<code>jakarta.xml.ws-api</code>
+				</td>
+				<td>
+					<code>4.0.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.jasypt</code>
+				</td>
+				<td>
+					<code>jasypt</code>
+				</td>
+				<td>
+					<code>1.9.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cassandra</code>
+				</td>
+				<td>
+					<code>java-driver-core</code>
+				</td>
+				<td>
+					<code>4.18.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.cassandra</code>
+				</td>
+				<td>
+					<code>java-driver-mapper-runtime</code>
+				</td>
+				<td>
+					<code>4.18.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.bull.javamelody</code>
+				</td>
+				<td>
+					<code>javamelody-spring-boot-starter</code>
+				</td>
+				<td>
+					<code>2.2.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.javaparser</code>
+				</td>
+				<td>
+					<code>javaparser-core</code>
+				</td>
+				<td>
+					<code>3.26.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.javers</code>
+				</td>
+				<td>
+					<code>javers-spring-boot-starter-mongo</code>
+				</td>
+				<td>
+					<code>7.6.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.sun.xml.bind</code>
+				</td>
+				<td>
+					<code>jaxb-impl</code>
+				</td>
+				<td>
+					<code>4.0.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.sun.xml.ws</code>
+				</td>
+				<td>
+					<code>jaxws-rt</code>
+				</td>
+				<td>
+					<code>4.0.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>jcifs</code>
+				</td>
+				<td>
+					<code>jcifs</code>
+				</td>
+				<td>
+					<code>1.3.17</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.stephenc.jcip</code>
+				</td>
+				<td>
+					<code>jcip-annotations</code>
+				</td>
+				<td>
+					<code>1.0-1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.jclouds</code>
+				</td>
+				<td>
+					<code>jclouds-allcompute</code>
+				</td>
+				<td>
+					<code>2.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.jclouds</code>
+				</td>
+				<td>
+					<code>jclouds-compute</code>
+				</td>
+				<td>
+					<code>2.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.yugabyte</code>
+				</td>
+				<td>
+					<code>jdbc-yugabytedb</code>
+				</td>
+				<td>
+					<code>42.3.5-yb-6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.jdom</code>
+				</td>
+				<td>
+					<code>jdom2</code>
+				</td>
+				<td>
+					<code>2.0.6.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.eclipse.jetty</code>
+				</td>
+				<td>
+					<code>jetty-alpn-java-server</code>
+				</td>
+				<td>
+					<code>12.0.16</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.eclipse.jetty.http2</code>
+				</td>
+				<td>
+					<code>jetty-http2-server</code>
+				</td>
+				<td>
+					<code>12.0.16</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.samskivert</code>
+				</td>
+				<td>
+					<code>jmustache</code>
+				</td>
+				<td>
+					<code>1.16</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>joda-time</code>
+				</td>
+				<td>
+					<code>joda-time</code>
+				</td>
+				<td>
+					<code>2.12.7</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.jooq</code>
+				</td>
+				<td>
+					<code>jool</code>
+				</td>
+				<td>
+					<code>0.9.15</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.bitbucket.b_c</code>
+				</td>
+				<td>
+					<code>jose4j</code>
+				</td>
+				<td>
+					<code>0.9.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>jquery</code>
+				</td>
+				<td>
+					<code>3.7.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>jquery-ui</code>
+				</td>
+				<td>
+					<code>1.14.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.jradius</code>
+				</td>
+				<td>
+					<code>jradius-apps</code>
+				</td>
+				<td>
+					<code>1.1.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.jradius</code>
+				</td>
+				<td>
+					<code>jradius-client</code>
+				</td>
+				<td>
+					<code>1.1.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.jradius</code>
+				</td>
+				<td>
+					<code>jradius-core</code>
+				</td>
+				<td>
+					<code>1.1.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.jradius</code>
+				</td>
+				<td>
+					<code>jradius-dictionary</code>
+				</td>
+				<td>
+					<code>1.1.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.jradius</code>
+				</td>
+				<td>
+					<code>jradius-extended</code>
+				</td>
+				<td>
+					<code>1.1.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.jradius</code>
+				</td>
+				<td>
+					<code>jradius-extras</code>
+				</td>
+				<td>
+					<code>1.1.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.jradius</code>
+				</td>
+				<td>
+					<code>jradius-server</code>
+				</td>
+				<td>
+					<code>1.1.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.json</code>
+				</td>
+				<td>
+					<code>json</code>
+				</td>
+				<td>
+					<code>20240303</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.minidev</code>
+				</td>
+				<td>
+					<code>json-smart</code>
+				</td>
+				<td>
+					<code>2.5.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.skyscreamer</code>
+				</td>
+				<td>
+					<code>jsonassert</code>
+				</td>
+				<td>
+					<code>1.5.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.jsoup</code>
+				</td>
+				<td>
+					<code>jsoup</code>
+				</td>
+				<td>
+					<code>1.18.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.sourceforge.jtds</code>
+				</td>
+				<td>
+					<code>jtds</code>
+				</td>
+				<td>
+					<code>1.3.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.slf4j</code>
+				</td>
+				<td>
+					<code>jul-to-slf4j</code>
+				</td>
+				<td>
+					<code>2.0.16</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.junit.jupiter</code>
+				</td>
+				<td>
+					<code>junit-jupiter-api</code>
+				</td>
+				<td>
+					<code>5.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.junit.jupiter</code>
+				</td>
+				<td>
+					<code>junit-jupiter-params</code>
+				</td>
+				<td>
+					<code>5.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.junit-pioneer</code>
+				</td>
+				<td>
+					<code>junit-pioneer</code>
+				</td>
+				<td>
+					<code>2.2.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.junit.platform</code>
+				</td>
+				<td>
+					<code>junit-platform-engine</code>
+				</td>
+				<td>
+					<code>1.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.junit.platform</code>
+				</td>
+				<td>
+					<code>junit-platform-launcher</code>
+				</td>
+				<td>
+					<code>1.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.junit.platform</code>
+				</td>
+				<td>
+					<code>junit-platform-runner</code>
+				</td>
+				<td>
+					<code>1.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.junit.platform</code>
+				</td>
+				<td>
+					<code>junit-platform-suite-api</code>
+				</td>
+				<td>
+					<code>1.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.kafka</code>
+				</td>
+				<td>
+					<code>kafka-clients</code>
+				</td>
+				<td>
+					<code>3.8.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.kafka</code>
+				</td>
+				<td>
+					<code>kafka-streams</code>
+				</td>
+				<td>
+					<code>3.8.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.esotericsoftware</code>
+				</td>
+				<td>
+					<code>kryo</code>
+				</td>
+				<td>
+					<code>5.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>de.javakaffee</code>
+				</td>
+				<td>
+					<code>kryo-serializers</code>
+				</td>
+				<td>
+					<code>0.45</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.ldaptive</code>
+				</td>
+				<td>
+					<code>ldaptive</code>
+				</td>
+				<td>
+					<code>2.3.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.lettuce</code>
+				</td>
+				<td>
+					<code>lettuce-core</code>
+				</td>
+				<td>
+					<code>6.4.0.RELEASE</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.redis</code>
+				</td>
+				<td>
+					<code>lettucemod</code>
+				</td>
+				<td>
+					<code>4.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.logging.log4j</code>
+				</td>
+				<td>
+					<code>log4j-api</code>
+				</td>
+				<td>
+					<code>2.23.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.logging.log4j</code>
+				</td>
+				<td>
+					<code>log4j-core</code>
+				</td>
+				<td>
+					<code>2.23.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.logging.log4j</code>
+				</td>
+				<td>
+					<code>log4j-jakarta-web</code>
+				</td>
+				<td>
+					<code>2.23.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.logging.log4j</code>
+				</td>
+				<td>
+					<code>log4j-jcl</code>
+				</td>
+				<td>
+					<code>2.23.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.logging.log4j</code>
+				</td>
+				<td>
+					<code>log4j-layout-template-json</code>
+				</td>
+				<td>
+					<code>2.23.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.logging.log4j</code>
+				</td>
+				<td>
+					<code>log4j-slf4j2-impl</code>
+				</td>
+				<td>
+					<code>2.23.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.logging.log4j</code>
+				</td>
+				<td>
+					<code>log4j-spring-cloud-config-client</code>
+				</td>
+				<td>
+					<code>2.23.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>ch.qos.logback</code>
+				</td>
+				<td>
+					<code>logback-access</code>
+				</td>
+				<td>
+					<code>1.5.7</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>ch.qos.logback</code>
+				</td>
+				<td>
+					<code>logback-classic</code>
+				</td>
+				<td>
+					<code>1.5.7</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>ch.qos.logback</code>
+				</td>
+				<td>
+					<code>logback-core</code>
+				</td>
+				<td>
+					<code>1.5.7</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.squareup.okhttp3</code>
+				</td>
+				<td>
+					<code>logging-interceptor</code>
+				</td>
+				<td>
+					<code>4.12.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.mailjet</code>
+				</td>
+				<td>
+					<code>mailjet-client</code>
+				</td>
+				<td>
+					<code>5.2.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.mariadb.jdbc</code>
+				</td>
+				<td>
+					<code>mariadb-java-client</code>
+				</td>
+				<td>
+					<code>3.4.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>material-components-web</code>
+				</td>
+				<td>
+					<code>14.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>mdi__font</code>
+				</td>
+				<td>
+					<code>7.4.47</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.dropwizard.metrics</code>
+				</td>
+				<td>
+					<code>metrics-core</code>
+				</td>
+				<td>
+					<code>4.2.27</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-commons</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-core</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-jakarta9</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-observation</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-atlas</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-cloudwatch2</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-datadog</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-elastic</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-ganglia</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-graphite</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-influx</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-jmx</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-new-relic</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-prometheus</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-signalfx</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-statsd</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-registry-wavefront</code>
+				</td>
+				<td>
+					<code>1.13.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-tracing-bridge-brave</code>
+				</td>
+				<td>
+					<code>1.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.micrometer</code>
+				</td>
+				<td>
+					<code>micrometer-tracing-bridge-otel</code>
+				</td>
+				<td>
+					<code>1.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.mockito</code>
+				</td>
+				<td>
+					<code>mockito-core</code>
+				</td>
+				<td>
+					<code>5.13.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.mockito</code>
+				</td>
+				<td>
+					<code>mockito-inline</code>
+				</td>
+				<td>
+					<code>5.2.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.mockito</code>
+				</td>
+				<td>
+					<code>mockito-junit-jupiter</code>
+				</td>
+				<td>
+					<code>5.13.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.squareup.okhttp3</code>
+				</td>
+				<td>
+					<code>mockwebserver</code>
+				</td>
+				<td>
+					<code>4.12.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.mongodb</code>
+				</td>
+				<td>
+					<code>mongodb-driver-core</code>
+				</td>
+				<td>
+					<code>5.1.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.mongodb</code>
+				</td>
+				<td>
+					<code>mongodb-driver-sync</code>
+				</td>
+				<td>
+					<code>5.1.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.microsoft.azure</code>
+				</td>
+				<td>
+					<code>msal4j</code>
+				</td>
+				<td>
+					<code>1.17.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.microsoft.sqlserver</code>
+				</td>
+				<td>
+					<code>mssql-jdbc</code>
+				</td>
+				<td>
+					<code>12.6.1.jre11</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.mysql</code>
+				</td>
+				<td>
+					<code>mysql-connector-j</code>
+				</td>
+				<td>
+					<code>9.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.netflix.netflix-commons</code>
+				</td>
+				<td>
+					<code>netflix-eventbus</code>
+				</td>
+				<td>
+					<code>0.3.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.netty</code>
+				</td>
+				<td>
+					<code>netty-buffer</code>
+				</td>
+				<td>
+					<code>4.1.113.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.netty</code>
+				</td>
+				<td>
+					<code>netty-codec</code>
+				</td>
+				<td>
+					<code>4.1.113.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.netty</code>
+				</td>
+				<td>
+					<code>netty-common</code>
+				</td>
+				<td>
+					<code>4.1.113.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.netty</code>
+				</td>
+				<td>
+					<code>netty-handler</code>
+				</td>
+				<td>
+					<code>4.1.113.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.netty</code>
+				</td>
+				<td>
+					<code>netty-resolver</code>
+				</td>
+				<td>
+					<code>4.1.113.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.netty</code>
+				</td>
+				<td>
+					<code>netty-transport</code>
+				</td>
+				<td>
+					<code>4.1.113.Final</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.nimbusds</code>
+				</td>
+				<td>
+					<code>nimbus-jose-jwt</code>
+				</td>
+				<td>
+					<code>9.40</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>normalize.css</code>
+				</td>
+				<td>
+					<code>8.0.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.nimbusds</code>
+				</td>
+				<td>
+					<code>oauth2-oidc-sdk</code>
+				</td>
+				<td>
+					<code>11.19.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.oracle.database.jdbc</code>
+				</td>
+				<td>
+					<code>ojdbc11</code>
+				</td>
+				<td>
+					<code>23.5.0.24.07</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.squareup.okhttp3</code>
+				</td>
+				<td>
+					<code>okhttp</code>
+				</td>
+				<td>
+					<code>4.12.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.squareup.okhttp</code>
+				</td>
+				<td>
+					<code>okhttp-urlconnection</code>
+				</td>
+				<td>
+					<code>2.7.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.squareup.okio</code>
+				</td>
+				<td>
+					<code>okio</code>
+				</td>
+				<td>
+					<code>3.9.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.okta.authn.sdk</code>
+				</td>
+				<td>
+					<code>okta-authn-sdk-api</code>
+				</td>
+				<td>
+					<code>3.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.okta.authn.sdk</code>
+				</td>
+				<td>
+					<code>okta-authn-sdk-impl</code>
+				</td>
+				<td>
+					<code>3.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.okta.sdk</code>
+				</td>
+				<td>
+					<code>okta-sdk-httpclient</code>
+				</td>
+				<td>
+					<code>8.2.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-core-api</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-messaging-impl</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-profile-api</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-profile-impl</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-saml-api</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-saml-impl</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-security-api</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-security-impl</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-soap-api</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-storage-impl</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-xacml-saml-api</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-xacml-saml-impl</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.opensaml</code>
+				</td>
+				<td>
+					<code>opensaml-xmlsec-impl</code>
+				</td>
+				<td>
+					<code>5.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.eclipse.jgit</code>
+				</td>
+				<td>
+					<code>org.eclipse.jgit</code>
+				</td>
+				<td>
+					<code>6.10.0.202406032230-r</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.eclipse.jgit</code>
+				</td>
+				<td>
+					<code>org.eclipse.jgit.http.apache</code>
+				</td>
+				<td>
+					<code>6.10.0.202406032230-r</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.eclipse.jgit</code>
+				</td>
+				<td>
+					<code>org.eclipse.jgit.ssh.jsch</code>
+				</td>
+				<td>
+					<code>6.10.0.202406032230-r</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.eclipse.persistence</code>
+				</td>
+				<td>
+					<code>org.eclipse.persistence.jpa</code>
+				</td>
+				<td>
+					<code>4.0.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.oshi</code>
+				</td>
+				<td>
+					<code>oshi-core</code>
+				</td>
+				<td>
+					<code>6.6.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-cas</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-config</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-core</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-http</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-jakartaee</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-jwt</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-oauth</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-oidc</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.pac4j</code>
+				</td>
+				<td>
+					<code>pac4j-saml</code>
+				</td>
+				<td>
+					<code>6.0.6</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.permit</code>
+				</td>
+				<td>
+					<code>permit-sdk-java</code>
+				</td>
+				<td>
+					<code>2.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.graalvm.polyglot</code>
+				</td>
+				<td>
+					<code>polyglot</code>
+				</td>
+				<td>
+					<code>24.0.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.postgresql</code>
+				</td>
+				<td>
+					<code>postgresql</code>
+				</td>
+				<td>
+					<code>42.7.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.quartz-scheduler</code>
+				</td>
+				<td>
+					<code>quartz</code>
+				</td>
+				<td>
+					<code>2.3.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.squareup.retrofit2</code>
+				</td>
+				<td>
+					<code>retrofit</code>
+				</td>
+				<td>
+					<code>2.11.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>s3</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.sun.xml.messaging.saaj</code>
+				</td>
+				<td>
+					<code>saaj-impl</code>
+				</td>
+				<td>
+					<code>3.0.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>de.captaingoldfish</code>
+				</td>
+				<td>
+					<code>scim-sdk-client</code>
+				</td>
+				<td>
+					<code>1.25.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>secretsmanager</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.vdurmont</code>
+				</td>
+				<td>
+					<code>semver4j</code>
+				</td>
+				<td>
+					<code>3.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.sendgrid</code>
+				</td>
+				<td>
+					<code>sendgrid-java</code>
+				</td>
+				<td>
+					<code>4.10.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.sentry</code>
+				</td>
+				<td>
+					<code>sentry-log4j2</code>
+				</td>
+				<td>
+					<code>7.14.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.sentry</code>
+				</td>
+				<td>
+					<code>sentry-spring-boot-starter-jakarta</code>
+				</td>
+				<td>
+					<code>7.14.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>ses</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.shibboleth</code>
+				</td>
+				<td>
+					<code>shib-support</code>
+				</td>
+				<td>
+					<code>9.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.slack.api</code>
+				</td>
+				<td>
+					<code>slack-api-client</code>
+				</td>
+				<td>
+					<code>1.42.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.slf4j</code>
+				</td>
+				<td>
+					<code>slf4j-api</code>
+				</td>
+				<td>
+					<code>2.0.16</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.yaml</code>
+				</td>
+				<td>
+					<code>snakeyaml</code>
+				</td>
+				<td>
+					<code>2.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>sns</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>sockjs-client</code>
+				</td>
+				<td>
+					<code>1.5.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.splunk.logging</code>
+				</td>
+				<td>
+					<code>splunk-library-javalogging</code>
+				</td>
+				<td>
+					<code>1.11.8</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-aop</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-beans</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.webflow</code>
+				</td>
+				<td>
+					<code>spring-binding</code>
+				</td>
+				<td>
+					<code>3.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-actuator</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>de.codecentric</code>
+				</td>
+				<td>
+					<code>spring-boot-admin-starter-client</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>de.codecentric</code>
+				</td>
+				<td>
+					<code>spring-boot-admin-starter-server</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-autoconfigure</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-configuration-metadata</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-configuration-processor</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-devtools</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-properties-migrator</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-actuator</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-amqp</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-aop</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-jetty</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-log4j2</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-logging</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-mail</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-mustache</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-test</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-thymeleaf</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-tomcat</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-undertow</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-validation</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-web</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-web-services</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.boot</code>
+				</td>
+				<td>
+					<code>spring-boot-starter-websocket</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.azure.spring</code>
+				</td>
+				<td>
+					<code>spring-cloud-azure-starter-actuator</code>
+				</td>
+				<td>
+					<code>5.15.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.azure.spring</code>
+				</td>
+				<td>
+					<code>spring-cloud-azure-starter-keyvault</code>
+				</td>
+				<td>
+					<code>5.15.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.azure.spring</code>
+				</td>
+				<td>
+					<code>spring-cloud-azure-starter-keyvault-secrets</code>
+				</td>
+				<td>
+					<code>5.15.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-bus</code>
+				</td>
+				<td>
+					<code>4.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-commons</code>
+				</td>
+				<td>
+					<code>4.1.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-config-client</code>
+				</td>
+				<td>
+					<code>4.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-config-monitor</code>
+				</td>
+				<td>
+					<code>4.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-config-server</code>
+				</td>
+				<td>
+					<code>4.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-context</code>
+				</td>
+				<td>
+					<code>4.1.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-gcp-data-firestore</code>
+				</td>
+				<td>
+					<code>5.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-gcp-secretmanager</code>
+				</td>
+				<td>
+					<code>5.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-gcp-starter-data-firestore</code>
+				</td>
+				<td>
+					<code>5.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-gcp-starter-logging</code>
+				</td>
+				<td>
+					<code>5.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-gcp-starter-pubsub</code>
+				</td>
+				<td>
+					<code>5.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.google.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-gcp-starter-secretmanager</code>
+				</td>
+				<td>
+					<code>5.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-bootstrap</code>
+				</td>
+				<td>
+					<code>4.1.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-bus-amqp</code>
+				</td>
+				<td>
+					<code>4.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-bus-kafka</code>
+				</td>
+				<td>
+					<code>4.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-consul-config</code>
+				</td>
+				<td>
+					<code>4.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-consul-discovery</code>
+				</td>
+				<td>
+					<code>4.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-kubernetes-fabric8-config</code>
+				</td>
+				<td>
+					<code>3.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-netflix-eureka-client</code>
+				</td>
+				<td>
+					<code>4.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-vault-config</code>
+				</td>
+				<td>
+					<code>4.1.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-zookeeper</code>
+				</td>
+				<td>
+					<code>4.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-zookeeper-config</code>
+				</td>
+				<td>
+					<code>4.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.cloud</code>
+				</td>
+				<td>
+					<code>spring-cloud-starter-zookeeper-discovery</code>
+				</td>
+				<td>
+					<code>4.1.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-context</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-context-indexer</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-context-support</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-core</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.data</code>
+				</td>
+				<td>
+					<code>spring-data-cassandra</code>
+				</td>
+				<td>
+					<code>4.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.data</code>
+				</td>
+				<td>
+					<code>spring-data-commons</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.data</code>
+				</td>
+				<td>
+					<code>spring-data-mongodb</code>
+				</td>
+				<td>
+					<code>4.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.data</code>
+				</td>
+				<td>
+					<code>spring-data-redis</code>
+				</td>
+				<td>
+					<code>3.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-expression</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.integration</code>
+				</td>
+				<td>
+					<code>spring-integration-amqp</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.integration</code>
+				</td>
+				<td>
+					<code>spring-integration-core</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.integration</code>
+				</td>
+				<td>
+					<code>spring-integration-jdbc</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.integration</code>
+				</td>
+				<td>
+					<code>spring-integration-jmx</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.integration</code>
+				</td>
+				<td>
+					<code>spring-integration-redis</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.integration</code>
+				</td>
+				<td>
+					<code>spring-integration-zookeeper</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-jcl</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-jdbc</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-jms</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.kafka</code>
+				</td>
+				<td>
+					<code>spring-kafka</code>
+				</td>
+				<td>
+					<code>3.2.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-messaging</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-orm</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.amqp</code>
+				</td>
+				<td>
+					<code>spring-rabbit</code>
+				</td>
+				<td>
+					<code>3.1.7</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.retry</code>
+				</td>
+				<td>
+					<code>spring-retry</code>
+				</td>
+				<td>
+					<code>2.0.8</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.security</code>
+				</td>
+				<td>
+					<code>spring-security-config</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.security</code>
+				</td>
+				<td>
+					<code>spring-security-core</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.security</code>
+				</td>
+				<td>
+					<code>spring-security-crypto</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.security</code>
+				</td>
+				<td>
+					<code>spring-security-rsa</code>
+				</td>
+				<td>
+					<code>1.1.5</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.security</code>
+				</td>
+				<td>
+					<code>spring-security-test</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.security</code>
+				</td>
+				<td>
+					<code>spring-security-web</code>
+				</td>
+				<td>
+					<code>6.3.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.session</code>
+				</td>
+				<td>
+					<code>spring-session-core</code>
+				</td>
+				<td>
+					<code>3.3.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.session</code>
+				</td>
+				<td>
+					<code>spring-session-data-mongodb</code>
+				</td>
+				<td>
+					<code>3.3.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.session</code>
+				</td>
+				<td>
+					<code>spring-session-data-redis</code>
+				</td>
+				<td>
+					<code>3.3.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.session</code>
+				</td>
+				<td>
+					<code>spring-session-hazelcast</code>
+				</td>
+				<td>
+					<code>3.3.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.session</code>
+				</td>
+				<td>
+					<code>spring-session-jdbc</code>
+				</td>
+				<td>
+					<code>3.3.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.shell</code>
+				</td>
+				<td>
+					<code>spring-shell-starter</code>
+				</td>
+				<td>
+					<code>3.3.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-test</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-tx</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-web</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.webflow</code>
+				</td>
+				<td>
+					<code>spring-webflow</code>
+				</td>
+				<td>
+					<code>3.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework</code>
+				</td>
+				<td>
+					<code>spring-webmvc</code>
+				</td>
+				<td>
+					<code>6.1.12</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.ws</code>
+				</td>
+				<td>
+					<code>spring-ws-security</code>
+				</td>
+				<td>
+					<code>4.0.11</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springframework.ws</code>
+				</td>
+				<td>
+					<code>spring-ws-support</code>
+				</td>
+				<td>
+					<code>4.0.11</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.springdoc</code>
+				</td>
+				<td>
+					<code>springdoc-openapi-starter-webmvc-ui</code>
+				</td>
+				<td>
+					<code>2.6.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>net.spy</code>
+				</td>
+				<td>
+					<code>spymemcached</code>
+				</td>
+				<td>
+					<code>2.12.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>sqs</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>ssm</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>stomp-websocket</code>
+				</td>
+				<td>
+					<code>2.3.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.sun.xml.stream.buffer</code>
+				</td>
+				<td>
+					<code>streambuffer</code>
+				</td>
+				<td>
+					<code>2.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>sts</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.swagger.core.v3</code>
+				</td>
+				<td>
+					<code>swagger-annotations</code>
+				</td>
+				<td>
+					<code>2.2.23</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.swagger.core.v3</code>
+				</td>
+				<td>
+					<code>swagger-core-jakarta</code>
+				</td>
+				<td>
+					<code>2.2.23</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.swagger.core.v3</code>
+				</td>
+				<td>
+					<code>swagger-jaxrs2-jakarta</code>
+				</td>
+				<td>
+					<code>2.2.23</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.swagger.core.v3</code>
+				</td>
+				<td>
+					<code>swagger-models</code>
+				</td>
+				<td>
+					<code>2.2.23</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>sweetalert2</code>
+				</td>
+				<td>
+					<code>11.12.4</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>text-encoding</code>
+				</td>
+				<td>
+					<code>0.7.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.textmagic.sdk</code>
+				</td>
+				<td>
+					<code>textmagic-java-sdk</code>
+				</td>
+				<td>
+					<code>2.0.2456</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.thymeleaf</code>
+				</td>
+				<td>
+					<code>thymeleaf</code>
+				</td>
+				<td>
+					<code>3.1.2.RELEASE</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.zhanhb</code>
+				</td>
+				<td>
+					<code>thymeleaf-layout-dialect</code>
+				</td>
+				<td>
+					<code>3.2.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.thymeleaf</code>
+				</td>
+				<td>
+					<code>thymeleaf-spring6</code>
+				</td>
+				<td>
+					<code>3.1.2.RELEASE</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.tomcat</code>
+				</td>
+				<td>
+					<code>tomcat-catalina-ha</code>
+				</td>
+				<td>
+					<code>10.1.35</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.tomcat.embed</code>
+				</td>
+				<td>
+					<code>tomcat-embed-core</code>
+				</td>
+				<td>
+					<code>10.1.35</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.tomcat.embed</code>
+				</td>
+				<td>
+					<code>tomcat-embed-el</code>
+				</td>
+				<td>
+					<code>10.1.35</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.tomcat.embed</code>
+				</td>
+				<td>
+					<code>tomcat-embed-websocket</code>
+				</td>
+				<td>
+					<code>10.1.35</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.twilio.sdk</code>
+				</td>
+				<td>
+					<code>twilio</code>
+				</td>
+				<td>
+					<code>10.5.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.unboundid</code>
+				</td>
+				<td>
+					<code>unboundid-ldapsdk</code>
+				</td>
+				<td>
+					<code>7.0.1</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.velocity</code>
+				</td>
+				<td>
+					<code>velocity-engine-core</code>
+				</td>
+				<td>
+					<code>2.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>software.amazon.awssdk</code>
+				</td>
+				<td>
+					<code>verifiedpermissions</code>
+				</td>
+				<td>
+					<code>2.27.10</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.yubico</code>
+				</td>
+				<td>
+					<code>webauthn-server-attestation</code>
+				</td>
+				<td>
+					<code>2.5.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.yubico</code>
+				</td>
+				<td>
+					<code>webauthn-server-core</code>
+				</td>
+				<td>
+					<code>2.5.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars.npm</code>
+				</td>
+				<td>
+					<code>whatwg-fetch</code>
+				</td>
+				<td>
+					<code>3.6.20</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>wsdl4j</code>
+				</td>
+				<td>
+					<code>wsdl4j</code>
+				</td>
+				<td>
+					<code>1.6.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.mmoayyed.ws-wss4j</code>
+				</td>
+				<td>
+					<code>wss4j-bindings</code>
+				</td>
+				<td>
+					<code>4.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.mmoayyed.ws-wss4j</code>
+				</td>
+				<td>
+					<code>wss4j-policy</code>
+				</td>
+				<td>
+					<code>4.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.mmoayyed.ws-wss4j</code>
+				</td>
+				<td>
+					<code>wss4j-ws-security-common</code>
+				</td>
+				<td>
+					<code>4.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.mmoayyed.ws-wss4j</code>
+				</td>
+				<td>
+					<code>wss4j-ws-security-dom</code>
+				</td>
+				<td>
+					<code>4.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.mmoayyed.ws-wss4j</code>
+				</td>
+				<td>
+					<code>wss4j-ws-security-policy-stax</code>
+				</td>
+				<td>
+					<code>4.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.github.mmoayyed.ws-wss4j</code>
+				</td>
+				<td>
+					<code>wss4j-ws-security-stax</code>
+				</td>
+				<td>
+					<code>4.0.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>xerces</code>
+				</td>
+				<td>
+					<code>xercesImpl</code>
+				</td>
+				<td>
+					<code>2.12.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.santuario</code>
+				</td>
+				<td>
+					<code>xmlsec</code>
+				</td>
+				<td>
+					<code>4.0.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.yubico</code>
+				</td>
+				<td>
+					<code>yubico-util</code>
+				</td>
+				<td>
+					<code>2.5.3</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>com.yubico</code>
+				</td>
+				<td>
+					<code>yubico-validation-client2</code>
+				</td>
+				<td>
+					<code>3.1.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>io.zipkin.reporter2</code>
+				</td>
+				<td>
+					<code>zipkin-reporter-brave</code>
+				</td>
+				<td>
+					<code>3.4.0</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.apache.zookeeper</code>
+				</td>
+				<td>
+					<code>zookeeper</code>
+				</td>
+				<td>
+					<code>3.9.2</code>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<code>org.webjars</code>
+				</td>
+				<td>
+					<code>zxcvbn</code>
+				</td>
+				<td>
+					<code>4.4.2</code>
+				</td>
+			</tr>
+		
+		
+	</tbody>
+</table>
+</div>
+
+<p>You may not immediately see all the listed artifacts and libraries in your
+deployment. Depending on which CAS feature module is included in the final build,
+the above libraries and dependencies will be pulled into the final web application artifact.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Ownership</strong><p>
+Please note that the above listed dependencies are generally those that are explicitly requested, owned and controlled
+by the CAS software. There are of course many other modules and dependencies that would be <i>transitively</i> pulled in
+whose specifics and versions are not directly controlled by CAS. In such scenarios, the specific feature module or library itself is
+responsible for pulling its own dependencies correctly into the build. What is listed above should mainly serve as a helpful guide
+and not a comprehensive reference.
+</p>
+</div>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tether@2.0.0/dist/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="/cas/javascripts/URI.js"></script>
+    <script src="/cas/javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+    <script>
+        let pageSection = 'Installation';
+        let siteUrl = '';
+        let basePath = '/cas';
+
+        
+    </script>
+</body>
+
+</html>

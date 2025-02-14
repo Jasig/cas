@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - JPA Ticket Registry</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="jpa-ticket-registry">JPA Ticket Registry</h1>
+<p>The JPA Ticket Registry allows CAS to store client authenticated state data (tickets) in a database back-end such as MySQL. </p>
+
+<div class="alert alert-warning"><strong>Usage Warning!</strong><p>Using a RDBMS as the back-end persistence choice for Ticket Registry state management is a fairly unnecessary and complicated process. Ticket registries generally do not need the durability that comes with RDBMS and unless you are already outfitted with clustered RDBMS technology and the resources to manage it, the complexity is likely not worth the trouble. Given the proliferation of hardware virtualization and the redundancy and vertical scaling they often provide, more suitable recommendation would be the default in-memory ticket registry for a single node CAS deployment and distributed cache-based registries for higher availability.</p></div>
+
+<h1 id="configuration">Configuration</h1>
+
+<ul>
+  <li>Adjust the <code>src/main/webapp/WEB-INF/spring-configuration/ticketRegistry.xml</code> with the following:</li>
+</ul>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistry&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.JpaTicketRegistry&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;entityManagerFactory&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;dataSource&quot;</span> <span class="na">ref=</span><span class="s">&quot;dataSource&quot;</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;jpaVendorAdapter&quot;</span><span class="nt">&gt;</span>
+	  <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter&quot;</span><span class="nt">&gt;</span>
+	    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;generateDdl&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+	    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;showSql&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+	  <span class="nt">&lt;/bean&gt;</span>
+	<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;jpaProperties&quot;</span><span class="nt">&gt;</span>
+	  <span class="nt">&lt;props&gt;</span>
+	    <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.hbm2ddl.auto&quot;</span><span class="nt">&gt;</span>update<span class="nt">&lt;/prop&gt;</span>
+	  <span class="nt">&lt;/props&gt;</span>
+	<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;transactionManager&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.orm.jpa.JpaTransactionManager&quot;</span>
+		<span class="na">p:entityManagerFactory-ref=</span><span class="s">&quot;entityManagerFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;tx:annotation-driven</span> <span class="na">transaction-manager=</span><span class="s">&quot;transactionManager&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistryCleaner&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner&quot;</span>
+		<span class="na">p:ticketRegistry-ref=</span><span class="s">&quot;ticketRegistry&quot;</span>
+		<span class="na">p:lock-ref=</span><span class="s">&quot;cleanerLock&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;cleanerLock&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.support.JpaLockingStrategy&quot;</span>
+		<span class="na">p:uniqueId=</span><span class="s">&quot;${host.name}&quot;</span>
+		<span class="na">p:applicationId=</span><span class="s">&quot;cas-ticket-registry-cleaner&quot;</span> <span class="nt">/&gt;</span>
+ 
+</code></pre></div>
+
+<p>The above snippet assumes that data source information and connection details are defined.</p>
+
+<ul>
+  <li>Configure other JPA dependencies:</li>
+</ul>
+
+<p>In the <code>pom.xml</code> file of the Maven overlay, adjust for the following dependencies:</p>
+
+<div class="highlight"><pre><code class="xml">...
+<span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>hibernate-core<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>${hibernate.core.version}<span class="nt">&lt;/version&gt;</span>
+	<span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+<span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>hibernate-entitymanager<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>${hibernate.core.version}<span class="nt">&lt;/version&gt;</span>
+	<span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+...
+</code></pre></div>
+
+<h1 id="database-configuration">Database Configuration</h1>
+
+<h2 id="jdbc-driver">JDBC Driver</h2>
+<p>CAS must have access to the appropriate JDBC driver for the database. Once you have obtained the appropriate driver and configured the data source, place the JAR inside the lib directory of your web server environment (i.e. <code>$TOMCAT_HOME/lib</code>)</p>
+
+<h2 id="schema">Schema</h2>
+<p>If the user has sufficient privileges on start up, the database tables should be created. The database user MUST have <code>CREATE/ALTER</code> privileges to take advantage of automatic schema generation and schema updates.</p>
+
+<h2 id="deadlocks">Deadlocks</h2>
+<p>The Hibernate SchemaExport DDL creation tool <em>may</em> fail to create two very import indices when generating the ticket tables. The absence of these indices dramatically increases the potential for database deadlocks under load.
+If the indices were not created you should manually create them before placing your CAS configuration into a production environment.</p>
+
+<p>To review indices, you may use the following MYSQL-based sample code below:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="k">show</span> <span class="k">index</span> <span class="k">from</span> <span class="n">SERVICETICKET</span> <span class="k">where</span> <span class="k">column_name</span><span class="o">=</span><span class="s1">&#39;ticketGrantingTicket_ID&#39;</span><span class="p">;</span>
+<span class="k">show</span> <span class="k">index</span> <span class="k">from</span> <span class="n">TICKETGRANTINGTICKET</span> <span class="k">where</span> <span class="k">column_name</span><span class="o">=</span><span class="s1">&#39;ticketGrantingTicket_ID&#39;</span><span class="p">;</span>
+</code></pre></div>
+
+<p>To create indices that are missing, you may use the following sample code below:</p>
+
+<h3 id="mysql">MYSQL</h3>
+
+<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ST_TGT_FK_I</span> <span class="k">ON</span> <span class="n">SERVICETICKET</span> <span class="p">(</span><span class="n">ticketGrantingTicket_ID</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ST_TGT_FK_I</span> <span class="k">ON</span> <span class="n">TICKETGRANTINGTICKET</span> <span class="p">(</span><span class="n">ticketGrantingTicket_ID</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="oracle">ORACLE</h3>
+
+<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="ss">&quot;ST_TGT_FK_I&quot;</span>
+  <span class="k">ON</span> <span class="n">SERVICETICKET</span> <span class="p">(</span><span class="ss">&quot;TICKETGRANTINGTICKET_ID&quot;</span><span class="p">)</span>
+  <span class="n">COMPUTE</span> <span class="k">STATISTICS</span><span class="p">;</span>
+ 
+<span class="cm">/** Create index on TGT self-referential foreign-key constraint */</span>
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="ss">&quot;TGT_TGT_FK_I&quot;</span>
+  <span class="k">ON</span> <span class="n">TICKETGRANTINGTICKET</span> <span class="p">(</span><span class="ss">&quot;TICKETGRANTINGTICKET_ID&quot;</span><span class="p">)</span>
+  <span class="n">COMPUTE</span> <span class="k">STATISTICS</span><span class="p">;</span>
+</code></pre></div>
+
+<h2 id="ticket-cleanup">Ticket Cleanup</h2>
+
+<p>The use <code>JpaLockingStrategy</code> is strongly recommended for HA environments where multiple nodes are attempting ticket cleanup on a shared database. <code>JpaLockingStrategy</code> can auto-generate the schema for the target platform.  A representative schema is provided below that applies to PostgreSQL:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">locks</span> <span class="p">(</span>
+ <span class="n">application_id</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+ <span class="n">unique_id</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">NULL</span><span class="p">,</span>
+ <span class="n">expiration_date</span> <span class="k">TIMESTAMP</span> <span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">locks</span> <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="n">pk_locks</span>
+ <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">application_id</span><span class="p">);</span>
+</code></pre></div>
+
+<div class="alert alert-warning"><strong>Platform-Specific Issues</strong><p>The exact DDL to create the LOCKS table may differ from the above. For example, on Oracle platforms the `expiration_date` column must be of type `DAT`E.  Use the `JpaLockingStrategy` which can create and update the schema automatically to avoid platform-specific schema issues.</p></div>
+
+<h2 id="connection-pooling">Connection Pooling</h2>
+
+<p>It is <strong><em>strongly</em></strong> recommended that database connection pooling be used in a production environment. The following configuration makes use of the c3p0 connection pooling library, which would replace the <code>dataSource</code> bean found in the <code>ticketRegistry.xml</code> example above:</p>
+
+<div class="highlight"><pre><code class="xml">...
+<span class="nt">&lt;bean</span>
+  <span class="na">id=</span><span class="s">&quot;dataSource&quot;</span>
+  <span class="na">class=</span><span class="s">&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;</span>
+  <span class="na">p:driverClass=</span><span class="s">&quot;${database.driverClass}&quot;</span>
+  <span class="na">p:jdbcUrl=</span><span class="s">&quot;${database.url}&quot;</span>
+  <span class="na">p:user=</span><span class="s">&quot;${database.user}&quot;</span>
+  <span class="na">p:password=</span><span class="s">&quot;${database.password}&quot;</span>
+  <span class="na">p:initialPoolSize=</span><span class="s">&quot;${database.pool.minSize}&quot;</span>
+  <span class="na">p:minPoolSize=</span><span class="s">&quot;${database.pool.minSize}&quot;</span>
+  <span class="na">p:maxPoolSize=</span><span class="s">&quot;${database.pool.maxSize}&quot;</span>
+  <span class="na">p:maxIdleTimeExcessConnections=</span><span class="s">&quot;${database.pool.maxIdleTime}&quot;</span>
+  <span class="na">p:checkoutTimeout=</span><span class="s">&quot;${database.pool.maxWait}&quot;</span>
+  <span class="na">p:acquireIncrement=</span><span class="s">&quot;${database.pool.acquireIncrement}&quot;</span>
+  <span class="na">p:acquireRetryAttempts=</span><span class="s">&quot;${database.pool.acquireRetryAttempts}&quot;</span>
+  <span class="na">p:acquireRetryDelay=</span><span class="s">&quot;${database.pool.acquireRetryDelay}&quot;</span>
+  <span class="na">p:idleConnectionTestPeriod=</span><span class="s">&quot;${database.pool.idleConnectionTestPeriod}&quot;</span>
+  <span class="na">p:preferredTestQuery=</span><span class="s">&quot;${database.pool.connectionHealthQuery}&quot;</span>
+  <span class="nt">/&gt;</span>
+...
+</code></pre></div>
+
+<p>The following pool configuration parameters are provided for information only and may serve as a reasonable starting point for configuring a production database connection pool. </p>
+
+<div class="alert alert-info"><strong>Usage Tip</strong><p>Note the health check query is specific to PostgreSQL.</p></div>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># == Basic database connection pool configuration ==</span>
+database.dialect<span class="o">=</span>org.hibernate.dialect.PostgreSQLDialect
+database.driverClass<span class="o">=</span>org.postgresql.Driver
+database.url<span class="o">=</span>jdbc:postgresql://somehost.vt.edu/cas?ssl<span class="o">=</span><span class="nb">true</span>
+database.user<span class="o">=</span>somebody
+database.password<span class="o">=</span>meaningless
+database.pool.minSize<span class="o">=</span>6
+database.pool.maxSize<span class="o">=</span>18
+ 
+<span class="c"># Maximum amount of time to wait in ms for a connection to become</span>
+<span class="c"># available when the pool is exhausted</span>
+database.pool.maxWait<span class="o">=</span>10000
+ 
+<span class="c"># Amount of time in seconds after which idle connections</span>
+<span class="c"># in excess of minimum size are pruned.</span>
+database.pool.maxIdleTime<span class="o">=</span>120
+ 
+<span class="c"># Number of connections to obtain on pool exhaustion condition.</span>
+<span class="c"># The maximum pool size is always respected when acquiring</span>
+<span class="c"># new connections.</span>
+database.pool.acquireIncrement<span class="o">=</span>6
+ 
+<span class="c"># == Connection testing settings ==</span>
+ 
+<span class="c"># Period in s at which a health query will be issued on idle</span>
+<span class="c"># connections to determine connection liveliness.</span>
+database.pool.idleConnectionTestPeriod<span class="o">=</span>30
+ 
+<span class="c"># Query executed periodically to test health</span>
+database.pool.connectionHealthQuery<span class="o">=</span><span class="k">select </span>1
+ 
+<span class="c"># == Database recovery settings ==</span>
+ 
+<span class="c"># Number of times to retry acquiring a _new_ connection</span>
+<span class="c"># when an error is encountered during acquisition.</span>
+database.pool.acquireRetryAttempts<span class="o">=</span>5
+ 
+<span class="c"># Amount of time in ms to wait between successive aquire retry attempts.</span>
+database.pool.acquireRetryDelay<span class="o">=</span>2000
+</code></pre></div>
+
+<p>The following maven dependency for the library must be included in your Maven overlay:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>c3p0<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>c3p0<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>${c3p0.version}<span class="nt">&lt;/version&gt;</span>
+	<span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h1 id="platform-considerations">Platform Considerations</h1>
+
+<h2 id="mysql-1">MySQL</h2>
+
+<h3 id="use-innodb-tables">Use InnoDB Tables</h3>
+<p>The use of InnoDB tables is strongly recommended for the MySQL platform for a couple reasons:</p>
+
+<ul>
+  <li>InnoDB provides referential integrity that is helpful for preventing orphaned records in ticket tables.</li>
+  <li>Provides better locking semantics (e.g. support for SELECT … FOR UPDATE) than the default MyISAM table type.</li>
+</ul>
+
+<p>InnoDB tables are easily specified via the use of the following Hibernate dialect:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.dialect&quot;</span><span class="nt">&gt;</span>org.hibernate.dialect.MySQLInnoDBDialect<span class="nt">&lt;/prop&gt;</span>
+ 
+<span class="c">&lt;!-- OR for MySQL 5.x use the following instead --&gt;</span>
+<span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.dialect&quot;</span><span class="nt">&gt;</span>org.hibernate.dialect.MySQL5InnoDBDialect<span class="nt">&lt;/prop&gt;</span>
+</code></pre></div>
+
+<h3 id="blob-vs-longblob">BLOB vs LONGBLOB</h3>
+<p>Hibernate on recent versions of MySQL (e.g. 5.1) properly maps the <code>@Lob</code> JPA annotation onto type <code>LONGBLOB</code>, which is very important since these fields commonly store serialized graphs of Java objects that grow proportionally with CAS SSO session lifetime. Under some circumstances, Hibernate may treat these columns as type <code>BLOB</code>, which have storage limits that are easily exceeded. It is recommended that the generated schema be reviewed and any BLOB type columns be converted to <code>LONGBLOB</code>.</p>
+
+<p>The following MySQL statement would change this <code>SERVICES_GRANTED_ACCESS_TO</code> column’s type to <code>LONGBLOB</code>:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">TICKETGRANTINGTICKET</span> <span class="k">MODIFY</span> <span class="n">SERVICES_GRANTED_ACCESS_TO</span> <span class="n">LONGBLOB</span><span class="p">;</span>
+</code></pre></div>
+
+<h3 id="case-sensitive-schema">Case Sensitive Schema</h3>
+<p>It may necessary to force lowercase schema names in the MySQL configuration:</p>
+
+<p>Adjust the <code>my.cnf</code> file to include the following:</p>
+
+<div class="highlight"><pre><code class="bash">lower-case-table-names <span class="o">=</span> 1
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

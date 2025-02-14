@@ -1,0 +1,5 @@
+description = "Apereo CAS Documentation"
+
+javadoc {
+    enabled false
+}

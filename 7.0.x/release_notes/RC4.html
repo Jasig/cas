@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Release Notes</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="../../images/cas_logo.png"/>
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond<p><sub>Identity, Single Sign-On and Access Management</sub></p></h1>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+            <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+                
+
+                <section>
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+
+                    <div id="cas-docs-container">
+                        <h1 id="700-rc4-release-notes">7.0.0-RC4 Release Notes</h1>
+
+<p>We strongly recommend that you take advantage of the release candidates as they come out. Waiting for a <code class="language-plaintext highlighter-rouge">GA</code> release is only going to set
+you up for unpleasant surprises. A <code class="language-plaintext highlighter-rouge">GA</code> is <a href="https://apereo.github.io/2017/03/08/the-myth-of-ga-rel/">a tag and nothing more</a>. Note
+that CAS releases are <em>strictly</em> time-based releases; they are not scheduled or based on specific benchmarks,
+statistics or completion of features. To gain confidence in a particular release, it is strongly recommended that 
+you start early by experimenting with release candidates and/or follow-up snapshots.</p>
+
+<h2 id="apereo-membership">Apereo Membership</h2>
+
+<p>If you benefit from Apereo CAS as free and open-source software, we invite you
+to <a href="https://www.apereo.org/content/apereo-membership">join the Apereo Foundation</a>
+and financially support the project at a capacity that best suits your deployment. Note that all development activity is performed
+<em>almost exclusively</em> on a voluntary basis with no expectations, commitments or strings attached. Having the financial means to better
+sustain engineering activities will allow the developer community to allocate <em>dedicated and committed</em> time for long-term support,
+maintenance and release planning, especially when it comes to addressing critical and security issues in a timely manner.</p>
+
+<h2 id="get-involved">Get Involved</h2>
+
+<ul>
+  <li>Start your CAS deployment today. Try out features and <a href="/cas/Mailing-Lists.html">share feedback</a>.</li>
+  <li>Better yet, <a href="/cas/developer/Contributor-Guidelines.html">contribute patches</a>.</li>
+  <li>Suggest and apply documentation improvements.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://github.com/apereo/cas/milestones">Release Schedule</a></li>
+  <li><a href="/cas/developer/Release-Policy.html">Release Policy</a></li>
+</ul>
+
+<h2 id="system-requirements">System Requirements</h2>
+
+<p>The JDK baseline requirement for this CAS release is and <strong>MUST</strong> be JDK <code class="language-plaintext highlighter-rouge">17</code>. All compatible distributions
+such as Amazon Corretto, Zulu, Eclipse Temurin, etc should work and are implicitly supported.</p>
+
+<h2 id="new--noteworthy">New &amp; Noteworthy</h2>
+
+<p>The following items are new improvements and enhancements presented in this release.</p>
+
+<h3 id="saml2-delegated-authentication-metadata">SAML2 Delegated Authentication Metadata</h3>
+
+<p>SAML2 service provider metadata used and managed during <a href="../integration/Delegate-Authentication-SAML.html">delegated authentication</a>
+can now be stored in relational databases.</p>
+
+<h3 id="testing-strategy">Testing Strategy</h3>
+
+<p>The collection of end-to-end browser tests based on Puppeteer continue to grow to cover more use cases
+and scenarios. At the moment, total number of jobs stands at approximately <code class="language-plaintext highlighter-rouge">392</code> distinct scenarios. The overall
+test coverage of the CAS codebase is approximately <code class="language-plaintext highlighter-rouge">94%</code>.</p>
+
+<h3 id="authentication-geolocation-via-maxmind">Authentication Geolocation via Maxmind</h3>
+
+<p>Geolocating authentication requests via Maxmind can now support <a href="../authentication/GeoTracking-Authentication-Requests.html">Maxmind Web Services</a>.</p>
+
+<h3 id="lazy-initialization">Lazy Initialization</h3>
+
+<p>Application components that are bootstrapped by CAS or other third-party libraries are now created lazily by default. In a nutshell, this means
+that application components (and all other components and turtles that depend on those) will only be created once and when they are needed. This means
+that lazy initialization may reduce the number of beans created when CAS is starting up which in turn improves the startup time. Initial test results
+show that startup improvements are anywhere between <code class="language-plaintext highlighter-rouge">8</code> to <code class="language-plaintext highlighter-rouge">10</code> seconds, depending on the features and modules included in the final CAS build. At the same 
+time, certain issues might be <em>masked</em> and may only be revealed at runtime since component creation is deferred. HTTP requests may also
+see a small <em>initial</em> delay as the responsible component is created on-demand (but only once; this is important) to respond to the request. To accomodate 
+specific use cases, certain components in CAS are also explicitly marked to always be created eagerly and skip laziness.</p>
+
+<p>If you encounter component initialization issues, deadlocks and long wait-times during CAS startup, or if you notice that background jobs, threads, event 
+listeners or cleaners are not doing their job, you may of course disable this behavior via the following setting and revert back to the 
+previous behavior:</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="py">spring.main.lazy-initialization</span><span class="p">=</span><span class="s">false</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="cas-initializr">CAS Initializr</h3>
+
+<p><a href="../installation/WAR-Overlay-Initializr.html">CAS Initializr</a> has received several new UI enhancements:</p>
+
+<p><img width="1719" alt="image" src="https://user-images.githubusercontent.com/1205228/215851405-2a8c03b2-545e-47d2-a35f-3a3bcb44e06b.png" /></p>
+
+<h3 id="duo-security-universal-prompt">Duo Security Universal Prompt</h3>
+
+<p>Multifactor authentication with <a href="../mfa/DuoSecurity-Authentication.html">Duo Security</a> via 
+Universal Prompt is now adjusted to use the browser’s local storage for tracking
+the state of CAS server and authentication contexts before redirecting to Duo Security. In this approach, CAS will no longer create
+a session-tracking ticket to store the existing authentication context and will only rely on the browser to store and/or restore the necessary
+authentication context for the entire flow. You might see additional screens before and after the multifactor authentication flow that 
+attempt to process the request from the browser’s local storage with sufficient messaging to indicate request processing is in progress.</p>
+
+<h2 id="other-stuff">Other Stuff</h2>
+
+<ul>
+  <li>The session cookie (typically and by default named <code class="language-plaintext highlighter-rouge">DISSESSION</code>) used for distributed session management can now be signed and encrypted in 
+scenarios where CAS is acting as an OAUTH or OpenID Connect provider, or is delegating authentication to an external identity provider.</li>
+  <li>Configuration settings in the CAS documentation are now able to automatically indicate whether they support regular expression patterns as their value.</li>
+  <li>Integration with <a href="../notifications/SMS-Messaging-Configuration-SmsMode.html">SmsMode</a> is now upgraded to use their most recent APIs.</li>
+  <li>Small enhancements to distributed session management to ensure orphan <code class="language-plaintext highlighter-rouge">DISSESSION</code> cookies are not generated when locating session identifiers.</li>
+  <li>CAS <a href="../authentication/Configuring-Authentication-Events.html">authentication events</a> can now be imported into the event repository via actuator endpoints.</li>
+  <li>OAuth and OpenID Connect request parameters are now decoded automatically to mainly support scenarios where i.e. <code class="language-plaintext highlighter-rouge">scope</code> is supplied as <code class="language-plaintext highlighter-rouge">openid+email</code>.</li>
+  <li><a href="../installation/WAR-Overlay-Initializr.html">CAS Initializr</a> is now able to present a preview of the would-be-generated CAS overlay.</li>
+  <li>Evaluation of access strategies for OAuth and OpenID Connect services is now able to consider virtually-remapped attributes for authorization enforcement.</li>
+  <li>The incorrect generation of <code class="language-plaintext highlighter-rouge">TST</code> tickets used to track single sign-on sessions across multiple authentication flows is now corrected.</li>
+  <li>Generating SAML2 metadata certificates and keys is now updated to use the more secure <code class="language-plaintext highlighter-rouge">SHA512withRSA</code> and <code class="language-plaintext highlighter-rouge">4096</code> for the algorithm and key size.</li>
+  <li>Internal modifications to the Ticket Registry APIs to allow a registry to query tickets by authentication/principal attributes.</li>
+  <li>CAS can now be extended to allow for <a href="../services/Service-Access-Strategy-Custom.html">custom application access strategy</a> and authorization rules.</li>
+  <li><a href="../integration/Delegate-Authentication.html">Delegated authentication</a> gains support for front-channel logout requests when initiated by the external/proxy identity provider.</li>
+</ul>
+
+<h2 id="library-upgrades">Library Upgrades</h2>
+
+<ul>
+  <li>Groovy</li>
+  <li>Pac4j</li>
+  <li>Puppeteer</li>
+  <li>Nimbus</li>
+  <li>Apache Tomcat</li>
+  <li>jQuery</li>
+  <li>Amazon SDK</li>
+  <li>Spring</li>
+  <li>Spring Boot</li>
+  <li>Spring Boot Admin</li>
+  <li>Spring Shell</li>
+  <li>Spring Cloud</li>
+  <li>Mockito</li>
+  <li>Thymeleaf Layout Dialect</li>
+  <li>JUnit</li>
+  <li>Kryo</li>
+  <li>ErrorProne</li>
+  <li>Checkstyle</li>
+  <li>JavaParser</li>
+  <li>Gradle</li>
+  <li>Lombok</li>
+  <li>Hypersistence</li>
+  <li>Jakarta WS</li>
+</ul>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+
+    <script>
+        let pageSection = 'Planning';
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+</body>
+
+</html>

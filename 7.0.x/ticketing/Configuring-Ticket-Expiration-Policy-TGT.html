@@ -1,0 +1,2300 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Configuring Ticket Expiration Policy Components</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="../../images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+            <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+                
+
+                <section>
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="ticket-granting-ticket-policies">Ticket-Granting Ticket Policies</h1>
+
+<p><code class="language-plaintext highlighter-rouge">TGT</code> expiration policy governs the time span during which an authenticated user may grant <code class="language-plaintext highlighter-rouge">ST</code>s with a valid (non-expired) <code class="language-plaintext highlighter-rouge">TGT</code> without
+having to re-authenticate. An attempt to grant an ST with an expired <code class="language-plaintext highlighter-rouge">TGT</code> would require the user to re-authenticate
+to obtain a new (valid) <code class="language-plaintext highlighter-rouge">TGT</code>.</p>
+
+<p>Ticket expiration policies are activated in the following conditions:</p>
+
+<ul>
+  <li>If the timeout values for the default policy are all set to zero or less, CAS shall ensure tickets are <em>never</em> considered expired.</li>
+  <li>Disabling a policy requires that all its timeout settings be set to a value equal or less than zero.</li>
+  <li>If not ticket expiration policy is determined, CAS shall ensure the ticket are <em>always</em> considered expired.</li>
+</ul>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Keep What You Need!</strong><p>You are encouraged to only keep and maintain 
+properties and settings needed for a particular policy. It is <strong>UNNECESSARY</strong> to grab a copy of all 
+fields or keeping a copy as a reference while leaving them commented out. This strategy would ultimately lead to 
+poor upgrades increasing chances of breaking changes and a messy deployment at that.</p>
+</div>
+
+<p>Ticket expiration policies are activated in the following order:</p>
+
+<ol>
+  <li>Tickets are never expired, if and when settings for the default policy are configured accordingly.</li>
+  <li>Timeout</li>
+  <li>Default</li>
+  <li>Throttled Timeout</li>
+  <li>Hard Timeout</li>
+  <li>Tickets always expire immediately.</li>
+</ol>
+
+<ul id="exppolicies" class="tab" data-tab="ee37f519-5d10-4ec9-bcda-106e6727a856" data-name="exppolicies">
+  
+      <li class="active" id="exppolicies-default">
+          <a href="#">Default </a>
+      </li>
+  
+      <li id="exppolicies-per-principal">
+          <a href="#">Per Principal </a>
+      </li>
+  
+      <li id="exppolicies-per-service">
+          <a href="#">Per Service </a>
+      </li>
+  
+      <li id="exppolicies-timeout">
+          <a href="#">Timeout </a>
+      </li>
+  
+      <li id="exppolicies-hard-timeout">
+          <a href="#">Hard Timeout </a>
+      </li>
+  
+      <li id="exppolicies-throttled">
+          <a href="#">Throttled </a>
+      </li>
+  
+      <li id="exppolicies-never">
+          <a href="#">Never </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="ee37f519-5d10-4ec9-bcda-106e6727a856" data-name="exppolicies">
+  
+      <li class="active">
+<p>This policy provides a hard-time out as well as a sliding window.</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscastickettgtcorecastickettgtprimary">
+
+    <li class="nav-item property-tab">
+        <a class="nav-link active" id="linkRequiredPropertiescastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#requiredPropertiescastickettgtcorecastickettgtprimary">Required</a>
+    </li>
+    <li class="nav-item property-tab">
+        <a class="nav-link" id="linkOptionalPropertiescastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#optionalPropertiescastickettgtcorecastickettgtprimary">Optional</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navSigningEncryptionPropertiescastickettgtcorecastickettgtprimary">
+        <a class="nav-link" id="linkSigningEncryptioncastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#signingEncryptionPropertiescastickettgtcorecastickettgtprimary">Signing &amp; Encryption</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navRdbmsPropertiescastickettgtcorecastickettgtprimary">
+        <a class="nav-link" id="linkRdbmscastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#rdbmsPropertiescastickettgtcorecastickettgtprimary">Hibernate &amp; JDBC</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navEmailPropertiescastickettgtcorecastickettgtprimary">
+        <a class="nav-link" id="linkEmailcastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#emailPropertiescastickettgtcorecastickettgtprimary">Email Servers</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navLdapPropertiescastickettgtcorecastickettgtprimary">
+        <a class="nav-link" id="linkLdapcastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#ldapPropertiescastickettgtcorecastickettgtprimary">LDAP &amp; Active Directory</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navAuthnPredicatePropertiescastickettgtcorecastickettgtprimary">
+        <a class="nav-link" id="linkAuthnPredicatecastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#authnPredicatePropertiescastickettgtcorecastickettgtprimary">Authentication</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordEncoderPropertiescastickettgtcorecastickettgtprimary">
+        <a class="nav-link" id="linkPasswordEncodercastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#passwordEncoderPropertiescastickettgtcorecastickettgtprimary">Password Encoding</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPrincipalTransformationPropertiescastickettgtcorecastickettgtprimary">
+        <a class="nav-link" id="linkPrincipalTransformationcastickettgtcorecastickettgtprimary" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcastickettgtcorecastickettgtprimary(this);" href="#principalTransformationPropertiescastickettgtcorecastickettgtprimary">Principal Transformation</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordPolicyPropertiescastickettgtcorecastickettgtprimary">
+        <a class="nav-link" id="linkPasswordPolicycastickettgtcorecastickettgtprimary" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcastickettgtcorecastickettgtprimary(this);" href="#passwordPolicyPropertiescastickettgtcorecastickettgtprimary">Password Policy</a>
+    </li>
+<li class="nav-item property-tab">
+        <a class="nav-link" onclick="javascript:enablePropertiesTabcastickettgtcorecastickettgtprimary(this);" id="linkNotescastickettgtcorecastickettgtprimary" data-bs-toggle="tab" href="#notescastickettgtcorecastickettgtprimary">Notes</a>
+    </li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcastickettgtcorecastickettgtprimary">
+
+
+<div class="tab-pane properties-tab fade in active show" id="requiredPropertiescastickettgtcorecastickettgtprimary">
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+    </sub>
+    <br><p></p>
+
+    <p></p>
+        
+    <table class="cas-datatable properties " id="tableRequiredPropertiescastickettgtcorecastickettgtprimary">
+    <thead><tr><th></th></tr></thead>
+    <tbody></tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescastickettgtcorecastickettgtprimary"></textarea>
+</div>
+
+<div class="tab-pane properties-tab fade in" id="optionalPropertiescastickettgtcorecastickettgtprimary">
+
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+        flag indicates that the presence of the setting
+        is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+        the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+        configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+    </sub>
+    <br><p></p>
+
+    <table class="cas-datatable properties " id="tableOptionalPropertiescastickettgtcorecastickettgtprimary">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.ticket.tgt.core.max-length=50</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Maximum length of tickets.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.ticket.TicketGrantingTicketCoreProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#castickettgtcoremaxlengthPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="castickettgtcoremaxlengthPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.ticket.tgt.core.max-length</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycastickettgtcoremaxlength">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycastickettgtcoremaxlength">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycastickettgtcoremaxlength">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcastickettgtcoremaxlength">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcastickettgtcoremaxlength">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycastickettgtcoremaxlength">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.ticket.tgt.core.max-length=50
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycastickettgtcoremaxlength">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  ticket: <br>    tgt: <br>      core: <br>        max-length</span><span class="pi">:</span> <span class="s2">"</span><span class="s">50"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycastickettgtcoremaxlength td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycastickettgtcoremaxlength">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.ticket.tgt.core.max-length<span class="o">=</span><span class="s2">"50"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcastickettgtcoremaxlength">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_TICKET_TGT_CORE_MAX_LENGTH</span><span class="o">=</span><span class="s2">"50"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcastickettgtcoremaxlength">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.ticket.tgt.core.max-length<span class="o">=</span><span class="s2">"50"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.ticket.tgt.core.only-track-most-recent-session=true</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Flag to control whether to track most recent SSO sessions. As multiple tickets may be issued for the same application, this impacts how session information is tracked for every ticket which then has a subsequent impact on logout.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.ticket.TicketGrantingTicketCoreProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#castickettgtcoreonlytrackmostrecentsessionPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="castickettgtcoreonlytrackmostrecentsessionPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.ticket.tgt.core.only-track-most-recent-session</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycastickettgtcoreonlytrackmostrecentsession">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycastickettgtcoreonlytrackmostrecentsession">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycastickettgtcoreonlytrackmostrecentsession">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcastickettgtcoreonlytrackmostrecentsession">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcastickettgtcoreonlytrackmostrecentsession">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycastickettgtcoreonlytrackmostrecentsession">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.ticket.tgt.core.only-track-most-recent-session=true
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycastickettgtcoreonlytrackmostrecentsession">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  ticket: <br>    tgt: <br>      core: <br>        only-track-most-recent-session</span><span class="pi">:</span> <span class="s2">"</span><span class="s">true"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycastickettgtcoreonlytrackmostrecentsession td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycastickettgtcoreonlytrackmostrecentsession">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.ticket.tgt.core.only-track-most-recent-session<span class="o">=</span><span class="s2">"true"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcastickettgtcoreonlytrackmostrecentsession">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_TICKET_TGT_CORE_ONLY_TRACK_MOST_RECENT_SESSION</span><span class="o">=</span><span class="s2">"true"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcastickettgtcoreonlytrackmostrecentsession">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.ticket.tgt.core.only-track-most-recent-session<span class="o">=</span><span class="s2">"true"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.ticket.tgt.primary.max-time-to-live-in-seconds=PT8H</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Maximum time in seconds tickets would be live in CAS server.
+                    </p>
+<p></p>
+                    <p class="small text-left"><i class="fas fa-clock"></i> This settings supports the
+                        <code>java.time.Duration</code> syntax <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;p class='small'&gt;The format of the value will be &lt;code&gt;PTnHnMnS&lt;/code&gt;, where &lt;code&gt;n&lt;/code&gt; is the relevant hours, minutes or seconds part of the duration. Any fractional seconds are placed after a decimal point in the seconds section. If a section has a zero value, it is omitted. The hours, minutes and seconds will all have the same sign. Example values
+                    could be in the form of &lt;code&gt;PT20S&lt;/code&gt;, &lt;code&gt;PT15M&lt;/code&gt;, &lt;code&gt;PT10H&lt;/code&gt;, &lt;code&gt;PT6D&lt;/code&gt;, &lt;code&gt;P2DT3H4M&lt;/code&gt;.
+                    If the value is set to &lt;code&gt;0&lt;/code&gt; or &lt;code&gt;never&lt;/code&gt;, the duration will be set to zero. If the value is blank, set to &lt;code&gt;-1&lt;/code&gt;,
+                    or &lt;code&gt;infinite&lt;/code&gt;, the value will effectively represent an unending duration.&lt;/p&gt;">[?]</sup>.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.ticket.PrimaryTicketExpirationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#castickettgtprimarymaxtimetoliveinsecondsPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="castickettgtprimarymaxtimetoliveinsecondsPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.ticket.tgt.primary.max-time-to-live-in-seconds</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycastickettgtprimarymaxtimetoliveinseconds">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycastickettgtprimarymaxtimetoliveinseconds">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycastickettgtprimarymaxtimetoliveinseconds">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcastickettgtprimarymaxtimetoliveinseconds">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcastickettgtprimarymaxtimetoliveinseconds">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycastickettgtprimarymaxtimetoliveinseconds">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.ticket.tgt.primary.max-time-to-live-in-seconds=PT8H
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycastickettgtprimarymaxtimetoliveinseconds">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  ticket: <br>    tgt: <br>      primary: <br>        max-time-to-live-in-seconds</span><span class="pi">:</span> <span class="s2">"</span><span class="s">PT8H"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycastickettgtprimarymaxtimetoliveinseconds td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycastickettgtprimarymaxtimetoliveinseconds">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.ticket.tgt.primary.max-time-to-live-in-seconds<span class="o">=</span><span class="s2">"PT8H"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcastickettgtprimarymaxtimetoliveinseconds">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_TICKET_TGT_PRIMARY_MAX_TIME_TO_LIVE_IN_SECONDS</span><span class="o">=</span><span class="s2">"PT8H"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcastickettgtprimarymaxtimetoliveinseconds">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.ticket.tgt.primary.max-time-to-live-in-seconds<span class="o">=</span><span class="s2">"PT8H"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.ticket.tgt.primary.time-to-kill-in-seconds=PT2H</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Time in seconds after which tickets would be destroyed after a period of inactivity.
+                    </p>
+<p></p>
+                    <p class="small text-left"><i class="fas fa-clock"></i> This settings supports the
+                        <code>java.time.Duration</code> syntax <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;p class='small'&gt;The format of the value will be &lt;code&gt;PTnHnMnS&lt;/code&gt;, where &lt;code&gt;n&lt;/code&gt; is the relevant hours, minutes or seconds part of the duration. Any fractional seconds are placed after a decimal point in the seconds section. If a section has a zero value, it is omitted. The hours, minutes and seconds will all have the same sign. Example values
+                    could be in the form of &lt;code&gt;PT20S&lt;/code&gt;, &lt;code&gt;PT15M&lt;/code&gt;, &lt;code&gt;PT10H&lt;/code&gt;, &lt;code&gt;PT6D&lt;/code&gt;, &lt;code&gt;P2DT3H4M&lt;/code&gt;.
+                    If the value is set to &lt;code&gt;0&lt;/code&gt; or &lt;code&gt;never&lt;/code&gt;, the duration will be set to zero. If the value is blank, set to &lt;code&gt;-1&lt;/code&gt;,
+                    or &lt;code&gt;infinite&lt;/code&gt;, the value will effectively represent an unending duration.&lt;/p&gt;">[?]</sup>.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.ticket.PrimaryTicketExpirationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#castickettgtprimarytimetokillinsecondsPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="castickettgtprimarytimetokillinsecondsPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.ticket.tgt.primary.time-to-kill-in-seconds</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycastickettgtprimarytimetokillinseconds">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycastickettgtprimarytimetokillinseconds">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycastickettgtprimarytimetokillinseconds">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcastickettgtprimarytimetokillinseconds">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcastickettgtprimarytimetokillinseconds">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycastickettgtprimarytimetokillinseconds">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.ticket.tgt.primary.time-to-kill-in-seconds=PT2H
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycastickettgtprimarytimetokillinseconds">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  ticket: <br>    tgt: <br>      primary: <br>        time-to-kill-in-seconds</span><span class="pi">:</span> <span class="s2">"</span><span class="s">PT2H"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycastickettgtprimarytimetokillinseconds td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycastickettgtprimarytimetokillinseconds">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.ticket.tgt.primary.time-to-kill-in-seconds<span class="o">=</span><span class="s2">"PT2H"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcastickettgtprimarytimetokillinseconds">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_TICKET_TGT_PRIMARY_TIME_TO_KILL_IN_SECONDS</span><span class="o">=</span><span class="s2">"PT2H"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcastickettgtprimarytimetokillinseconds">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.ticket.tgt.primary.time-to-kill-in-seconds<span class="o">=</span><span class="s2">"PT2H"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescastickettgtcorecastickettgtprimary"># Maximum length of tickets.
+# cas.ticket.tgt.core.max-length=50
+
+# Flag to control whether to track most recent SSO sessions.
+# cas.ticket.tgt.core.only-track-most-recent-session=true
+
+# Maximum time in seconds tickets would be live in CAS server.
+# cas.ticket.tgt.primary.max-time-to-live-in-seconds=PT8H
+
+# Time in seconds after which tickets would be destroyed after a period of inactivity.
+# cas.ticket.tgt.primary.time-to-kill-in-seconds=PT2H
+
+</textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notescastickettgtcorecastickettgtprimary">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.0.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+</div>
+<script>
+    window.addEventListener('load', (event) => {$("#linkRdbmscastickettgtcorecastickettgtprimary").remove();$("#linkEmailcastickettgtcorecastickettgtprimary").remove();$("#linkSigningEncryptioncastickettgtcorecastickettgtprimary").remove();$("#linkRequiredPropertiescastickettgtcorecastickettgtprimary").remove();
+            $("#requiredPropertiescastickettgtcorecastickettgtprimary").remove();$("#linkPasswordPolicycastickettgtcorecastickettgtprimary").remove();$("#linkPrincipalTransformationcastickettgtcorecastickettgtprimary").remove();$("#linkPasswordEncodercastickettgtcorecastickettgtprimary").remove();$("#linkAuthnPredicatecastickettgtcorecastickettgtprimary").remove();$("#linkLdapcastickettgtcorecastickettgtprimary").remove();// console.log("Checking for visible link menu in: navPillsMenuscastickettgtcorecastickettgtprimary");
+        let id=$("#navPillsMenuscastickettgtcorecastickettgtprimary a:visible:first").prop('id');
+        // console.log("Attempting to select tab with id " + id);
+        if (id != undefined && id != null) {
+            // console.log("Selecting first tab with link id " + id);
+            let firstTabEl = document.querySelector(`#${id}`);
+            let firstTab = new bootstrap.Tab(firstTabEl);
+            firstTab.show();
+            // console.log("Selected tab with link id " + id);
+        }
+
+        let c = $("#tableRequiredPropertiescastickettgtcorecastickettgtprimary li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navRequiredPropertiescastickettgtcorecastickettgtprimary").closest("table").remove();
+            $("#navRequiredPropertiesLeftcastickettgtcorecastickettgtprimary").closest("table").remove();
+        }
+        c = $("#tableOptionalPropertiescastickettgtcorecastickettgtprimary li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navOptionalPropertiescastickettgtcorecastickettgtprimary").closest("table").remove();
+            $("#navOptionalPropertiesLeftcastickettgtcorecastickettgtprimary").closest("table").remove();
+        }
+        c = $("#tableThirdPartyPropertiescastickettgtcorecastickettgtprimary li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navThirdPartyPropertiescastickettgtcorecastickettgtprimary").hide();
+        }
+        
+    });
+</script>
+
+</div>
+
+</li>
+  
+      <li>
+<p>This ticket expiration policy is conditionally activated if and when the authenticated principal contains a <code class="language-plaintext highlighter-rouge">authenticationSessionTimeout</code> attribute.
+This attribute is expected to be a single-valued attribute whose value, measured in seconds, would allow CAS to build a hard timeout
+expiration policy and associate it with the ticket-granting ticket. The value may be specified a numeric value or in the <code class="language-plaintext highlighter-rouge">Duration</code> syntax, i.e. <code class="language-plaintext highlighter-rouge">PT2H</code>.</p>
+
+</li>
+  
+      <li>
+<p>The expiration policy of ticket granting tickets can be conditionally decided on a per-application basis. The candidate service
+whose ticket granting ticket expiration policy is to deviate from the default configuration must be designed as such:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+<td class="rouge-code"><pre><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.CasRegisteredService"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^https://.*"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Sample"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"ticketGrantingTicketExpirationPolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.DefaultRegisteredServiceTicketGrantingTicketExpirationPolicy"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"maxTimeToLiveInSeconds"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>Remember that applications are responsible to manage their own session. CAS will not and cannot manage the application session
+and generally has no control over the application’s timeout policies, logout practices, etc. The expiration policy
+of the ticket-granting ticket per application allows to CAS to use that policy as an override and separate from the global defaults,
+at the time the ticket is constructed and only if the incoming service request matches
+that given registered service definition. Once created, the policy remains global and affects all other applications and
+it has nothing to do with how the application manages its own sessions.</p>
+
+</li>
+  
+      <li>
+<p>The expiration policy applied to TGTs provides for most-recently-used expiration policy, similar to a Web server session timeout.
+For example, a 2-hour time span with this policy in effect would require a <code class="language-plaintext highlighter-rouge">TGT</code> to be used every 2 hours or less, otherwise
+it would be marked as expired.</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscastickettgttimeout">
+
+    <li class="nav-item property-tab">
+        <a class="nav-link active" id="linkRequiredPropertiescastickettgttimeout" data-bs-toggle="tab" href="#requiredPropertiescastickettgttimeout">Required</a>
+    </li>
+    <li class="nav-item property-tab">
+        <a class="nav-link" id="linkOptionalPropertiescastickettgttimeout" data-bs-toggle="tab" href="#optionalPropertiescastickettgttimeout">Optional</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navSigningEncryptionPropertiescastickettgttimeout">
+        <a class="nav-link" id="linkSigningEncryptioncastickettgttimeout" data-bs-toggle="tab" href="#signingEncryptionPropertiescastickettgttimeout">Signing &amp; Encryption</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navRdbmsPropertiescastickettgttimeout">
+        <a class="nav-link" id="linkRdbmscastickettgttimeout" data-bs-toggle="tab" href="#rdbmsPropertiescastickettgttimeout">Hibernate &amp; JDBC</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navEmailPropertiescastickettgttimeout">
+        <a class="nav-link" id="linkEmailcastickettgttimeout" data-bs-toggle="tab" href="#emailPropertiescastickettgttimeout">Email Servers</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navLdapPropertiescastickettgttimeout">
+        <a class="nav-link" id="linkLdapcastickettgttimeout" data-bs-toggle="tab" href="#ldapPropertiescastickettgttimeout">LDAP &amp; Active Directory</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navAuthnPredicatePropertiescastickettgttimeout">
+        <a class="nav-link" id="linkAuthnPredicatecastickettgttimeout" data-bs-toggle="tab" href="#authnPredicatePropertiescastickettgttimeout">Authentication</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordEncoderPropertiescastickettgttimeout">
+        <a class="nav-link" id="linkPasswordEncodercastickettgttimeout" data-bs-toggle="tab" href="#passwordEncoderPropertiescastickettgttimeout">Password Encoding</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPrincipalTransformationPropertiescastickettgttimeout">
+        <a class="nav-link" id="linkPrincipalTransformationcastickettgttimeout" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcastickettgttimeout(this);" href="#principalTransformationPropertiescastickettgttimeout">Principal Transformation</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordPolicyPropertiescastickettgttimeout">
+        <a class="nav-link" id="linkPasswordPolicycastickettgttimeout" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcastickettgttimeout(this);" href="#passwordPolicyPropertiescastickettgttimeout">Password Policy</a>
+    </li>
+<li class="nav-item property-tab">
+        <a class="nav-link" onclick="javascript:enablePropertiesTabcastickettgttimeout(this);" id="linkNotescastickettgttimeout" data-bs-toggle="tab" href="#notescastickettgttimeout">Notes</a>
+    </li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcastickettgttimeout">
+
+
+<div class="tab-pane properties-tab fade in active show" id="requiredPropertiescastickettgttimeout">
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+    </sub>
+    <br><p></p>
+
+    <p></p>
+        
+    <table class="cas-datatable properties " id="tableRequiredPropertiescastickettgttimeout">
+    <thead><tr><th></th></tr></thead>
+    <tbody></tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescastickettgttimeout"></textarea>
+</div>
+
+<div class="tab-pane properties-tab fade in" id="optionalPropertiescastickettgttimeout">
+
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+        flag indicates that the presence of the setting
+        is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+        the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+        configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+    </sub>
+    <br><p></p>
+
+    <table class="cas-datatable properties " id="tableOptionalPropertiescastickettgttimeout">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.ticket.tgt.timeout.max-time-to-live-in-seconds=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Maximum time in seconds. for TGTs to be live in CAS server.
+                    </p>
+<p></p>
+                    <p class="small text-left"><i class="fas fa-clock"></i> This settings supports the
+                        <code>java.time.Duration</code> syntax <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;p class='small'&gt;The format of the value will be &lt;code&gt;PTnHnMnS&lt;/code&gt;, where &lt;code&gt;n&lt;/code&gt; is the relevant hours, minutes or seconds part of the duration. Any fractional seconds are placed after a decimal point in the seconds section. If a section has a zero value, it is omitted. The hours, minutes and seconds will all have the same sign. Example values
+                    could be in the form of &lt;code&gt;PT20S&lt;/code&gt;, &lt;code&gt;PT15M&lt;/code&gt;, &lt;code&gt;PT10H&lt;/code&gt;, &lt;code&gt;PT6D&lt;/code&gt;, &lt;code&gt;P2DT3H4M&lt;/code&gt;.
+                    If the value is set to &lt;code&gt;0&lt;/code&gt; or &lt;code&gt;never&lt;/code&gt;, the duration will be set to zero. If the value is blank, set to &lt;code&gt;-1&lt;/code&gt;,
+                    or &lt;code&gt;infinite&lt;/code&gt;, the value will effectively represent an unending duration.&lt;/p&gt;">[?]</sup>.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.ticket.TimeoutTicketExpirationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#castickettgttimeoutmaxtimetoliveinsecondsPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="castickettgttimeoutmaxtimetoliveinsecondsPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.ticket.tgt.timeout.max-time-to-live-in-seconds</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycastickettgttimeoutmaxtimetoliveinseconds">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycastickettgttimeoutmaxtimetoliveinseconds">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycastickettgttimeoutmaxtimetoliveinseconds">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcastickettgttimeoutmaxtimetoliveinseconds">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcastickettgttimeoutmaxtimetoliveinseconds">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycastickettgttimeoutmaxtimetoliveinseconds">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.ticket.tgt.timeout.max-time-to-live-in-seconds=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycastickettgttimeoutmaxtimetoliveinseconds">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  ticket: <br>    tgt: <br>      timeout: <br>        max-time-to-live-in-seconds</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycastickettgttimeoutmaxtimetoliveinseconds td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycastickettgttimeoutmaxtimetoliveinseconds">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.ticket.tgt.timeout.max-time-to-live-in-seconds<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcastickettgttimeoutmaxtimetoliveinseconds">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_TICKET_TGT_TIMEOUT_MAX_TIME_TO_LIVE_IN_SECONDS</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcastickettgttimeoutmaxtimetoliveinseconds">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.ticket.tgt.timeout.max-time-to-live-in-seconds<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescastickettgttimeout"># Maximum time in seconds. for TGTs to be live in CAS server.
+# cas.ticket.tgt.timeout.max-time-to-live-in-seconds=
+
+</textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notescastickettgttimeout">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.0.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+</div>
+<script>
+    window.addEventListener('load', (event) => {$("#linkRdbmscastickettgttimeout").remove();$("#linkEmailcastickettgttimeout").remove();$("#linkSigningEncryptioncastickettgttimeout").remove();$("#linkRequiredPropertiescastickettgttimeout").remove();
+            $("#requiredPropertiescastickettgttimeout").remove();$("#linkPasswordPolicycastickettgttimeout").remove();$("#linkPrincipalTransformationcastickettgttimeout").remove();$("#linkPasswordEncodercastickettgttimeout").remove();$("#linkAuthnPredicatecastickettgttimeout").remove();$("#linkLdapcastickettgttimeout").remove();// console.log("Checking for visible link menu in: navPillsMenuscastickettgttimeout");
+        let id=$("#navPillsMenuscastickettgttimeout a:visible:first").prop('id');
+        // console.log("Attempting to select tab with id " + id);
+        if (id != undefined && id != null) {
+            // console.log("Selecting first tab with link id " + id);
+            let firstTabEl = document.querySelector(`#${id}`);
+            let firstTab = new bootstrap.Tab(firstTabEl);
+            firstTab.show();
+            // console.log("Selected tab with link id " + id);
+        }
+
+        let c = $("#tableRequiredPropertiescastickettgttimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navRequiredPropertiescastickettgttimeout").closest("table").remove();
+            $("#navRequiredPropertiesLeftcastickettgttimeout").closest("table").remove();
+        }
+        c = $("#tableOptionalPropertiescastickettgttimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navOptionalPropertiescastickettgttimeout").closest("table").remove();
+            $("#navOptionalPropertiesLeftcastickettgttimeout").closest("table").remove();
+        }
+        c = $("#tableThirdPartyPropertiescastickettgttimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navThirdPartyPropertiescastickettgttimeout").hide();
+        }
+        
+    });
+</script>
+
+</div>
+
+</li>
+  
+      <li>
+<p>The hard timeout policy provides for finite ticket lifetime as measured from the time of creation. For example, a 4-hour time span
+for this policy means that a ticket created at 1PM may be used up until 5PM; subsequent attempts to use it will mark it expired
+and the user will be forced to re-authenticate.</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscastickettgthardtimeout">
+
+    <li class="nav-item property-tab">
+        <a class="nav-link active" id="linkRequiredPropertiescastickettgthardtimeout" data-bs-toggle="tab" href="#requiredPropertiescastickettgthardtimeout">Required</a>
+    </li>
+    <li class="nav-item property-tab">
+        <a class="nav-link" id="linkOptionalPropertiescastickettgthardtimeout" data-bs-toggle="tab" href="#optionalPropertiescastickettgthardtimeout">Optional</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navSigningEncryptionPropertiescastickettgthardtimeout">
+        <a class="nav-link" id="linkSigningEncryptioncastickettgthardtimeout" data-bs-toggle="tab" href="#signingEncryptionPropertiescastickettgthardtimeout">Signing &amp; Encryption</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navRdbmsPropertiescastickettgthardtimeout">
+        <a class="nav-link" id="linkRdbmscastickettgthardtimeout" data-bs-toggle="tab" href="#rdbmsPropertiescastickettgthardtimeout">Hibernate &amp; JDBC</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navEmailPropertiescastickettgthardtimeout">
+        <a class="nav-link" id="linkEmailcastickettgthardtimeout" data-bs-toggle="tab" href="#emailPropertiescastickettgthardtimeout">Email Servers</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navLdapPropertiescastickettgthardtimeout">
+        <a class="nav-link" id="linkLdapcastickettgthardtimeout" data-bs-toggle="tab" href="#ldapPropertiescastickettgthardtimeout">LDAP &amp; Active Directory</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navAuthnPredicatePropertiescastickettgthardtimeout">
+        <a class="nav-link" id="linkAuthnPredicatecastickettgthardtimeout" data-bs-toggle="tab" href="#authnPredicatePropertiescastickettgthardtimeout">Authentication</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordEncoderPropertiescastickettgthardtimeout">
+        <a class="nav-link" id="linkPasswordEncodercastickettgthardtimeout" data-bs-toggle="tab" href="#passwordEncoderPropertiescastickettgthardtimeout">Password Encoding</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPrincipalTransformationPropertiescastickettgthardtimeout">
+        <a class="nav-link" id="linkPrincipalTransformationcastickettgthardtimeout" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcastickettgthardtimeout(this);" href="#principalTransformationPropertiescastickettgthardtimeout">Principal Transformation</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordPolicyPropertiescastickettgthardtimeout">
+        <a class="nav-link" id="linkPasswordPolicycastickettgthardtimeout" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcastickettgthardtimeout(this);" href="#passwordPolicyPropertiescastickettgthardtimeout">Password Policy</a>
+    </li>
+<li class="nav-item property-tab">
+        <a class="nav-link" onclick="javascript:enablePropertiesTabcastickettgthardtimeout(this);" id="linkNotescastickettgthardtimeout" data-bs-toggle="tab" href="#notescastickettgthardtimeout">Notes</a>
+    </li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcastickettgthardtimeout">
+
+
+<div class="tab-pane properties-tab fade in active show" id="requiredPropertiescastickettgthardtimeout">
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+    </sub>
+    <br><p></p>
+
+    <p></p>
+        
+    <table class="cas-datatable properties " id="tableRequiredPropertiescastickettgthardtimeout">
+    <thead><tr><th></th></tr></thead>
+    <tbody></tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescastickettgthardtimeout"></textarea>
+</div>
+
+<div class="tab-pane properties-tab fade in" id="optionalPropertiescastickettgthardtimeout">
+
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+        flag indicates that the presence of the setting
+        is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+        the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+        configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+    </sub>
+    <br><p></p>
+
+    <table class="cas-datatable properties " id="tableOptionalPropertiescastickettgthardtimeout">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.ticket.tgt.hard-timeout.time-to-kill-in-seconds=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Timeout in seconds to kill the session and consider tickets expired.
+                    </p>
+<p></p>
+                    <p class="small text-left"><i class="fas fa-clock"></i> This settings supports the
+                        <code>java.time.Duration</code> syntax <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;p class='small'&gt;The format of the value will be &lt;code&gt;PTnHnMnS&lt;/code&gt;, where &lt;code&gt;n&lt;/code&gt; is the relevant hours, minutes or seconds part of the duration. Any fractional seconds are placed after a decimal point in the seconds section. If a section has a zero value, it is omitted. The hours, minutes and seconds will all have the same sign. Example values
+                    could be in the form of &lt;code&gt;PT20S&lt;/code&gt;, &lt;code&gt;PT15M&lt;/code&gt;, &lt;code&gt;PT10H&lt;/code&gt;, &lt;code&gt;PT6D&lt;/code&gt;, &lt;code&gt;P2DT3H4M&lt;/code&gt;.
+                    If the value is set to &lt;code&gt;0&lt;/code&gt; or &lt;code&gt;never&lt;/code&gt;, the duration will be set to zero. If the value is blank, set to &lt;code&gt;-1&lt;/code&gt;,
+                    or &lt;code&gt;infinite&lt;/code&gt;, the value will effectively represent an unending duration.&lt;/p&gt;">[?]</sup>.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.ticket.HardTimeoutTicketExpirationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#castickettgthardtimeouttimetokillinsecondsPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="castickettgthardtimeouttimetokillinsecondsPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.ticket.tgt.hard-timeout.time-to-kill-in-seconds</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycastickettgthardtimeouttimetokillinseconds">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycastickettgthardtimeouttimetokillinseconds">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycastickettgthardtimeouttimetokillinseconds">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcastickettgthardtimeouttimetokillinseconds">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcastickettgthardtimeouttimetokillinseconds">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycastickettgthardtimeouttimetokillinseconds">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.ticket.tgt.hard-timeout.time-to-kill-in-seconds=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycastickettgthardtimeouttimetokillinseconds">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  ticket: <br>    tgt: <br>      hard-timeout: <br>        time-to-kill-in-seconds</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycastickettgthardtimeouttimetokillinseconds td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycastickettgthardtimeouttimetokillinseconds">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.ticket.tgt.hard-timeout.time-to-kill-in-seconds<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcastickettgthardtimeouttimetokillinseconds">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_TICKET_TGT_HARD_TIMEOUT_TIME_TO_KILL_IN_SECONDS</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcastickettgthardtimeouttimetokillinseconds">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.ticket.tgt.hard-timeout.time-to-kill-in-seconds<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescastickettgthardtimeout"># Timeout in seconds to kill the session and consider tickets expired.
+# cas.ticket.tgt.hard-timeout.time-to-kill-in-seconds=
+
+</textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notescastickettgthardtimeout">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.0.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+</div>
+<script>
+    window.addEventListener('load', (event) => {$("#linkRdbmscastickettgthardtimeout").remove();$("#linkEmailcastickettgthardtimeout").remove();$("#linkSigningEncryptioncastickettgthardtimeout").remove();$("#linkRequiredPropertiescastickettgthardtimeout").remove();
+            $("#requiredPropertiescastickettgthardtimeout").remove();$("#linkPasswordPolicycastickettgthardtimeout").remove();$("#linkPrincipalTransformationcastickettgthardtimeout").remove();$("#linkPasswordEncodercastickettgthardtimeout").remove();$("#linkAuthnPredicatecastickettgthardtimeout").remove();$("#linkLdapcastickettgthardtimeout").remove();// console.log("Checking for visible link menu in: navPillsMenuscastickettgthardtimeout");
+        let id=$("#navPillsMenuscastickettgthardtimeout a:visible:first").prop('id');
+        // console.log("Attempting to select tab with id " + id);
+        if (id != undefined && id != null) {
+            // console.log("Selecting first tab with link id " + id);
+            let firstTabEl = document.querySelector(`#${id}`);
+            let firstTab = new bootstrap.Tab(firstTabEl);
+            firstTab.show();
+            // console.log("Selected tab with link id " + id);
+        }
+
+        let c = $("#tableRequiredPropertiescastickettgthardtimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navRequiredPropertiescastickettgthardtimeout").closest("table").remove();
+            $("#navRequiredPropertiesLeftcastickettgthardtimeout").closest("table").remove();
+        }
+        c = $("#tableOptionalPropertiescastickettgthardtimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navOptionalPropertiescastickettgthardtimeout").closest("table").remove();
+            $("#navOptionalPropertiesLeftcastickettgthardtimeout").closest("table").remove();
+        }
+        c = $("#tableThirdPartyPropertiescastickettgthardtimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navThirdPartyPropertiescastickettgthardtimeout").hide();
+        }
+        
+    });
+</script>
+
+</div>
+
+</li>
+  
+      <li>
+<p>The throttled timeout policy extends the TimeoutExpirationPolicy with the concept of throttling where a ticket may be used at
+most every <code class="language-plaintext highlighter-rouge">N</code> seconds. This policy was designed to thwart denial of service conditions where a rogue or misconfigured client
+attempts to consume CAS server resources by requesting high volumes of service tickets in a short time.</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscastickettgtthrottledtimeout">
+
+    <li class="nav-item property-tab">
+        <a class="nav-link active" id="linkRequiredPropertiescastickettgtthrottledtimeout" data-bs-toggle="tab" href="#requiredPropertiescastickettgtthrottledtimeout">Required</a>
+    </li>
+    <li class="nav-item property-tab">
+        <a class="nav-link" id="linkOptionalPropertiescastickettgtthrottledtimeout" data-bs-toggle="tab" href="#optionalPropertiescastickettgtthrottledtimeout">Optional</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navSigningEncryptionPropertiescastickettgtthrottledtimeout">
+        <a class="nav-link" id="linkSigningEncryptioncastickettgtthrottledtimeout" data-bs-toggle="tab" href="#signingEncryptionPropertiescastickettgtthrottledtimeout">Signing &amp; Encryption</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navRdbmsPropertiescastickettgtthrottledtimeout">
+        <a class="nav-link" id="linkRdbmscastickettgtthrottledtimeout" data-bs-toggle="tab" href="#rdbmsPropertiescastickettgtthrottledtimeout">Hibernate &amp; JDBC</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navEmailPropertiescastickettgtthrottledtimeout">
+        <a class="nav-link" id="linkEmailcastickettgtthrottledtimeout" data-bs-toggle="tab" href="#emailPropertiescastickettgtthrottledtimeout">Email Servers</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navLdapPropertiescastickettgtthrottledtimeout">
+        <a class="nav-link" id="linkLdapcastickettgtthrottledtimeout" data-bs-toggle="tab" href="#ldapPropertiescastickettgtthrottledtimeout">LDAP &amp; Active Directory</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navAuthnPredicatePropertiescastickettgtthrottledtimeout">
+        <a class="nav-link" id="linkAuthnPredicatecastickettgtthrottledtimeout" data-bs-toggle="tab" href="#authnPredicatePropertiescastickettgtthrottledtimeout">Authentication</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordEncoderPropertiescastickettgtthrottledtimeout">
+        <a class="nav-link" id="linkPasswordEncodercastickettgtthrottledtimeout" data-bs-toggle="tab" href="#passwordEncoderPropertiescastickettgtthrottledtimeout">Password Encoding</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPrincipalTransformationPropertiescastickettgtthrottledtimeout">
+        <a class="nav-link" id="linkPrincipalTransformationcastickettgtthrottledtimeout" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcastickettgtthrottledtimeout(this);" href="#principalTransformationPropertiescastickettgtthrottledtimeout">Principal Transformation</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordPolicyPropertiescastickettgtthrottledtimeout">
+        <a class="nav-link" id="linkPasswordPolicycastickettgtthrottledtimeout" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcastickettgtthrottledtimeout(this);" href="#passwordPolicyPropertiescastickettgtthrottledtimeout">Password Policy</a>
+    </li>
+<li class="nav-item property-tab">
+        <a class="nav-link" onclick="javascript:enablePropertiesTabcastickettgtthrottledtimeout(this);" id="linkNotescastickettgtthrottledtimeout" data-bs-toggle="tab" href="#notescastickettgtthrottledtimeout">Notes</a>
+    </li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcastickettgtthrottledtimeout">
+
+
+<div class="tab-pane properties-tab fade in active show" id="requiredPropertiescastickettgtthrottledtimeout">
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+    </sub>
+    <br><p></p>
+
+    <p></p>
+        
+    <table class="cas-datatable properties " id="tableRequiredPropertiescastickettgtthrottledtimeout">
+    <thead><tr><th></th></tr></thead>
+    <tbody></tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescastickettgtthrottledtimeout"></textarea>
+</div>
+
+<div class="tab-pane properties-tab fade in" id="optionalPropertiescastickettgtthrottledtimeout">
+
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+        flag indicates that the presence of the setting
+        is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+        the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+        configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+    </sub>
+    <br><p></p>
+
+    <table class="cas-datatable properties " id="tableOptionalPropertiescastickettgtthrottledtimeout">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.ticket.tgt.throttled-timeout.time-in-between-uses-in-seconds=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Timeout in between each attempt.
+                    </p>
+<p></p>
+                    <p class="small text-left"><i class="fas fa-clock"></i> This settings supports the
+                        <code>java.time.Duration</code> syntax <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;p class='small'&gt;The format of the value will be &lt;code&gt;PTnHnMnS&lt;/code&gt;, where &lt;code&gt;n&lt;/code&gt; is the relevant hours, minutes or seconds part of the duration. Any fractional seconds are placed after a decimal point in the seconds section. If a section has a zero value, it is omitted. The hours, minutes and seconds will all have the same sign. Example values
+                    could be in the form of &lt;code&gt;PT20S&lt;/code&gt;, &lt;code&gt;PT15M&lt;/code&gt;, &lt;code&gt;PT10H&lt;/code&gt;, &lt;code&gt;PT6D&lt;/code&gt;, &lt;code&gt;P2DT3H4M&lt;/code&gt;.
+                    If the value is set to &lt;code&gt;0&lt;/code&gt; or &lt;code&gt;never&lt;/code&gt;, the duration will be set to zero. If the value is blank, set to &lt;code&gt;-1&lt;/code&gt;,
+                    or &lt;code&gt;infinite&lt;/code&gt;, the value will effectively represent an unending duration.&lt;/p&gt;">[?]</sup>.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.ticket.ThrottledTimeoutTicketExpirationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#castickettgtthrottledtimeouttimeinbetweenusesinsecondsPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="castickettgtthrottledtimeouttimeinbetweenusesinsecondsPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.ticket.tgt.throttled-timeout.time-in-between-uses-in-seconds</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycastickettgtthrottledtimeouttimeinbetweenusesinseconds">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycastickettgtthrottledtimeouttimeinbetweenusesinseconds">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycastickettgtthrottledtimeouttimeinbetweenusesinseconds">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcastickettgtthrottledtimeouttimeinbetweenusesinseconds">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcastickettgtthrottledtimeouttimeinbetweenusesinseconds">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycastickettgtthrottledtimeouttimeinbetweenusesinseconds">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.ticket.tgt.throttled-timeout.time-in-between-uses-in-seconds=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycastickettgtthrottledtimeouttimeinbetweenusesinseconds">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  ticket: <br>    tgt: <br>      throttled-timeout: <br>        time-in-between-uses-in-seconds</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycastickettgtthrottledtimeouttimeinbetweenusesinseconds td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycastickettgtthrottledtimeouttimeinbetweenusesinseconds">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.ticket.tgt.throttled-timeout.time-in-between-uses-in-seconds<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcastickettgtthrottledtimeouttimeinbetweenusesinseconds">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_TICKET_TGT_THROTTLED_TIMEOUT_TIME_IN_BETWEEN_USES_IN_SECONDS</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcastickettgtthrottledtimeouttimeinbetweenusesinseconds">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.ticket.tgt.throttled-timeout.time-in-between-uses-in-seconds<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.ticket.tgt.throttled-timeout.time-to-kill-in-seconds=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Timeout in seconds to kill the session and consider tickets expired.
+                    </p>
+<p></p>
+                    <p class="small text-left"><i class="fas fa-clock"></i> This settings supports the
+                        <code>java.time.Duration</code> syntax <sup data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="&lt;p class='small'&gt;The format of the value will be &lt;code&gt;PTnHnMnS&lt;/code&gt;, where &lt;code&gt;n&lt;/code&gt; is the relevant hours, minutes or seconds part of the duration. Any fractional seconds are placed after a decimal point in the seconds section. If a section has a zero value, it is omitted. The hours, minutes and seconds will all have the same sign. Example values
+                    could be in the form of &lt;code&gt;PT20S&lt;/code&gt;, &lt;code&gt;PT15M&lt;/code&gt;, &lt;code&gt;PT10H&lt;/code&gt;, &lt;code&gt;PT6D&lt;/code&gt;, &lt;code&gt;P2DT3H4M&lt;/code&gt;.
+                    If the value is set to &lt;code&gt;0&lt;/code&gt; or &lt;code&gt;never&lt;/code&gt;, the duration will be set to zero. If the value is blank, set to &lt;code&gt;-1&lt;/code&gt;,
+                    or &lt;code&gt;infinite&lt;/code&gt;, the value will effectively represent an unending duration.&lt;/p&gt;">[?]</sup>.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.ticket.ThrottledTimeoutTicketExpirationPolicyProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#castickettgtthrottledtimeouttimetokillinsecondsPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="castickettgtthrottledtimeouttimetokillinsecondsPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.ticket.tgt.throttled-timeout.time-to-kill-in-seconds</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycastickettgtthrottledtimeouttimetokillinseconds">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycastickettgtthrottledtimeouttimetokillinseconds">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycastickettgtthrottledtimeouttimetokillinseconds">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcastickettgtthrottledtimeouttimetokillinseconds">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcastickettgtthrottledtimeouttimetokillinseconds">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycastickettgtthrottledtimeouttimetokillinseconds">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.ticket.tgt.throttled-timeout.time-to-kill-in-seconds=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycastickettgtthrottledtimeouttimetokillinseconds">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  ticket: <br>    tgt: <br>      throttled-timeout: <br>        time-to-kill-in-seconds</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycastickettgtthrottledtimeouttimetokillinseconds td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycastickettgtthrottledtimeouttimetokillinseconds">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.ticket.tgt.throttled-timeout.time-to-kill-in-seconds<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcastickettgtthrottledtimeouttimetokillinseconds">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_TICKET_TGT_THROTTLED_TIMEOUT_TIME_TO_KILL_IN_SECONDS</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcastickettgtthrottledtimeouttimetokillinseconds">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.ticket.tgt.throttled-timeout.time-to-kill-in-seconds<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescastickettgtthrottledtimeout"># Timeout in between each attempt.
+# cas.ticket.tgt.throttled-timeout.time-in-between-uses-in-seconds=
+
+# Timeout in seconds to kill the session and consider tickets expired.
+# cas.ticket.tgt.throttled-timeout.time-to-kill-in-seconds=
+
+</textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notescastickettgtthrottledtimeout">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.0.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+</div>
+<script>
+    window.addEventListener('load', (event) => {$("#linkRdbmscastickettgtthrottledtimeout").remove();$("#linkEmailcastickettgtthrottledtimeout").remove();$("#linkSigningEncryptioncastickettgtthrottledtimeout").remove();$("#linkRequiredPropertiescastickettgtthrottledtimeout").remove();
+            $("#requiredPropertiescastickettgtthrottledtimeout").remove();$("#linkPasswordPolicycastickettgtthrottledtimeout").remove();$("#linkPrincipalTransformationcastickettgtthrottledtimeout").remove();$("#linkPasswordEncodercastickettgtthrottledtimeout").remove();$("#linkAuthnPredicatecastickettgtthrottledtimeout").remove();$("#linkLdapcastickettgtthrottledtimeout").remove();// console.log("Checking for visible link menu in: navPillsMenuscastickettgtthrottledtimeout");
+        let id=$("#navPillsMenuscastickettgtthrottledtimeout a:visible:first").prop('id');
+        // console.log("Attempting to select tab with id " + id);
+        if (id != undefined && id != null) {
+            // console.log("Selecting first tab with link id " + id);
+            let firstTabEl = document.querySelector(`#${id}`);
+            let firstTab = new bootstrap.Tab(firstTabEl);
+            firstTab.show();
+            // console.log("Selected tab with link id " + id);
+        }
+
+        let c = $("#tableRequiredPropertiescastickettgtthrottledtimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navRequiredPropertiescastickettgtthrottledtimeout").closest("table").remove();
+            $("#navRequiredPropertiesLeftcastickettgtthrottledtimeout").closest("table").remove();
+        }
+        c = $("#tableOptionalPropertiescastickettgtthrottledtimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navOptionalPropertiescastickettgtthrottledtimeout").closest("table").remove();
+            $("#navOptionalPropertiesLeftcastickettgtthrottledtimeout").closest("table").remove();
+        }
+        c = $("#tableThirdPartyPropertiescastickettgtthrottledtimeout li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navThirdPartyPropertiescastickettgtthrottledtimeout").hide();
+        }
+        
+    });
+</script>
+
+</div>
+
+</li>
+  
+      <li>
+<p>The never expires policy allows tickets to exist indefinitely. This policy is activated when the primary ticket expiration
+policy is configured with negative timeout values.</p>
+
+<div class="alert alert-warning">
+<img class="emoji" title=":warning:" alt=":warning:" src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png" height="20" width="20"> <strong>Usage Warning!</strong><p>Use of this policy has significant consequences to overall
+security policy and should be enabled only after a thorough review by a qualified security team. There are also implications to
+server resource usage for the ticket registries backed by filesystem storage. Since disk storage for tickets can never be reclaimed
+for those registries with this policy in effect, use of this policy with those ticket registry implementations
+is strongly discouraged.</p>
+</div>
+
+</li>
+  
+</ul>
+
+<h2 id="how-do-i-choose">How Do I Choose?</h2>
+
+<p>Changing the <code class="language-plaintext highlighter-rouge">TGT</code> policy is a matter of organizational policy, and typically one that would control the length of the 
+overall SSO session for the best user experience. Unless you have good reason to do so or a business use case dictates a scenario, 
+the defaults generally are appropriate. Overall, you want to try to keep the length of the SSO session to a minimum to 
+avoid security issues, but not too small to cause user annoyance with repeated logins.</p>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+
+    <script>
+        let pageSection = 'Ticketing';
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+</body>
+
+</html>

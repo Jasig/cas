@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - OAuth Authentication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="oauthopenid-authentication">OAuth/OpenID Authentication</h1>
+
+<div class="alert alert-info"><strong>CAS as OAuth Server</strong><p>This page specifically describes how to enable OAuth/OpenID server support for CAS. If you would like to have CAS act as an OAuth/OpenID client communicating with other providers (such as Google, Facebook, etc), <a href="../integration/Delegate-Authentication.html">see this page</a>.</p></div>
+
+<p>To get a better understanding of the OAuth/OpenID protocol support in CAS, <a href="../protocol/OAuth-Protocol.html">see this page</a>.</p>
+
+<h2 id="configuration">Configuration</h2>
+<p>Support is enabled by including the following dependency in the Maven WAR overlay:</p>
+
+<div class="highlight"><pre><code class="xml">    <span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.jasig.cas<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>cas-server-support-oauth<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>${cas.version}<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h1 id="configuration-1">Configuration</h1>
+
+<h2 id="add-the-oauth20wrappercontroller">Add the OAuth20WrapperController</h2>
+
+<p>To add the <code>OAuth20WrapperController</code>, you need to add the mapping between the /oauth2.0/* url and the CAS servlet in the <em>web.xml</em> file:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;servlet-mapping&gt;</span>
+  <span class="nt">&lt;servlet-name&gt;</span>cas<span class="nt">&lt;/servlet-name&gt;</span>
+  <span class="nt">&lt;url-pattern&gt;</span>/oauth2.0/*<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span>
+</code></pre></div>
+
+<p>You have to create the controller itself in the <em>cas-servlet.xml</em> file:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span>
+  <span class="na">id=</span><span class="s">&quot;oauth20WrapperController&quot;</span>
+  <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.oauth.web.OAuth20WrapperController&quot;</span>
+  <span class="na">p:loginUrl=</span><span class="s">&quot;http://mycasserverwithoauthwrapper/login&quot;</span>
+  <span class="na">p:servicesManager-ref=</span><span class="s">&quot;servicesManager&quot;</span>
+  <span class="na">p:ticketRegistry-ref=</span><span class="s">&quot;ticketRegistry&quot;</span>
+  <span class="na">p:timeout=</span><span class="s">&quot;7200&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>The <em>loginUrl</em> is the login url of the CAS server. The timeout is the lifetime of a CAS ticket granting ticket (in seconds, not in milliseconds!) with its mapping in the <code>handlerMappingC</code> bean (<em>cas-servlet.xml</em> file):</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;handlerMappingC&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.handler.SimpleUrlHandlerMapping&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;mappings&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;props&gt;</span>
+      <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;/serviceValidate&quot;</span><span class="nt">&gt;</span>serviceValidateController<span class="nt">&lt;/prop&gt;</span>
+ 
+   ...
+ 
+      <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;/statistics&quot;</span><span class="nt">&gt;</span>statisticsController<span class="nt">&lt;/prop&gt;</span>
+      <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;/oauth2.0/*&quot;</span><span class="nt">&gt;</span>oauth20WrapperController<span class="nt">&lt;/prop&gt;</span>
+    <span class="nt">&lt;/props&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;alwaysUseFullPath&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h2 id="add-the-needed-cas-services">Add the needed CAS services</h2>
+
+<h3 id="callback-authorization">Callback Authorization</h3>
+
+<p>One service is needed to make the OAuth wrapper works in CAS. It defines the callback url after CAS authentication to return to the OAuth wrapper as a CAS service.<br />
+<strong>Note</strong>: the callback url must end with “callbackAuthorize”.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;serviceRegistryDao&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.InMemoryServiceRegistryDaoImpl&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;registeredServices&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;list&gt;</span>
+      <span class="c">&lt;!-- A dedicated component to recognize OAuth Callback Authorization requests --&gt;</span>
+      <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.oauth.services.OAuthCallbackAuthorizeService&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;id&quot;</span> <span class="na">value=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">value=</span><span class="s">&quot;HTTP&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">value=</span><span class="s">&quot;oauth wrapper callback url&quot;</span> <span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- By default, only support regex patterns if/when needed --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;serviceId&quot;</span> <span class="na">value=</span><span class="s">&quot;${server.prefix}/oauth2.0/callbackAuthorize&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/bean&gt;</span>
+...
+</code></pre></div>
+
+<h3 id="oauth-clients">OAuth Clients</h3>
+
+<p>Every OAuth client must be defined as a CAS service (notice the new <em>clientId</em> and <em>clientSecret</em> properties, specific to OAuth):</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;serviceRegistryDao&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.InMemoryServiceRegistryDaoImpl&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;registeredServices&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;list&gt;</span>
+       
+      <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.oauth.services.OAuthRegisteredService&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;id&quot;</span> <span class="na">value=</span><span class="s">&quot;1&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">value=</span><span class="s">&quot;serviceName&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">value=</span><span class="s">&quot;Service Description&quot;</span> <span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- Supports regex patterns by default for service ids --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;serviceId&quot;</span> <span class="na">value=</span><span class="s">&quot;oauth client service url&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;clientId&quot;</span> <span class="na">value=</span><span class="s">&quot;client id goes here&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;clientSecret&quot;</span> <span class="na">value=</span><span class="s">&quot;client secret goes here&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/bean&gt;</span>
+...
+</code></pre></div>
+
+<hr />
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

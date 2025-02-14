@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - SPNEGO Authentication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="spnego-authentication">SPNEGO Authentication</h1>
+<p><a href="http://en.wikipedia.org/wiki/SPNEGO">SPNEGO</a> is an authentication technology that is primarily used to provide
+transparent CAS authentication to browsers running on Windows running under Active Directory domain credentials.
+There are three actors involved: the client, the CAS server, and the Active Directory Domain Controller/KDC.</p>
+
+<pre><code>1. Client sends CAS:               HTTP GET to CAS  for cas protected page
+2. CAS responds:                   HTTP 401 - Access Denied WWW-Authenticate: Negotiate
+3. Client sends ticket request:    Kerberos(KRB_TGS_REQ) Requesting ticket for HTTP/cas.example.com@REALM
+4. Kerberos KDC responds:          Kerberos(KRB_TGS_REP) Granting ticket for HTTP/cas.example.com@REALM
+5. Client sends CAS:               HTTP GET Authorization: Negotiate w/SPNEGO Token
+6. CAS responds:                   HTTP 200 - OK WWW-Authenticate w/SPNEGO response + requested page.
+</code></pre>
+
+<p>The above interaction occurs only for the first request, when there is no CAS ticket-granting ticket associated with
+the user session. Once CAS grants a ticket-granting ticket, the SPNEGO process will not happen again until the CAS
+ticket expires.</p>
+
+<h2 id="spnego-requirements">SPNEGO Requirements</h2>
+<ul>
+  <li>Client is logged in to a Windows Active Directory domain.</li>
+  <li>Supported browser and JDK.</li>
+  <li>CAS is running MIT kerberos against the AD domain controller.</li>
+</ul>
+
+<h2 id="spnego-components">SPNEGO Components</h2>
+<p>SPNEGO support is enabled by including the following dependency in the Maven WAR overlay:</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.jasig.cas&lt;/groupId&gt;
+  &lt;artifactId&gt;cas-server-support-spnego&lt;/artifactId&gt;
+  &lt;version&gt;${cas.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h6 id="jcifsspnegoauthenticationhandler"><code>JCIFSSpnegoAuthenticationHandler</code></h6>
+<p>The authentication handler that provides SPNEGO support in both Kerberos and NTLM flavors. NTLM is disabled by default.
+Configuration properties:</p>
+
+<ul>
+  <li><code>principalWithDomainName</code> - True to include the domain name in the CAS principal ID, false otherwise.</li>
+  <li><code>NTLMallowed</code> - True to enable NTLM support, false otherwise. (Disabled by default.)</li>
+</ul>
+
+<h6 id="jcifsconfig"><code>JCIFSConfig</code></h6>
+<p>Configuration helper for JCIFS and the Spring framework. Configuration properties:</p>
+
+<ul>
+  <li><code>jcifsServicePrincipal</code> - service principal name.</li>
+  <li><code>jcifsServicePassword</code> - service principal password.</li>
+  <li><code>kerberosDebug</code> - True to enable kerberos debugging, false otherwise.</li>
+  <li><code>kerberosRealm</code> - Kerberos realm name.</li>
+  <li><code>kerberosKdc</code> - Kerberos KDC address.</li>
+  <li><code>loginConf</code> - Path to the login.conf JAAS configuration file.</li>
+</ul>
+
+<h6 id="spnegonegociatecredentialsaction"><code>SpnegoNegociateCredentialsAction</code></h6>
+<p>CAS login Webflow action that begins the SPNEGO authenticaiton process. The action checks the <code>Authorization</code> request
+header for a suitable value (<code>Negotiate</code> for Kerberos or <code>NTLM</code>). If the check is successful, flow continues to the
+<code>SpnegoCredentialsAction</code> state; otherwise a 401 (not authorized) response is returned.</p>
+
+<h6 id="spnegocredentialsaction"><code>SpnegoCredentialsAction</code></h6>
+<p>Constructs CAS credentials from the encoded GSSAPI data in the <code>Authorization</code> request header. The standard CAS
+authentication process proceeds as usual after this step: authentication is attempted with a suitable handler,
+<code>JCIFSSpnegoAuthenticationHandler</code> in this case. The action also sets response headers accordingly based on whether
+authentication succeeded or failed.</p>
+
+<h2 id="spnego-configuration">SPNEGO Configuration</h2>
+
+<h3 id="create-spn-account">Create SPN Account</h3>
+<p>Create an Active Directory account for the Service Principal Name (SPN) and record the username and password, which
+will be used subsequently to configure the <code>JCIFSConfig</code> component.</p>
+
+<h3 id="create-keytab-file">Create Keytab File</h3>
+<p>The keytab file enables a trust link between the CAS server and the Key Distribution Center (KDC); an Active Directory
+domain controller serves the role of KDC in this context.
+The <a href="http://technet.microsoft.com/en-us/library/cc753771.aspx"><code>ktpass</code> tool</a> is used to generate the keytab file,
+which contains a cryptographic key. Be sure to execute the command from an Active Directory domain controller as
+administrator.</p>
+
+<h3 id="test-spn-account">Test SPN Account</h3>
+<p>Install and configure MIT Kerberos V on the CAS server host(s). The following sample <code>krb5.conf</code> file may be used
+as a reference.</p>
+
+<pre><code>[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+ 
+[libdefaults]
+ ticket_lifetime = 24000
+ default_realm = YOUR.REALM.HERE
+ default_keytab_name = /home/cas/kerberos/myspnaccount.keytab
+ dns_lookup_realm = false
+ dns_lookup_kdc = false
+ default_tkt_enctypes = rc4-hmac
+ default_tgs_enctypes = rc4-hmac
+ 
+[realms]
+ YOUR.REALM.HERE = {
+  kdc = your.kdc.your.realm.here:88
+ }
+ 
+[domain_realm]
+ .your.realm.here = YOUR.REALM.HERE
+ your.realm.here = YOUR.REALM.HERE
+</code></pre>
+
+<p>Then verify that your are able to read the keytab file:</p>
+
+<pre><code>klist -k
+</code></pre>
+
+<p>Then verify that your are able to read the keytab file:</p>
+
+<pre><code>kinit a_user_in_the_realm@YOUR.REALM.HERE
+klist
+</code></pre>
+
+<h3 id="browser-configuration">Browser Configuration</h3>
+<ul>
+  <li>Internet Explorer - Enable <em>Integrated Windows Authentication</em> and add the CAS server URL to the <em>Local Intranet</em>
+zone.</li>
+  <li>Firefox - Set the <code>network.negotiate-auth.trusted-uris</code> configuration parameter in <code>about:config</code> to the CAS server
+URL, e.g. https://cas.example.com.</li>
+</ul>
+
+<h3 id="cas-component-configuration">CAS Component Configuration</h3>
+<p>Define two new action states in <code>login-webflow.xml</code> before the <code>viewLoginForm</code> state:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;action-state</span> <span class="na">id=</span><span class="s">&quot;startAuthenticate&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;evaluate</span> <span class="na">expression=</span><span class="s">&quot;negociateSpnego&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;success&quot;</span> <span class="na">to=</span><span class="s">&quot;spnego&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/action-state&gt;</span>
+ 
+<span class="nt">&lt;action-state</span> <span class="na">id=</span><span class="s">&quot;spnego&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;evaluate</span> <span class="na">expression=</span><span class="s">&quot;spnego&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;success&quot;</span> <span class="na">to=</span><span class="s">&quot;sendTicketGrantingTicket&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;error&quot;</span> <span class="na">to=</span><span class="s">&quot;viewLoginForm&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/action-state&gt;</span>
+</code></pre></div>
+
+<p>Additionally, two existing states need to be modified:
+1. <code>gatewayRequestCheck</code> - replace <code>viewLoginForm</code> with <code>startAuthenticate</code>
+2. <code>renewRequestCheck</code> - replace <code>viewLoginForm</code> with <code>startAuthenticate</code></p>
+
+<p>Add two bean definitions in <code>cas-servlet.xml</code>:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;negociateSpnego&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.spnego.web.flow.SpnegoNegociateCredentialsAction&quot;</span> <span class="nt">/&gt;</span>
+ 
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;spnego&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.spnego.web.flow.SpnegoCredentialsAction&quot;</span>
+      <span class="na">p:centralAuthenticationService-ref=</span><span class="s">&quot;centralAuthenticationService&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>Update <code>deployerConfigContext.xml</code> according to the following template:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;jcifsConfig&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.spnego.authentication.handler.support.JCIFSConfig&quot;</span>
+      <span class="na">p:jcifsServicePrincipal=</span><span class="s">&quot;HTTP/cas.example.com@EXAMPLE.COM&quot;</span>
+      <span class="na">p:kerberosDebug=</span><span class="s">&quot;false&quot;</span>
+      <span class="na">p:kerberosRealm=</span><span class="s">&quot;EXAMPLE.COM&quot;</span>
+      <span class="na">p:kerberosKdc=</span><span class="s">&quot;172.10.1.10&quot;</span>
+      <span class="na">p:loginConf=</span><span class="s">&quot;/path/to/login.conf&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;spnegoAuthentication&quot;</span> <span class="na">class=</span><span class="s">&quot;jcifs.spnego.Authentication&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;spnegoHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.spnego.authentication.handler.support.JCIFSSpnegoAuthenticationHandler&quot;</span>
+      <span class="na">p:authentication-ref=</span><span class="s">&quot;spnegoAuthentication&quot;</span>
+      <span class="na">p:principalWithDomainName=</span><span class="s">&quot;false&quot;</span>
+      <span class="na">p:NTLMallowed=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;spnegoPrincipalResolver&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.spnego.authentication.principal.SpnegoPrincipalResolver&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticationManager&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.PolicyBasedAuthenticationManager&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;constructor-arg&gt;</span>
+    <span class="nt">&lt;map&gt;</span>
+      <span class="nt">&lt;entry</span> <span class="na">key-ref=</span><span class="s">&quot;spnegoHandler&quot;</span> <span class="na">value-ref=</span><span class="s">&quot;spnegoPrincipalResolver&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/map&gt;</span>
+  <span class="nt">&lt;/constructor-arg&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;authenticationMetaDataPopulators&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;list&gt;</span>
+      <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.SuccessfulHandlerMetaDataPopulator&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/list&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<p>Provide a JAAS <code>login.conf</code> file in a location that agrees with the <code>loginConf</code> property of the <code>JCIFSConfig</code> bean
+above.</p>
+
+<pre><code>jcifs.spnego.initiate {
+   com.sun.security.auth.module.Krb5LoginModule required storeKey=true useKeyTab=true keyTab="/home/cas/kerberos/myspnaccount.keytab";
+};
+jcifs.spnego.accept {
+   com.sun.security.auth.module.Krb5LoginModule required storeKey=true useKeyTab=true keyTab="/home/cas/kerberos/myspnaccount.keytab";
+};
+</code></pre>
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

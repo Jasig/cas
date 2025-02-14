@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - CAS Protocol Specification</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            <p><a name="headTop"></a></p>
+
+<h1 id="cas-protocol-30-specification"><em>CAS Protocol 3.0 Specification</em></h1>
+
+<h1 id="authors-version"><strong>Authors, Version</strong></h1>
+
+<p>Author: Drew Mazurek</p>
+
+<p>Contributors:</p>
+
+<ul>
+  <li>Susan Bramhall</li>
+  <li>Howard Gilbert</li>
+  <li>Andy Newman</li>
+  <li>Andrew Petro</li>
+  <li>Robert Oschwald [CAS 3.0]</li>
+  <li>Misagh Moayyed</li>
+</ul>
+
+<p>Version: 3.0.3</p>
+
+<p>Release Date: 2017-12-01</p>
+
+<p>Copyright © 2005, Yale University</p>
+
+<p>Copyright © 2017, Apereo, Inc.</p>
+
+<p><a name="head1"></a></p>
+
+<h1 id="1-introduction"><strong>1. Introduction</strong></h1>
+
+<p>This is the official specification of the CAS 1.0, 2.0 and 3.0 protocols.</p>
+
+<p>The Central Authentication Service (CAS) is a single-sign-on / single-sign-off protocol
+for the web.
+It permits a user to access multiple applications while providing their
+credentials (such as userid and password) only once to a central CAS Server
+application.</p>
+
+<p><a name="head1.1"></a></p>
+
+<h2 id="11-conventions--definitions"><strong>1.1. Conventions &amp; Definitions</strong></h2>
+
+<p>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”,
+“SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be
+interpreted as described in RFC 2119[<a href="#1">1</a>].</p>
+
+<ul>
+  <li>
+    <p>“Client” refers to the end user and/or the web browser.</p>
+  </li>
+  <li>
+    <p>“CAS Client” refers to the software component that is integrated with a web
+application and interacts with the CAS server via CAS protocol.</p>
+  </li>
+  <li>
+    <p>“Server” refers to the Central Authentication Service server.</p>
+  </li>
+  <li>
+    <p>“Service” refers to the application the client is trying to access.</p>
+  </li>
+  <li>
+    <p>“Back-end service” refers to the application a service is trying to access
+on behalf of a client. This can also be referred to as the “target service.”</p>
+  </li>
+  <li>
+    <p>“SSO” refers to Single Sign on.</p>
+  </li>
+  <li>
+    <p>“SLO” refers to Single Logout.</p>
+  </li>
+  <li>
+    <p>“&lt;LF&gt;” is a bare line feed (ASCII value 0x0a).</p>
+  </li>
+</ul>
+
+<p><a name="head1.2"></a></p>
+
+<h2 id="12-reference-implementation"><strong>1.2 Reference Implementation</strong></h2>
+<p>The Apereo CAS Server [<a href="#8">8</a>] is the official reference implementation of the
+CAS Protocol Specification.</p>
+
+<p>Apereo CAS Server 4.x and above supports the CAS Protocol 3.0 Specification.</p>
+
+<p><a name="head2"></a></p>
+
+<h1 id="2-cas-uris"><strong>2. CAS URIs</strong></h1>
+
+<p>CAS is an HTTP[<a href="#2">2</a>],[<a href="#3">3</a>]-based protocol that requires each of its
+components to be accessible through specific URIs. This section will discuss
+each of the URIs:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>URI</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/login</code></td>
+      <td>credential requestor / acceptor</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/logout</code></td>
+      <td>destroy CAS session (logout)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/validate</code></td>
+      <td>service ticket validation</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/serviceValidate</code></td>
+      <td>service ticket validation [CAS 2.0]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/proxyValidate</code></td>
+      <td>service/proxy ticket validation [CAS 2.0]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/proxy</code></td>
+      <td>proxy ticket service [CAS 2.0]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/p3/serviceValidate</code></td>
+      <td>service ticket validation [CAS 3.0]</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/p3/proxyValidate</code></td>
+      <td>service/proxy ticket validation [CAS 3.0]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a name="head2.1"></a></p>
+
+<h2 id="21-login-as-credential-requestor"><strong>2.1. /login as credential requestor</strong></h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">/login</code> URI operates with two behaviors: as a credential requestor, and as
+a credential acceptor. It responds to credentials by acting as a credential
+acceptor and otherwise acts as a credential requestor.</p>
+
+<p>If the client has already established a single sign-on session with CAS, the
+web browser presents to CAS a secure cookie containing a string identifying
+a ticket-granting ticket. This cookie is called the ticket-granting cookie.
+If the ticket-granting cookie keys to a valid ticket-granting ticket, CAS MAY
+issue a service ticket provided all the other conditions in this specification
+are met.
+See Section <a href="#head3.6">3.6</a> for more information on ticket-granting cookies.</p>
+
+<p><a name="head2.1.1"></a></p>
+
+<h3 id="211-parameters"><strong>2.1.1. parameters</strong></h3>
+
+<p>The following HTTP request parameters may be passed to <code class="language-plaintext highlighter-rouge">/login</code> while it is
+acting as a credential requestor. They are all case-sensitive, and they all
+MUST be handled by <code class="language-plaintext highlighter-rouge">/login</code>.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">service</code> [OPTIONAL] - the identifier of the application the client is
+trying to access. In almost all cases, this will be the URL of the
+application. As a HTTP request parameter, this URL value MUST be
+URL-encoded as described in section 2.2 of RFC 3986 [<a href="#4">4</a>].
+If a <code class="language-plaintext highlighter-rouge">service</code> is not specified and a single sign-on session does not yet
+exist, CAS SHOULD request credentials from the user to initiate a single
+sign-on session. If a <code class="language-plaintext highlighter-rouge">service</code> is not specified and a single sign-on
+session already exists, CAS SHOULD display a message notifying the client
+that it is already logged in.</p>
+
+    <blockquote>
+      <p>Note: It is STRONGLY RECOMMENDED that all <code class="language-plaintext highlighter-rouge">service</code> urls be filtered via
+the service management tool, such that only authorized and known
+client applications would be able to use the CAS server.
+Leaving the service management tool open to allow lenient access to
+all applications will potentially increase the risk of service attacks
+and other security vulnerabilities. Furthermore, it is RECOMMENDED that
+only secure protocols such as <code class="language-plaintext highlighter-rouge">https</code> be allowed for client applications
+for further strengthen the authenticating client.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">renew</code> [OPTIONAL] - if this parameter is set, single sign-on will be
+bypassed. In this case, CAS will require the client to present credentials
+regardless of the existence of a single sign-on session with CAS. This
+parameter is not compatible with the <code class="language-plaintext highlighter-rouge">gateway</code> parameter. Services
+redirecting to the <code class="language-plaintext highlighter-rouge">/login</code> URI and login form views posting to the <code class="language-plaintext highlighter-rouge">/login</code>
+URI SHOULD NOT set both the <code class="language-plaintext highlighter-rouge">renew</code> and <code class="language-plaintext highlighter-rouge">gateway</code> request parameters.
+Behavior is undefined if both are set. It is RECOMMENDED that CAS
+implementations ignore the <code class="language-plaintext highlighter-rouge">gateway</code> parameter if <code class="language-plaintext highlighter-rouge">renew</code> is set.
+It is RECOMMENDED that when the <code class="language-plaintext highlighter-rouge">renew</code> parameter is set its value be “true”.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">gateway</code> [OPTIONAL] - if this parameter is set, CAS will not ask the client
+for credentials. If the client has a pre-existing single sign-on session
+with CAS, or if a single sign-on session can be established through
+non-interactive means (i.e. trust authentication), CAS MAY redirect the
+client to the URL specified by the <code class="language-plaintext highlighter-rouge">service</code> parameter, appending a valid
+service ticket. (CAS also MAY interpose an advisory page informing the
+client that a CAS authentication has taken place.) If the client does not
+have a single sign-on session with CAS, and a non-interactive authentication
+cannot be established, CAS MUST redirect the client to the URL specified by
+the <code class="language-plaintext highlighter-rouge">service</code> parameter with no “ticket” parameter appended to the URL. If
+the <code class="language-plaintext highlighter-rouge">service</code> parameter is not specified and <code class="language-plaintext highlighter-rouge">gateway</code> is set, the behavior
+of CAS is undefined. It is RECOMMENDED that in this case, CAS request
+credentials as if neither parameter was specified. This parameter is not
+compatible with the <code class="language-plaintext highlighter-rouge">renew</code> parameter. Behavior is undefined if both are
+set. It is RECOMMENDED that when the <code class="language-plaintext highlighter-rouge">gateway</code> parameter is set its value be
+“true”.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">method</code> [OPTIONAL, CAS 3.0] - The <code class="language-plaintext highlighter-rouge">method</code> to be used when sending responses.
+While native HTTP redirects (<code class="language-plaintext highlighter-rouge">GET</code>) may be utilized as the default method,
+applications that require a <code class="language-plaintext highlighter-rouge">POST</code> response can use this parameter to indicate
+the method type. A <code class="language-plaintext highlighter-rouge">HEADER</code> method may also be specified
+to indicate the CAS final response such as <code class="language-plaintext highlighter-rouge">service</code> and <code class="language-plaintext highlighter-rouge">ticket</code>should be returned 
+in form of HTTP response headers.  It is up to the CAS server implementation to determine
+whether or not <code class="language-plaintext highlighter-rouge">POST</code> or <code class="language-plaintext highlighter-rouge">HEADER</code> responses are supported.</p>
+  </li>
+</ul>
+
+<p><a name="head2.1.2"></a></p>
+
+<h3 id="212-url-examples-of-login"><strong>2.1.2. URL examples of /login</strong></h3>
+
+<p>Simple login example:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/login?service=http%3A%2F%2Fwww.example.org%2Fservice</code></p>
+
+<p>Don’t prompt for username/password:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/login?service=http%3A%2F%2Fwww.example.org%2Fservice&amp;gateway=true</code></p>
+
+<p>Always prompt for username/password:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/login?service=http%3A%2F%2Fwww.example.org%2Fservice&amp;renew=true</code></p>
+
+<p>Use POST responses instead of redirects:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/login?method=POST&amp;service=http%3A%2F%2Fwww.example.org%2Fservice</code></p>
+
+<p><a name="head2.1.3"></a></p>
+
+<h3 id="213-response-for-usernamepassword-authentication"><strong>2.1.3. response for username/password authentication</strong></h3>
+
+<p>When <code class="language-plaintext highlighter-rouge">/login</code> behaves as a credential requestor, the response will vary depending
+on the type of credentials it is requesting. In most cases, CAS will respond by
+displaying a login screen requesting a username and password. This page MUST
+include a form with the parameters, “username”, “password”, and “lt”. The form
+MAY also include the parameter “warn”. If <code class="language-plaintext highlighter-rouge">service</code> was specified to <code class="language-plaintext highlighter-rouge">/login</code>,
+<code class="language-plaintext highlighter-rouge">service</code> MUST also be a parameter of the form, containing the value originally
+passed to <code class="language-plaintext highlighter-rouge">/login</code>. These parameters are discussed in detail in Section <a href="#head2.2.1">2.2.1</a>. The
+form MUST be submitted through the HTTP POST method to <code class="language-plaintext highlighter-rouge">/login</code> which will then
+act as a credential acceptor, discussed in Section <a href="#head2.2">2.2</a>.</p>
+
+<p><a name="head2.1.4"></a></p>
+
+<h3 id="214-response-for-trust-authentication"><strong>2.1.4. response for trust authentication</strong></h3>
+
+<p>Trust authentication accommodates consideration of arbitrary aspects of the
+request as a basis for authentication. The appropriate user experience for trust
+authentication will be highly deployer-specific in consideration of local policy
+and of the logistics of the particular authentication mechanism implemented.</p>
+
+<p>When <code class="language-plaintext highlighter-rouge">/login</code> behaves as a credential requestor for trust authentication, its
+behavior will be determined by the type of credentials it will be receiving. If
+the credentials are valid, CAS MAY transparently redirect the user to the
+service. Alternately, CAS MAY display a warning that credentials were presented
+and allow the client to confirm that it wants to use those credentials. It is
+RECOMMENDED that CAS implementations allow the deployer to choose the preferred
+behavior. If the credentials are invalid or non-existent, it is RECOMMENDED that
+CAS displays to the client the reason why authentication failed, and possibly present
+the user with alternate means of authentication (e.g. username/password
+authentication).</p>
+
+<p><a name="head2.1.5"></a></p>
+
+<h3 id="215-response-for-single-sign-on-authentication"><strong>2.1.5. response for single sign-on authentication</strong></h3>
+
+<p>If the client has already established a single sign-on session with CAS, the
+client will have presented its HTTP session cookie to <code class="language-plaintext highlighter-rouge">/login</code> and behavior will
+be handled as in Section <a href="#head2.2.4">2.2.4</a>. However, if the <code class="language-plaintext highlighter-rouge">renew</code> parameter
+is set, the behavior will be handled as in Section <a href="#head2.1.3">2.1.3</a> or
+<a href="#head2.1.4">2.1.4</a>.</p>
+
+<p><a name="head2.2"></a></p>
+
+<h2 id="22-login-as-credential-acceptor"><strong>2.2. /login as credential acceptor</strong></h2>
+
+<p>When a set of accepted credentials are passed to <code class="language-plaintext highlighter-rouge">/login</code>, <code class="language-plaintext highlighter-rouge">/login</code> acts as a
+credential acceptor and its behavior is defined in this Section.</p>
+
+<p><a name="head2.2.1"></a></p>
+
+<h3 id="221-parameters-common-to-all-types-of-authentication"><strong>2.2.1. parameters common to all types of authentication</strong></h3>
+
+<p>The following HTTP request parameters MAY be passed to <code class="language-plaintext highlighter-rouge">/login</code> while it is acting
+as a credential acceptor. They are all case-sensitive and they all MUST be
+handled by <code class="language-plaintext highlighter-rouge">/login</code>.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">service</code> [OPTIONAL] - the URL of the application the client is trying to
+access. As a HTTP request parameter, this URL value MUST be URL-encoded as
+described in Section 2.2 of RFC 1738 [<a href="#4">4</a>]. CAS MUST redirect the
+client to this URL upon successful authentication. This is discussed in
+detail in Section <a href="#head2.2.4">2.2.4</a>. If the CAS Server operates in
+non-open mode (Service URLs allowed to use the CAS Server are registered
+within the CAS Server), the CAS Server MUST deny operation and print out
+a meaningful message if a non-authorized service URL is presented.</p>
+
+    <blockquote>
+      <p>Note: It is STRONGLY RECOMMENDED that all <code class="language-plaintext highlighter-rouge">service</code> urls be filtered via
+the service management tool, such that only authorized and known
+client applications would be able to use the CAS server.
+Leaving the service management tool open to allow lenient access to
+all applications will potentially increase the risk of service attacks
+and other security vulnerabilities. Furthermore, it is RECOMMENDED that
+only secure protocols such as <code class="language-plaintext highlighter-rouge">https</code> be allowed for client applications
+for further strengthen the authenticating client.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">warn</code> [OPTIONAL] - if this parameter is set, single sign-on MUST NOT be
+transparent. The client MUST be prompted before being authenticated to
+another service.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">method</code> [OPTIONAL] - The <code class="language-plaintext highlighter-rouge">method</code> to be used when sending responses. See
+section <a href="#head2.1.1">2.1.1</a> for details</p>
+  </li>
+</ul>
+
+<p><a name="head2.2.2"></a></p>
+
+<h3 id="222-parameters-for-usernamepassword-authentication"><strong>2.2.2. parameters for username/password authentication</strong></h3>
+
+<p>In addition to the OPTIONAL parameters specified in Section <a href="#head2.2.1">2.2.1</a>,
+the following HTTP request parameters MUST be passed to <code class="language-plaintext highlighter-rouge">/login</code> while it is
+acting as a credential acceptor for username/password authentication. They are
+all case-sensitive.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">username</code> [REQUIRED] - the username of the client that is trying to log in</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">password</code> [REQUIRED] - the password of the client that is trying to log in</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">lt</code> [OPTIONAL] - a login ticket. This is provided as part of the login form
+discussed in Section <a href="#head2.1.3">2.1.3</a>. The login ticket itself is discussed
+in Section <a href="#head3.5">3.5</a>.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">rememberMe</code> [OPTIONAL, CAS 3.0] - if this parameter is set, a Long-Term
+Ticket Granting Ticket might be created by the CAS server (referred to as
+Remember-Me support). It is subject to the CAS server configuration whether
+Long-Term Ticket Granting Tickets are supported or not.</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Note: When Long-Term Ticket Granting Tickets (Remember Me) are supported by
+  the CAS Server, security considerations MUST be taken into account. This for
+  example includes shared computer usage. On CAS client systems it might be
+  necessary to handle Remember-Me logins different. See Section
+  <a href="#head4.1">4.1</a> for details.</p>
+</blockquote>
+
+<p><a name="head2.2.3"></a></p>
+
+<h3 id="223-parameters-for-trust-authentication"><strong>2.2.3. parameters for trust authentication</strong></h3>
+
+<p>There are no REQUIRED HTTP request parameters for trust authentication. Trust
+authentication MAY be based on any aspect of the HTTP request.</p>
+
+<p><a name="head2.2.4"></a></p>
+
+<h3 id="224-response"><strong>2.2.4. response</strong></h3>
+
+<p>One of the following responses MUST be provided by <code class="language-plaintext highlighter-rouge">/login</code> when it is operating
+as a credential acceptor.</p>
+
+<ul>
+  <li>
+    <p>successful login: redirect the client to the URL specified by the <code class="language-plaintext highlighter-rouge">service</code>
+parameter in a manner that will not cause the client’s credentials to be
+forwarded to the <code class="language-plaintext highlighter-rouge">service</code>. This redirection MUST result in the client issuing
+a GET request to the <code class="language-plaintext highlighter-rouge">service</code>. The request MUST include a valid service
+ticket, passed as the HTTP request parameter, “ticket”. See <a href="#head_appdx_b">Appendix
+B</a> for more information. If <code class="language-plaintext highlighter-rouge">service</code> was not specified,
+CAS MUST display a message notifying the client that it has successfully
+initiated a single sign-on session.</p>
+  </li>
+  <li>
+    <p>failed login: return to <code class="language-plaintext highlighter-rouge">/login</code> as a credential requestor. It is RECOMMENDED
+in this case that the CAS server display an error message to the user
+describing why login failed (e.g. bad password, locked account, etc.),
+and if appropriate, provide an opportunity for the user to attempt to
+login again.</p>
+  </li>
+</ul>
+
+<p><a name="head2.3"></a></p>
+
+<h2 id="23-logout"><strong>2.3. /logout</strong></h2>
+
+<p><code class="language-plaintext highlighter-rouge">/logout</code> destroys a client’s single sign-on CAS session. The ticket-granting
+cookie (Section <a href="#head3.6">3.6</a>) is destroyed, and subsequent requests to <code class="language-plaintext highlighter-rouge">/login</code> will not
+obtain service tickets until the user again presents primary credentials (and
+thereby establishes a new single sign-on session).</p>
+
+<p><a name="head2.3.1"></a></p>
+
+<h3 id="231-parameters"><strong>2.3.1. parameters</strong></h3>
+
+<p>The following HTTP request parameter MAY be specified to <code class="language-plaintext highlighter-rouge">/logout</code>. It is case
+sensitive and SHOULD be handled by <code class="language-plaintext highlighter-rouge">/logout</code>.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">service</code> [OPTIONAL, CAS 3.0] - if a <code class="language-plaintext highlighter-rouge">service</code> parameter is specified, the
+browser might be automatically redirected to the URL specified by <code class="language-plaintext highlighter-rouge">service</code>
+after the logout was performed by the CAS server. If redirection by the
+CAS Server is actually performed depends on the server configuration.
+As a HTTP request parameter, the <code class="language-plaintext highlighter-rouge">service</code> value MUST be URL-encoded as
+described in Section 2.2 of RFC 1738 [<a href="#4">4</a>].</p>
+
+    <blockquote>
+      <p>Note: It is STRONGLY RECOMMENDED that all <code class="language-plaintext highlighter-rouge">service</code> urls be filtered via
+the service management tool, such that only authorized and known
+client applications would be able to use the CAS server.
+Leaving the service management tool open to allow lenient access to
+all applications will potentially increase the risk of service attacks
+and other security vulnerabilities. Furthermore, it is RECOMMENDED that
+only secure protocols such as <code class="language-plaintext highlighter-rouge">https</code> be allowed for client applications
+for further strengthen the authenticating client.</p>
+    </blockquote>
+
+    <blockquote>
+      <p>Note: The <code class="language-plaintext highlighter-rouge">url</code> parameter defined in the former CAS 2.0 specification is
+not a valid parameter in CAS 3.0 anymore. CAS Servers MUST ignore given
+<code class="language-plaintext highlighter-rouge">url</code> parameters.
+A CAS client MAY provide the <code class="language-plaintext highlighter-rouge">service</code> parameter as described above,
+as this ensures the parameter is validated against the registered service
+URLs when operating in non-open mode. See <a href="#head2.3.2">2.3.2</a> for details.</p>
+    </blockquote>
+  </li>
+</ul>
+
+<p><a name="head2.3.2"></a></p>
+
+<h3 id="232-response"><strong>2.3.2. response</strong></h3>
+
+<p>[CAS 1.0, CAS 2.0] <code class="language-plaintext highlighter-rouge">/logout</code> MUST display a page stating that the user has been
+logged out. If the “url” request parameter is implemented, <code class="language-plaintext highlighter-rouge">/logout</code> SHOULD also
+provide a link to the provided URL as described in Section <a href="#head2.3.1">2.3.1</a>.</p>
+
+<p>[CAS 3.0] <code class="language-plaintext highlighter-rouge">/logout</code> MUST display a page stating that the user has been logged out
+if no <code class="language-plaintext highlighter-rouge">service</code> parameter was provided. If a <code class="language-plaintext highlighter-rouge">service</code> request parameter with an
+encoded URL value is provided, the CAS server redirects to the given service URL
+after successful logout.</p>
+
+<blockquote>
+  <p>Note: When CAS Server operates in non-open mode (allowed Service URLs are
+  registered within the CAS Server), the CAS server MUST ensure that only
+  registered [service] parameter Service URLs are accepted for redirection.
+  The <code class="language-plaintext highlighter-rouge">url</code> parameter defined in the former CAS 2.0 specification is
+  not a valid parameter in CAS 3.0 anymore. CAS Servers MUST ignore given
+  <code class="language-plaintext highlighter-rouge">url</code> parameters.</p>
+</blockquote>
+
+<p><a name="head2.3.3"></a></p>
+
+<h3 id="233-single-logout"><strong>2.3.3 Single Logout</strong></h3>
+
+<p>The CAS Server MAY support Single Logout (SLO). SLO means that the user gets
+logged out not only from the CAS Server, but also from all visited CAS client
+applications. If SLO is supported by the CAS Server, the CAS Server MUST send a
+HTTP POST request containing a logout XML document (see <a href="#head_appdx_c">Appendix
+C</a>) to all service URLs provided to CAS during this CAS session
+whenever a Ticket Granting Ticket is explicitly expired by the user (e.g. during logout).
+CAS Clients that do not support the SLO POST requests MUST ignore these requests.
+SLO requests MAY also be initiated by the CAS Server upon TGT idle timeout.</p>
+
+<p><a name="head2.3.3.1"></a></p>
+
+<h4 id="2331-server-behaviour"><strong>2.3.3.1 Server behaviour</strong></h4>
+
+<p>The CAS Server SHALL ignore all errors that might occur on a Single Logout POST
+request to CAS Client applications service URLs. This ensures that any errors
+while sending the POST request do not disturb CAS Server performance and
+availability (“fire and forget”).</p>
+
+<p><a name="head2.3.3.2"></a></p>
+
+<h4 id="2332-client-behaviour"><strong>2.3.3.2 Client behaviour</strong></h4>
+
+<p>Handling the logout POST request data is up to the CAS client. It is RECOMMENDED
+to logout the user from the application identified by the service ticket id sent
+in the SLO POST request.
+If the client supports SLO POST request handling, the client SHALL return a HTTP success
+status code.</p>
+
+<p><a name="head2.4"></a></p>
+
+<h2 id="24-validate-cas-10"><strong>2.4. /validate [CAS 1.0]</strong></h2>
+
+<p><code class="language-plaintext highlighter-rouge">/validate</code> checks the validity of a service ticket. <code class="language-plaintext highlighter-rouge">/validate</code> is part of the CAS
+1.0 protocol and thus does not handle proxy authentication. CAS MUST respond
+with a ticket validation failure response when a proxy ticket is passed to
+<code class="language-plaintext highlighter-rouge">/validate</code>.</p>
+
+<p><a name="head2.4.1"></a></p>
+
+<h3 id="241-parameters"><strong>2.4.1. parameters</strong></h3>
+
+<p>The following HTTP request parameters MAY be specified to <code class="language-plaintext highlighter-rouge">/validate</code>. They are
+case sensitive and MUST all be handled by <code class="language-plaintext highlighter-rouge">/validate</code>.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">service</code> [REQUIRED] - the identifier of the service for which the ticket was
+issued, as discussed in Section 2.2.1.
+As a HTTP request parameter, the <code class="language-plaintext highlighter-rouge">service</code> value MUST be URL-encoded as
+described in Section 2.2 of RFC 1738 [<a href="#4">4</a>].</p>
+
+    <blockquote>
+      <p>Note: It is STRONGLY RECOMMENDED that all <code class="language-plaintext highlighter-rouge">service</code> urls be filtered via
+the service management tool, such that only authorized and known
+client applications would be able to use the CAS server.
+Leaving the service management tool open to allow lenient access to
+all applications will potentially increase the risk of service attacks
+and other security vulnerabilities. Furthermore, it is RECOMMENDED that
+only secure protocols such as <code class="language-plaintext highlighter-rouge">https</code> be allowed for client applications
+for further strengthen the authenticating client.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ticket</code> [REQUIRED] - the service ticket issued by <code class="language-plaintext highlighter-rouge">/login</code>. Service tickets are
+described in Section 3.1.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">renew</code> [OPTIONAL] - if this parameter is set, ticket validation will only
+succeed if the service ticket was issued from the presentation of the user’s
+primary credentials. It will fail if the ticket was issued from a single
+sign-on session.</p>
+  </li>
+</ul>
+
+<p><a name="head2.4.2"></a></p>
+
+<h3 id="242-response"><strong>2.4.2. response</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">/validate</code> will return one of the following two responses:</p>
+
+<p>On ticket validation success:</p>
+
+<p>yes&lt;LF&gt;username&lt;LF&gt;</p>
+
+<p>On ticket validation failure:</p>
+
+<p>no&lt;LF&gt;</p>
+
+<p><a name="head2.4.3"></a></p>
+
+<h3 id="243-url-examples-of-validate"><strong>2.4.3. URL examples of /validate</strong></h3>
+
+<p>Simple validation attempt:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/validate?service=http%3A%2F%2Fwww.example.org%2Fservice&amp;ticket=ST-1856339-aA5Yuvrxzpv8Tau1cYQ7</code></p>
+
+<p>Ensure service ticket was issued by presentation of primary credentials:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/validate?service=http%3A%2F%2Fwww.example.org%2Fservice&amp;ticket=ST-1856339-aA5Yuvrxzpv8Tau1cYQ7&amp;renew=true</code></p>
+
+<p><a name="head2.5"></a></p>
+
+<h2 id="25-servicevalidate-cas-20"><strong>2.5. /serviceValidate [CAS 2.0]</strong></h2>
+
+<p><code class="language-plaintext highlighter-rouge">/serviceValidate</code> checks the validity of a service ticket and returns an XML-fragment response.
+<code class="language-plaintext highlighter-rouge">/serviceValidate</code> MUST also generate and issue proxy-granting tickets when requested.
+<code class="language-plaintext highlighter-rouge">/serviceValidate</code> MUST NOT return a successful authentication if it receives a proxy ticket.
+It is RECOMMENDED that if <code class="language-plaintext highlighter-rouge">/serviceValidate</code> receives a proxy ticket, the error message in the XML
+response SHOULD explain that validation failed because a proxy ticket was passed
+to <code class="language-plaintext highlighter-rouge">/serviceValidate</code>.</p>
+
+<p><a name="head2.5.1"></a></p>
+
+<h3 id="251-parameters"><strong>2.5.1. parameters</strong></h3>
+
+<p>The following HTTP request parameters MAY be specified to <code class="language-plaintext highlighter-rouge">/serviceValidate</code>. They
+are case sensitive and MUST all be handled by <code class="language-plaintext highlighter-rouge">/serviceValidate</code>.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">service</code> [REQUIRED] - the identifier of the service for which the ticket was
+issued, as discussed in Section <a href="#head2.2.1">2.2.1</a>.
+As a HTTP request parameter, the <code class="language-plaintext highlighter-rouge">service</code> value MUST be URL-encoded as
+described in Section 2.2 of RFC 1738 [<a href="#4">4</a>].</p>
+
+    <blockquote>
+      <p>Note: It is STRONGLY RECOMMENDED that all <code class="language-plaintext highlighter-rouge">service</code> urls be filtered via
+the service management tool, such that only authorized and known
+client applications would be able to use the CAS server.
+Leaving the service management tool open to allow lenient access to
+all applications will potentially increase the risk of service attacks
+and other security vulnerabilities. Furthermore, it is RECOMMENDED that
+only secure protocols such as <code class="language-plaintext highlighter-rouge">https</code> be allowed for client applications
+for further strengthen the authenticating client.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ticket</code> [REQUIRED] - the service ticket issued by <code class="language-plaintext highlighter-rouge">/login</code>. Service tickets are
+described in Section <a href="#head3.1">3.1</a>.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">pgtUrl</code> [OPTIONAL] - the URL of the proxy callback. Discussed in Section
+<a href="#head2.5.4">2.5.4</a>.
+As a HTTP request parameter, the “pgtUrl” value MUST be URL-encoded as
+described in Section 2.2 of RFC 1738 [<a href="#4">4</a>].</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">renew</code> [OPTIONAL] - if this parameter is set, ticket validation will only
+succeed if the service ticket was issued from the presentation of the user’s
+primary credentials. It will fail if the ticket was issued from a single
+sign-on session.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">format</code> [OPTIONAL] - if this parameter is set, ticket validation response
+MUST be produced based on the parameter value. Supported values are <code class="language-plaintext highlighter-rouge">XML</code>
+and <code class="language-plaintext highlighter-rouge">JSON</code>. If this parameter is not set, the default <code class="language-plaintext highlighter-rouge">XML</code> format will be used.
+If the parameter value is not supported by the CAS server, an error code
+MUST be returned as is described in section <a href="#head2.5.3">2.5.3</a>.</p>
+  </li>
+</ul>
+
+<p><a name="head2.5.2"></a></p>
+
+<h3 id="252-response"><strong>2.5.2. response</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">/serviceValidate</code> will return an XML-formatted CAS serviceResponse as described
+in the XML schema in <a href="#head_appdx_a">Appendix A</a>. Below are example responses:</p>
+
+<p><strong>On ticket validation success:</strong></p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;cas:serviceResponse</span> <span class="na">xmlns:cas=</span><span class="s">"http://www.yale.edu/tp/cas"</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;cas:authenticationSuccess&gt;</span>
+  <span class="nt">&lt;cas:user&gt;</span>username<span class="nt">&lt;/cas:user&gt;</span>
+  <span class="nt">&lt;cas:proxyGrantingTicket&gt;</span>PGTIOU-84678-8a9d...<span class="nt">&lt;/cas:proxyGrantingTicket&gt;</span>
+ <span class="nt">&lt;/cas:authenticationSuccess&gt;</span>
+<span class="nt">&lt;/cas:serviceResponse&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"serviceResponse"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"authenticationSuccess"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"user"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"username"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"proxyGrantingTicket"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"PGTIOU-84678-8a9d..."</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>On ticket validation failure:</strong></p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;cas:serviceResponse</span> <span class="na">xmlns:cas=</span><span class="s">"http://www.yale.edu/tp/cas"</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;cas:authenticationFailure</span> <span class="na">code=</span><span class="s">"INVALID_TICKET"</span><span class="nt">&gt;</span>
+    Ticket ST-1856339-aA5Yuvrxzpv8Tau1cYQ7 not recognized
+  <span class="nt">&lt;/cas:authenticationFailure&gt;</span>
+<span class="nt">&lt;/cas:serviceResponse&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"serviceResponse"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"authenticationFailure"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"INVALID_TICKET"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Ticket ST-1856339-aA5Yuvrxzpv8Tau1cYQ7 not recognized"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>For proxy responses, see section <a href="#head2.6.2">2.6.2</a>.</p>
+
+<p><a name="head2.5.3"></a></p>
+
+<h3 id="253-error-codes"><strong>2.5.3. error codes</strong></h3>
+
+<p>The following values MAY be used as the “code” attribute of authentication
+failure responses. The following is the minimum set of error codes that all CAS
+servers MUST implement. Implementations MAY include others.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">INVALID_REQUEST</code> - not all of the required request parameters were present</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">INVALID_TICKET_SPEC</code> - failure to meet the requirements of validation specification</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">UNAUTHORIZED_SERVICE_PROXY</code> - the service is not authorized to perform proxy authentication</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">INVALID_PROXY_CALLBACK</code> - The proxy callback specified is invalid. The credentials specified
+for proxy authentication do not meet the security requirements</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">INVALID_TICKET</code> - the ticket provided was not valid, or the ticket did not
+come from an initial login and <code class="language-plaintext highlighter-rouge">renew</code> was set on validation. The body of
+the <code class="language-plaintext highlighter-rouge">&lt;cas:authenticationFailure&gt;</code> block of the XML response SHOULD describe
+the exact details.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">INVALID_SERVICE</code> - the ticket provided was valid, but the service specified
+did not match the service associated with the ticket. CAS MUST invalidate
+the ticket and disallow future validation of that same ticket.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">INTERNAL_ERROR</code> - an internal error occurred during ticket validation</p>
+  </li>
+</ul>
+
+<p>For all error codes, it is RECOMMENDED that CAS provide a more detailed message
+as the body of the <code class="language-plaintext highlighter-rouge">&lt;cas:authenticationFailure&gt;</code> block of the XML response.</p>
+
+<p><a name="head2.5.4"></a></p>
+
+<h3 id="254-proxy-callback"><strong>2.5.4. proxy callback</strong></h3>
+
+<p>If a service wishes to proxy a client’s authentication to a back-end service, it
+must acquire a proxy-granting ticket (PGT). Acquisition of this ticket is handled
+through a proxy callback URL. This URL will uniquely and securely identify the
+service that is proxying the client’s authentication. The back-end service can
+then decide whether or not to accept the credentials based on the proxying
+service identifying callback URL.</p>
+
+<p>The proxy callback mechanism works as follows:</p>
+
+<ol>
+  <li>
+    <p>The service that is requesting a proxy-granting ticket (PGT) specifies upon
+initial service ticket or proxy ticket validation the HTTP request parameter
+“pgtUrl” to <code class="language-plaintext highlighter-rouge">/serviceValidate</code> (or <code class="language-plaintext highlighter-rouge">/proxyValidate</code>). This is a callback URL of
+the service to which CAS will connect to verify the service’s identity. This
+URL MUST be HTTPS and CAS MUST evaluate the endpoint to establish peer trust.
+Building trust at a minimum involves utilizing PKIX and employing container trust to
+validate the signature, chain and the expiration window of the certificate of the
+callback url. The generation of the proxy-granting-ticket or the corresponding
+proxy granting ticket IOU may fail due to the proxy callback url failing to meet the minimum
+security requirements such as failure to establishing trust between peers or unresponsiveness
+of the endpoint, etc. In case of failure, no proxy-granting ticket will be issued and the CAS
+service response as described in Section <a href="#head2.5.2">2.5.2</a> MUST NOT contain a
+<code class="language-plaintext highlighter-rouge">&lt;proxyGrantingTicket&gt;</code> block. At this point, the issuance of a
+proxy-granting ticket is halted and service ticket validation will
+fail. Otherwise, the process will proceed normally to step 2.</p>
+  </li>
+  <li>
+    <p>CAS uses an HTTP GET request to pass the HTTP request parameters <code class="language-plaintext highlighter-rouge">pgtId</code> and
+<code class="language-plaintext highlighter-rouge">pgtIou</code> to the pgtUrl endpoint. These entities are discussed in Sections <a href="#head3.3">3.3</a> and
+<a href="#head3.4">3.4</a>, respectively. If the proxy callback url specifies any parameters, those
+MUST be preserved. CAS MUST also ensure that the endpoint is reachable by verifying
+the response HTTP status code from the GET request, as detailed in step #3. If the
+proxy service fails to authenticate or the endpoint responds with an unacceptable status
+code, proxy authentication MUST fail and CAS MUST respond with the appropriate error code
+as is described in section <a href="#head2.5.3">2.5.3</a>.</p>
+  </li>
+  <li>
+    <p>If the HTTP GET returns an HTTP status code of 200 (OK), CAS MUST respond to
+the <code class="language-plaintext highlighter-rouge">/serviceValidate</code> (or <code class="language-plaintext highlighter-rouge">/proxyValidate</code>) request with a service response
+(Section <a href="#head2.5.2">2.5.2</a>) containing the proxy-granting ticket IOU (Section <a href="#head3.4">3.4</a>)
+within the <code class="language-plaintext highlighter-rouge">&lt;cas:proxyGrantingTicket&gt;</code> block. If the HTTP GET returns any
+other status code, except HTTP 3xx redirects, CAS MUST respond to the
+<code class="language-plaintext highlighter-rouge">/serviceValidate</code> (or <code class="language-plaintext highlighter-rouge">/proxyValidate</code>) request with a service response that
+MUST NOT contain a <code class="language-plaintext highlighter-rouge">&lt;cas:proxyGrantingTicket&gt;</code> block. CAS MAY follow any HTTP
+redirects issued by the <code class="language-plaintext highlighter-rouge">pgtUrl</code>. However, the identifying callback URL
+provided upon validation in the <code class="language-plaintext highlighter-rouge">&lt;proxy&gt;</code> block MUST be the same URL that was
+initially passed to <code class="language-plaintext highlighter-rouge">/serviceValidate</code> (or <code class="language-plaintext highlighter-rouge">/proxyValidate</code>) as the <code class="language-plaintext highlighter-rouge">pgtUrl</code>
+parameter.</p>
+  </li>
+  <li>
+    <p>The service, having received a proxy-granting ticket IOU in the CAS
+response, and both a proxy-granting ticket and a proxy-granting ticket IOU
+from the proxy callback, will use the proxy-granting ticket IOU to correlate
+the proxy-granting ticket with the validation response. The service will
+then use the proxy-granting ticket for the acquisition of proxy tickets as
+described in Section <a href="#head2.7">2.7</a>.</p>
+  </li>
+</ol>
+
+<p><a name="head2.5.5"></a></p>
+
+<h3 id="255-attributes-cas-30"><strong>2.5.5. attributes [CAS 3.0]</strong></h3>
+
+<p>[CAS 3.0] The response document MAY include an optional <cas:attributes>
+element for additional authentication and/or user attributes. See
+[Appendix A](&lt;#head_appdx_a&gt;) for details.</cas:attributes></p>
+
+<p><a name="head2.5.6"></a></p>
+
+<h3 id="256-url-examples-of-servicevalidate"><strong>2.5.6. URL examples of /serviceValidate</strong></h3>
+
+<p>Simple validation attempt:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/serviceValidate?service=http%3A%2F%2Fwww.example.org%2Fservice&amp;ticket=ST-1856339-aA5Yuvrxzpv8Tau1cYQ7</code></p>
+
+<p>Ensure service ticket was issued by presentation of primary credentials:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/serviceValidate?service=http%3A%2F%2Fwww.example.org%2Fservice&amp;ticket=ST-1856339-aA5Yuvrxzpv8Tau1cYQ7&amp;renew=true
+</code></p>
+
+<p>Pass in a callback URL for proxying:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://cas.example.org/cas/serviceValidate?service=http%3A%2F%2Fwww.example.org%2Fservice&amp;ticket=ST-1856339-aA5Yuvrxzpv8Tau1cYQ7&amp;pgtUrl=https://www.example.org%2Fservice%2FproxyCallback</code></p>
+
+<p><a name="head2.5.7"></a></p>
+
+<h3 id="257-example-response-with-custom-attributes"><strong>2.5.7 Example response with custom attributes</strong></h3>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre>  <span class="nt">&lt;cas:serviceResponse</span> <span class="na">xmlns:cas=</span><span class="s">"http://www.yale.edu/tp/cas"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cas:authenticationSuccess&gt;</span>
+      <span class="nt">&lt;cas:user&gt;</span>username<span class="nt">&lt;/cas:user&gt;</span>
+      <span class="nt">&lt;cas:attributes&gt;</span>
+        <span class="nt">&lt;cas:firstname&gt;</span>John<span class="nt">&lt;/cas:firstname&gt;</span>
+        <span class="nt">&lt;cas:lastname&gt;</span>Doe<span class="nt">&lt;/cas:lastname&gt;</span>
+        <span class="nt">&lt;cas:title&gt;</span>Mr.<span class="nt">&lt;/cas:title&gt;</span>
+        <span class="nt">&lt;cas:email&gt;</span>jdoe@example.org<span class="nt">&lt;/cas:email&gt;</span>
+        <span class="nt">&lt;cas:affiliation&gt;</span>staff<span class="nt">&lt;/cas:affiliation&gt;</span>
+        <span class="nt">&lt;cas:affiliation&gt;</span>faculty<span class="nt">&lt;/cas:affiliation&gt;</span>
+      <span class="nt">&lt;/cas:attributes&gt;</span>
+      <span class="nt">&lt;cas:proxyGrantingTicket&gt;</span>PGTIOU-84678-8a9d...<span class="nt">&lt;/cas:proxyGrantingTicket&gt;</span>
+    <span class="nt">&lt;/cas:authenticationSuccess&gt;</span>
+  <span class="nt">&lt;/cas:serviceResponse&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"serviceResponse"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"authenticationSuccess"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"user"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"username"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"proxyGrantingTicket"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"PGTIOU-84678-8a9d..."</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"proxies"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"https://proxy1/pgtUrl"</span><span class="p">,</span><span class="w"> </span><span class="s2">"https://proxy2/pgtUrl"</span><span class="w"> </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"attributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"firstName"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"affiliation"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"staff"</span><span class="p">,</span><span class="w"> </span><span class="s2">"faculty"</span><span class="w"> </span><span class="p">],</span><span class="w">
+        </span><span class="nl">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Mr."</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"email"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"jdoe@example.orgmailto:jdoe@example.org"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"lastname"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><a name="head2.6"></a></p>
+
+<h2 id="26-proxyvalidate-cas-20"><strong>2.6. /proxyValidate [CAS 2.0]</strong></h2>
+
+<p><code class="language-plaintext highlighter-rouge">/proxyValidate</code> MUST perform the same validation tasks as <code class="language-plaintext highlighter-rouge">/serviceValidate</code> and
+additionally validate proxy tickets. <code class="language-plaintext highlighter-rouge">/proxyValidate</code> MUST be capable of
+validating both service tickets and proxy tickets. See Section
+<a href="#head2.5.4">2.5.4</a> for details.</p>
+
+<p><a name="head2.6.1"></a></p>
+
+<h3 id="261-parameters"><strong>2.6.1. parameters</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">/proxyValidate</code> has the same parameter requirements as <code class="language-plaintext highlighter-rouge">/serviceValidate</code>. See
+Section <a href="#head2.5.1">2.5.1</a>.</p>
+
+<p><a name="head2.6.2"></a></p>
+
+<h3 id="262-response"><strong>2.6.2. response</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">/proxyValidate</code> will return an XML-formatted CAS serviceResponse as described in
+the XML schema in <a href="#head_appdx_a">Appendix A</a>. Below are example responses:</p>
+
+<p>Response on ticket validation success:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>  <span class="nt">&lt;cas:serviceResponse</span> <span class="na">xmlns:cas=</span><span class="s">"http://www.yale.edu/tp/cas"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cas:authenticationSuccess&gt;</span>
+      <span class="nt">&lt;cas:user&gt;</span>username<span class="nt">&lt;/cas:user&gt;</span>
+      <span class="nt">&lt;cas:proxyGrantingTicket&gt;</span>PGTIOU-84678-8a9d...<span class="nt">&lt;/cas:proxyGrantingTicket&gt;</span>
+      <span class="nt">&lt;cas:proxies&gt;</span>
+        <span class="nt">&lt;cas:proxy&gt;</span>https://proxy2/pgtUrl<span class="nt">&lt;/cas:proxy&gt;</span>
+        <span class="nt">&lt;cas:proxy&gt;</span>https://proxy1/pgtUrl<span class="nt">&lt;/cas:proxy&gt;</span>
+      <span class="nt">&lt;/cas:proxies&gt;</span>
+    <span class="nt">&lt;/cas:authenticationSuccess&gt;</span>
+  <span class="nt">&lt;/cas:serviceResponse&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"serviceResponse"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"authenticationSuccess"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"user"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"username"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"proxyGrantingTicket"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"PGTIOU-84678-8a9d..."</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"proxies"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"https://proxy1/pgtUrl"</span><span class="p">,</span><span class="w"> </span><span class="s2">"https://proxy2/pgtUrl"</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<blockquote>
+  <p>Note: when authentication has proceeded through multiple proxies, the order
+  in which the proxies were traversed MUST be reflected in the <cas:proxies>
+  block. The most recently-visited proxy MUST be the first proxy listed, and
+  all the other proxies MUST be shifted down as new proxies are added. In the
+  above example, the service identified by &lt;https://proxy1/pgtUrl&gt; was
+  visited first, and that service proxied authentication to the service
+  identified by &lt;https://proxy2/pgtUrl&gt;.</cas:proxies></p>
+</blockquote>
+
+<p>Response on ticket validation failure:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>  <span class="nt">&lt;cas:serviceResponse</span> <span class="na">xmlns:cas=</span><span class="s">'http://www.yale.edu/tp/cas'</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;cas:authenticationFailure</span> <span class="na">code=</span><span class="s">"INVALID_TICKET"</span><span class="nt">&gt;</span>
+         ticket PT-1856376-1HMgO86Z2ZKeByc5XdYD not recognized
+      <span class="nt">&lt;/cas:authenticationFailure&gt;</span>
+  <span class="nt">&lt;/cas:serviceResponse&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"serviceResponse"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"authenticationFailure"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"INVALID_TICKET"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Ticket PT-1856339-aA5Yuvrxzpv8Tau1cYQ7 not recognized"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><a name="head2.6.3"></a></p>
+
+<h3 id="263-error-codes"><strong>2.6.3 error codes</strong></h3>
+
+<p>See section <a href="#head2.5.3">2.5.3</a></p>
+
+<p><a name="head2.6.4"></a></p>
+
+<h3 id="264-url-examples-of-proxyvalidate"><strong>2.6.4 URL examples of /proxyValidate</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">/proxyValidate</code> accepts the same parameters as <code class="language-plaintext highlighter-rouge">/serviceValidate</code>. See Section
+<a href="#head2.5.5">2.5.5</a> for use examples, substituting “proxyValidate” for
+“serviceValidate”.</p>
+
+<p><a name="head2.7"></a></p>
+
+<h2 id="27-proxy-cas-20"><strong>2.7. /proxy [CAS 2.0]</strong></h2>
+
+<p><code class="language-plaintext highlighter-rouge">/proxy</code> provides proxy tickets to services that have acquired proxy-granting
+tickets and will be proxying authentication to back-end services.</p>
+
+<p><a name="head2.7.1"></a></p>
+
+<h3 id="271-parameters"><strong>2.7.1. parameters</strong></h3>
+
+<p>The following HTTP request parameters MUST be specified to <code class="language-plaintext highlighter-rouge">/proxy</code>. They are both
+case-sensitive.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">pgt</code> [REQUIRED] - the proxy-granting ticket acquired by the service during
+service ticket or proxy ticket validation.</li>
+  <li><code class="language-plaintext highlighter-rouge">targetService</code> [REQUIRED] - the service identifier of the back-end service.
+Note that not all back-end services are web services so this service identifier
+will not always be an URL. However, the service identifier specified here
+MUST match the <code class="language-plaintext highlighter-rouge">service</code> parameter specified to <code class="language-plaintext highlighter-rouge">/proxyValidate</code> upon validation
+of the proxy ticket.</li>
+</ul>
+
+<p><a name="head2.7.2"></a></p>
+
+<h3 id="272-response"><strong>2.7.2. response</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">/proxy</code> will return an XML-formatted CAS serviceResponse document as described in the XML
+schema in <a href="#head_appdx_a">Appendix A</a>. Below are example responses:</p>
+
+<p>Response on request success:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>  <span class="nt">&lt;cas:serviceResponse</span> <span class="na">xmlns:cas=</span><span class="s">"http://www.yale.edu/tp/cas"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;cas:proxySuccess&gt;</span>
+          <span class="nt">&lt;cas:proxyTicket&gt;</span>PT-1856392-b98xZrQN4p90ASrw96c8<span class="nt">&lt;/cas:proxyTicket&gt;</span>
+      <span class="nt">&lt;/cas:proxySuccess&gt;</span>
+  <span class="nt">&lt;/cas:serviceResponse&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Response on request failure:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;cas:serviceResponse</span> <span class="na">xmlns:cas=</span><span class="s">"http://www.yale.edu/tp/cas"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;cas:proxyFailure</span> <span class="na">code=</span><span class="s">"INVALID_REQUEST"</span><span class="nt">&gt;</span>
+          'pgt' and 'targetService' parameters are both required
+      <span class="nt">&lt;/cas:proxyFailure&gt;</span>
+  <span class="nt">&lt;/cas:serviceResponse&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"serviceResponse"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"authenticationFailure"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"INVALID_REQUEST"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"'pgt' and 'targetService' parameters are both required"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><a name="head2.7.3"></a></p>
+
+<h3 id="273-error-codes"><strong>2.7.3. error codes</strong></h3>
+
+<p>The following values MAY be used as the <code class="language-plaintext highlighter-rouge">code</code> attribute of authentication
+failure responses. The following is the minimum set of error codes that all CAS
+servers MUST implement. Implementations MAY include others.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">INVALID_REQUEST</code> - not all of the required request parameters were present</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">UNAUTHORIZED_SERVICE</code> - service is unauthorized to perform the proxy request</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">INTERNAL_ERROR</code> - an internal error occurred during ticket validation</p>
+  </li>
+</ul>
+
+<p>For all error codes, it is RECOMMENDED that CAS provide a more detailed message
+as the body of the <cas:authenticationFailure> block of the XML response.</cas:authenticationFailure></p>
+
+<p><a name="head2.7.4"></a></p>
+
+<h3 id="274-url-example-of-proxy"><strong>2.7.4. URL example of /proxy</strong></h3>
+
+<p>Simple proxy request:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://server/cas/proxy?targetService=http%3A%2F%2Fwww.service.com&amp;pgt=PGT-490649-W81Y9Sa2vTM7hda7xNTkezTbVge4CUsybAr</code></p>
+
+<p><a name="head3"></a></p>
+
+<h3 id="274-service-ticket-lifecycle-implications"><strong>2.7.4 Service Ticket Lifecycle implications</strong></h3>
+<p>The CAS Server implementation MAY update the parent Service Ticket (ST) lifetime upon proxy ticket generation.</p>
+
+<h2 id="28-p3servicevalidate-cas-30"><strong>2.8. /p3/serviceValidate [CAS 3.0]</strong></h2>
+
+<p><code class="language-plaintext highlighter-rouge">/p3/serviceValidate</code> MUST perform the same validation tasks as <code class="language-plaintext highlighter-rouge">/serviceValidate</code> and
+additionally return user attributes in the CAS response. See
+Section <a href="#head2.5">2.5</a> and Section <a href="#head2.5.7">2.5.7</a> for details.</p>
+
+<p><a name="head2.8.1"></a></p>
+
+<h3 id="281-parameters"><strong>2.8.1. parameters</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">/p3/serviceValidate</code> has the same parameter requirements as <code class="language-plaintext highlighter-rouge">/serviceValidate</code>. See
+Section <a href="#head2.5.1">2.5.1</a>.</p>
+
+<h2 id="29-p3proxyvalidate-cas-30"><strong>2.9. /p3/proxyValidate [CAS 3.0]</strong></h2>
+
+<p><code class="language-plaintext highlighter-rouge">/p3/proxyValidate</code> MUST perform the same validation tasks as <code class="language-plaintext highlighter-rouge">/p3/serviceValidate</code> and
+additionally validate proxy tickets. See Section <a href="#head2.5">2.8</a>.</p>
+
+<p><a name="head2.8.1"></a></p>
+
+<h3 id="291-parameters"><strong>2.9.1. parameters</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">/p3/proxyValidate</code> has the same parameter requirements as <code class="language-plaintext highlighter-rouge">/p3/serviceValidate</code>. See
+Section <a href="#head2.8.1">2.8.1</a>.</p>
+
+<h1 id="3-cas-entities"><strong>3. CAS Entities</strong></h1>
+
+<p><a name="head3.1"></a></p>
+
+<h2 id="31-service-ticket"><strong>3.1. service ticket</strong></h2>
+
+<p>A service ticket is an opaque string that is used by the client as a credential
+to obtain access to a service. The service ticket is obtained from CAS upon a
+client’s presentation of credentials and a service identifier to <code class="language-plaintext highlighter-rouge">/login</code> as
+described in Section <a href="#head2.2">2.2</a>.</p>
+
+<p><a name="head3.1.1"></a></p>
+
+<h3 id="311-service-ticket-properties"><strong>3.1.1. service ticket properties</strong></h3>
+
+<ul>
+  <li>
+    <p>Service tickets are only valid for the service identifier that was specified
+to <code class="language-plaintext highlighter-rouge">/login</code> when they were generated. The service identifier SHOULD NOT be
+part of the service ticket.</p>
+  </li>
+  <li>
+    <p>Service tickets MUST only be valid for one ticket validation attempt.
+Whether or not validation was successful, CAS MUST then invalidate the ticket,
+causing all future validation attempts of that same ticket to fail.</p>
+  </li>
+  <li>
+    <p>CAS SHOULD expire unvalidated service tickets in a reasonable period of time
+after they are issued. If a service presents an expired service ticket for
+validation, CAS MUST respond with a validation failure response.</p>
+  </li>
+  <li>
+    <p>It is RECOMMENDED that the validation response include a descriptive message
+explaining why validation failed.</p>
+  </li>
+  <li>
+    <p>It is RECOMMENDED that the duration a service ticket is valid before it expires
+be no longer than five minutes. Local security and CAS usage considerations
+MAY determine the optimal lifespan of unvalidated service tickets.</p>
+  </li>
+  <li>Service tickets MUST contain adequate secure random data so that a ticket is
+not guessable.</li>
+  <li>
+    <p>Service tickets MUST begin with the characters, <code class="language-plaintext highlighter-rouge">ST-</code>.</p>
+  </li>
+  <li>Services MUST be able to accept service tickets of up to 32 characters in length.
+It is RECOMMENDED that services support service tickets of up to 256 characters in
+length.</li>
+</ul>
+
+<p><a name="head3.2"></a></p>
+
+<h2 id="32-proxy-ticket"><strong>3.2. proxy ticket</strong></h2>
+
+<p>A proxy ticket is an opaque string that a service uses as a credential to obtain
+access to a back-end service on behalf of a client. Proxy tickets are obtained
+from CAS upon a service’s presentation of a valid proxy-granting ticket (Section
+<a href="#head3.3">3.3</a>), and a service identifier for the back-end service to which
+it is connecting.</p>
+
+<p><a name="head3.2.1"></a></p>
+
+<h3 id="321-proxy-ticket-properties"><strong>3.2.1. proxy ticket properties</strong></h3>
+
+<ul>
+  <li>
+    <p>Proxy tickets are only valid for the service identifier specified to <code class="language-plaintext highlighter-rouge">/proxy</code>
+when they were generated. The service identifier SHOULD NOT be part of the
+proxy ticket.</p>
+  </li>
+  <li>
+    <p>Proxy tickets MUST only be valid for one ticket validation attempt.
+Whether or not validation was successful, CAS MUST then invalidate
+the ticket, causing all future validation attempts of that same ticket to
+fail.</p>
+  </li>
+  <li>
+    <p>CAS SHOULD expire unvalidated proxy tickets in a reasonable period
+of time after they are issued. If a service presents for validation an
+expired proxy ticket, CAS MUST respond with a validation failure response.</p>
+  </li>
+  <li>
+    <p>It is RECOMMENDED that the validation response include a descriptive message
+explaining why validation failed.</p>
+  </li>
+  <li>
+    <p>It is RECOMMENDED that the duration a proxy ticket is valid before it expires
+be no longer than five minutes. Local security and CAS usage considerations
+MAY determine the optimal lifespan of unvalidated proxy tickets.</p>
+  </li>
+  <li>
+    <p>Proxy tickets MUST contain adequate secure random data so that a ticket is
+not guessable.</p>
+  </li>
+  <li>
+    <p>Proxy tickets SHOULD begin with the characters, <code class="language-plaintext highlighter-rouge">PT-</code>.</p>
+  </li>
+  <li>
+    <p>Back-end services MUST be able to accept proxy tickets of up to 32 characters
+in length.</p>
+  </li>
+  <li>
+    <p>It is RECOMMENDED that back-end services support proxy tickets of up to 256
+characters in length.</p>
+  </li>
+</ul>
+
+<p><a name="head3.3"></a></p>
+
+<h2 id="33-proxy-granting-ticket"><strong>3.3. proxy-granting ticket</strong></h2>
+
+<p>A proxy-granting ticket (PGT) is an opaque string that is used by a service to obtain
+proxy tickets for obtaining access to a back-end service on behalf of a client.
+Proxy-granting tickets are obtained from CAS upon validation of a service ticket
+or a proxy ticket. Proxy-granting ticket issuance is described fully in Section
+<a href="#head2.5.4">2.5.4</a>.</p>
+
+<p><a name="head3.3.1"></a></p>
+
+<h3 id="331-proxy-granting-ticket-properties"><strong>3.3.1. proxy-granting ticket properties</strong></h3>
+
+<ul>
+  <li>
+    <p>Proxy-granting tickets MAY be used by services to obtain multiple proxy
+tickets. Proxy-granting tickets are not one-time-use tickets.</p>
+  </li>
+  <li>
+    <p>Proxy-granting tickets MUST expire when the client whose authentication is
+being proxied logs out of CAS.</p>
+  </li>
+  <li>
+    <p>Proxy-granting tickets MUST contain adequate secure random data so that a
+ticket is not guessable in a reasonable period of time through brute-force
+attacks.</p>
+  </li>
+  <li>
+    <p>Proxy-granting tickets SHOULD begin with the characters <code class="language-plaintext highlighter-rouge">PGT-</code>.</p>
+  </li>
+  <li>
+    <p>Services MUST be able to handle proxy-granting tickets of up to 64
+characters in length.</p>
+  </li>
+  <li>
+    <p>It is RECOMMENDED that services support proxy-granting tickets of up to
+256 characters in length.</p>
+  </li>
+</ul>
+
+<p><a name="head3.4"></a></p>
+
+<h2 id="34-proxy-granting-ticket-iou"><strong>3.4. proxy-granting ticket IOU</strong></h2>
+
+<p>A proxy-granting ticket IOU is an opaque string that is placed in the response
+provided by <code class="language-plaintext highlighter-rouge">/serviceValidate</code> and <code class="language-plaintext highlighter-rouge">/proxyValidate</code> used to correlate a service
+ticket or proxy ticket validation with a particular proxy-granting ticket. See
+Section <a href="#head2.5.4">2.5.4</a> for a full description of this process.</p>
+
+<p><a name="head3.4.1"></a></p>
+
+<h3 id="341-proxy-granting-ticket-iou-properties"><strong>3.4.1. proxy-granting ticket IOU properties</strong></h3>
+
+<ul>
+  <li>
+    <p>Proxy-granting ticket IOUs SHOULD NOT contain any reference to their
+associated proxy-granting tickets. Given a particular PGTIOU, it MUST NOT be
+possible to derive its corresponding PGT through algorithmic methods in a
+reasonable period of time.</p>
+  </li>
+  <li>
+    <p>Proxy-granting ticket IOUs MUST contain adequate secure random data so that
+a ticket is not guessable in a reasonable period of time through brute-force
+attacks.</p>
+  </li>
+  <li>
+    <p>Proxy-granting ticket IOUs SHOULD begin with the characters, <code class="language-plaintext highlighter-rouge">PGTIOU-</code>.</p>
+  </li>
+  <li>
+    <p>Services MUST be able to handle PGTIOUs of up to 64 characters in length. It
+is RECOMMENDED that services support PGTIOUs of up to 256 characters in
+length.</p>
+  </li>
+</ul>
+
+<p><a name="head3.5"></a></p>
+
+<h2 id="35-login-ticket"><strong>3.5. login ticket</strong></h2>
+
+<p>A login ticket is an <em>optional</em> string that MAY be provided by <code class="language-plaintext highlighter-rouge">/login</code> as a credential requester
+and passed to <code class="language-plaintext highlighter-rouge">/login</code> as a credential acceptor for username/password
+authentication. Its purpose is to prevent the replaying of credentials due to
+bugs in web browsers.</p>
+
+<p><a name="head3.5.1"></a></p>
+
+<h3 id="351-login-ticket-properties"><strong>3.5.1. login ticket properties</strong></h3>
+
+<ul>
+  <li>
+    <p>Login tickets issued by <code class="language-plaintext highlighter-rouge">/login</code> MUST be probabilistically unique.</p>
+  </li>
+  <li>
+    <p>Login tickets MUST only be valid for one authentication attempt. Whether or
+not authentication was successful, CAS MUST then invalidate the login
+ticket, causing all future authentication attempts with that instance of
+that login ticket to fail.</p>
+  </li>
+  <li>
+    <p>Login tickets SHOULD begin with the characters <code class="language-plaintext highlighter-rouge">LT-</code>.</p>
+  </li>
+</ul>
+
+<p><a name="head3.6"></a></p>
+
+<h2 id="36-ticket-granting-cookie"><strong>3.6. ticket-granting cookie</strong></h2>
+
+<p>A ticket-granting cookie is an HTTP cookie[<a href="#5">5</a>] set by CAS upon the
+establishment of a single sign-on session. This cookie maintains login state for
+the client, and while it is valid, the client can present it to CAS in lieu of
+primary credentials. Services can opt out of single sign-on through the <code class="language-plaintext highlighter-rouge">renew</code>
+parameter described in Sections <a href="#head2.1.1">2.1.1</a>, <a href="#head2.4.1">2.4.1</a>,
+and <a href="#head2.5.1">2.5.1</a>.</p>
+
+<p><a name="head3.6.1"></a></p>
+
+<h3 id="361-ticket-granting-cookie-properties"><strong>3.6.1. ticket-granting cookie properties</strong></h3>
+
+<ul>
+  <li>
+    <p>A ticket-granting cookie SHALL be set to expire at the end of the client’s
+browser session if Long-Term support is not active (<a href="#head4.1.1">4.1.1</a>)
+for the corresponding TGT.</p>
+  </li>
+  <li>
+    <p>CAS SHALL set the cookie path to be as restrictive as possible. For example,
+if the CAS server is set up under the path /cas, the cookie path SHALL be set
+to /cas.</p>
+  </li>
+  <li>
+    <p>The value of ticket-granting cookies SHALL contain adequate secure random data
+so that a ticket-granting cookie is not guessable in a reasonable period of time.</p>
+  </li>
+  <li>
+    <p>The name of ticket-granting cookies SHOULD begin with the characters <code class="language-plaintext highlighter-rouge">TGC-</code>.</p>
+  </li>
+  <li>
+    <p>The value of ticket-granting cookies SHOULD follow the same rules as the ticket-granting
+ticket. Typically, the value of the ticket-granting cookies MAY contain the ticket-granting
+ticket itself as the representation of the authenticated single sign-on session.</p>
+  </li>
+</ul>
+
+<p><a name="head3.7"></a></p>
+
+<h2 id="37-ticket-and-ticket-granting-cookie-character-set"><strong>3.7. ticket and ticket-granting cookie character set</strong></h2>
+
+<p>In addition to the above requirements, all CAS tickets and the value of the
+ticket-granting cookie MUST contain only characters from the set <code class="language-plaintext highlighter-rouge">{A-Z, a-z, 0-9}</code>,
+and the hyphen character <code class="language-plaintext highlighter-rouge">-</code>.</p>
+
+<p><a name="head3.8"></a></p>
+
+<h2 id="38-ticket-granting-ticket"><strong>3.8. ticket-granting ticket</strong></h2>
+
+<p>A ticket-granting ticket (TGT) is an opaque string that is generated by the CAS
+server that is issued upon an successful authentication event upon <code class="language-plaintext highlighter-rouge">/login</code>.
+This ticket may be tied to the ticket-granting cookie which represents the
+state of the single sign-on session, with validity period and acts as the
+foundation and baseline for issuance of service tickets, proxy-granting
+tickets, and more.</p>
+
+<p><a name="head3.8.1"></a></p>
+
+<h3 id="381-ticket-granting-ticket-properties"><strong>3.8.1. ticket-granting ticket properties</strong></h3>
+
+<ul>
+  <li>
+    <p>Ticket-granting tickets MAY be used by services to obtain multiple service
+tickets. Ticket-granting tickets are not one-time-use tickets and are associated
+with a validity period and expiration policy.</p>
+  </li>
+  <li>
+    <p>Ticket-granting tickets MUST expire when the client whose authentication is
+being managed logs out of CAS.</p>
+  </li>
+  <li>
+    <p>Ticket-granting tickets MUST contain adequate secure random data so that a
+ticket is not guessable in a reasonable period of time through brute-force
+attacks.</p>
+  </li>
+  <li>
+    <p>Ticket-granting tickets SHOULD begin with the characters <code class="language-plaintext highlighter-rouge">TGT-</code>.</p>
+  </li>
+  <li>
+    <p>It is RECOMMENDED that ticket-granting tickets be encrypted when
+shared with other external resources in order to minimize security
+vulnerabilities as they are tied to the ticket-granting cookie
+and represent the authentication session.</p>
+  </li>
+</ul>
+
+<p><a name="head4"></a></p>
+
+<h1 id="4-optional-features"><strong>4. Optional Features</strong></h1>
+
+<p><a name="head4.1"></a></p>
+
+<h2 id="41-long-term-tickets---remember-me-cas-30"><strong>4.1 Long-Term Tickets - Remember-Me [CAS 3.0]</strong></h2>
+
+<p>CAS Server MAY support Long-Term Ticket Granting Tickets (referred to as
+“Remember Me” functionality). If this feature is supported by the CAS Server, it
+is possible to perform recurring, non interactive re-logins to the CAS Server as
+long as the Long-Term Ticket Granting Ticket in the CAS Server is not expired
+and the browsers TGC Cookie is valid.</p>
+
+<p><a name="head4.1.1"></a></p>
+
+<h3 id="411-enabling-remember-me-login-page"><strong>4.1.1 Enabling Remember-Me (Login Page)</strong></h3>
+
+<ul>
+  <li>
+    <p>The CAS Server MUST provide a checkbox on the login page to allow Remember-Me
+functionality.</p>
+  </li>
+  <li>
+    <p>By default, the checkbox MUST be unchecked.</p>
+  </li>
+  <li>
+    <p>It MUST be the users choice to enable Remember-Me for the login or not.
+See Section <a href="#head2.2.2">2.2.2</a>.</p>
+  </li>
+</ul>
+
+<p><a name="head4.1.2"></a></p>
+
+<h3 id="412-security-implications"><strong>4.1.2 Security implications</strong></h3>
+
+<p>Enabling Remember-Me MAY have security implications. As the CAS authentication
+is bound to the browser and the user is not getting interactively logged-in when
+a valid Long-Term TGT ticket exists and the CAS cookie presented by the browser
+is valid, special care MUST be taken on the CAS client side to handle Remember-Me
+logins properly. It MUST be the CAS clients responsibility to decide
+if and when Remember-Me CAS logins might be handled special. See <a href="#head4.1.3">4.1.3</a>.</p>
+
+<p><a name="head4.1.3"></a></p>
+
+<h3 id="413-cas-validation-response-attributes"><strong>4.1.3 CAS Validation Response Attributes</strong></h3>
+
+<p>As only the CAS Client MUST decide how to handle Remember-Me logins (see
+<a href="#head4.2.1">4.2.1</a>), the CAS Server MUST provide information about a
+Remember-Me login to the CAS Client. This information MUST be provided by all
+ticket validation methods supported by the CAS Server (See Sections
+<a href="#head2.5">2.5</a>, <a href="#head2.6">2.6</a> and <a href="#head2.8">2.8</a>) in this case.</p>
+
+<ul>
+  <li>
+    <p>In serviceValidate XML responses (see <a href="#head_appdx_a">Appendix A</a>), a
+Remember-Me login MUST be indicated by the
+<code class="language-plaintext highlighter-rouge">longTermAuthenticationRequestTokenUsed</code> attribute. Additionally, the
+<code class="language-plaintext highlighter-rouge">isFromNewLogin</code> attribute MAY be used to decide whether this has security
+implications.</p>
+  </li>
+  <li>
+    <p>In SAML validation responses, Remember-Me MUST be indicated by the
+<code class="language-plaintext highlighter-rouge">longTermAuthenticationRequestTokenUsed</code> attribute.</p>
+  </li>
+</ul>
+
+<p><a name="head4.1.4"></a></p>
+
+<h3 id="414-cas-client-requirements"><strong>4.1.4 CAS Client requirements</strong></h3>
+
+<p>If the CAS client needs to handle Remember-Me logins special (e.g. deny access to
+sensitive areas of the CAS client application on a remembered login), the CAS
+client MUST NOT use the <code class="language-plaintext highlighter-rouge">/validate</code> CAS validation URL, as this URL does not
+support CAS attributes in the validation response document.</p>
+
+<h3 id="415-long-term-ticket-granting-cookie-properties"><strong>4.1.5 Long-Term ticket-granting cookie properties</strong></h3>
+
+<p>When a Long-Term TGT was created by the CAS Server, the Ticket-granting cookie
+MUST NOT expire at the end of the client’s browser session as defined in <a href="#head3.6.1">3.6.1</a>.
+Instead, the Ticket Granting cookie SHALL expire at the defined Long-Term TGT ticket lifetime.</p>
+
+<p>The lifetime value definition of Long-Term Ticket Granting Tickets is up to the CAS Server implementer.
+The Long-Term Ticket Granting Ticket lifetime MAY not exceed 3 months.</p>
+
+<p><a name="head4.2"></a></p>
+
+<h2 id="42-samlvalidate-cas-30"><strong>4.2 /samlValidate [CAS 3.0]</strong></h2>
+
+<p><code class="language-plaintext highlighter-rouge">/samlValidate</code> checks the validity of a Service Ticket by a SAML 1.1 request
+document provided by a HTTP POST. A SAML (Secure Access Markup Language)[<a href="#7">7</a>] 1.1
+response document MUST be returned. This allows the release of additional
+information (attributes) of the authenticated NetID. The Security Assertion
+Markup Language (SAML) describes a document and protocol framework by which
+security assertions (such as assertions about a prior act of authentication) can
+be exchanged.</p>
+
+<p><a name="head4.2.1"></a></p>
+
+<h3 id="421-parameters"><strong>4.2.1 parameters</strong></h3>
+
+<p>The following HTTP request parameters MUST be specified to <code class="language-plaintext highlighter-rouge">/samlValidate</code>. They
+are both case-sensitive.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">TARGET</code> [REQUIRED] - URL encoded service identifier of the back-end service.
+Note that as an HTTP request parameter, this URL value MUST be URL-encoded
+as described in Section 2.2 of RFC 1738<a href="#4">[4]</a>. The service identifier
+specified here MUST match the <code class="language-plaintext highlighter-rouge">service</code> parameter provided to <code class="language-plaintext highlighter-rouge">/login</code>. See
+Section <a href="#head2.1.1">2.1.1</a>. The <code class="language-plaintext highlighter-rouge">TARGET</code> service SHALL use HTTPS. SAML
+attributes MUST NOT be released to a non-SSL site.</li>
+</ul>
+
+<p><a name="head4.2.2"></a></p>
+
+<h3 id="422-http-request-method-and-body"><strong>4.2.2 HTTP Request Method and Body</strong></h3>
+
+<p>Request to /samlValidate MUST be a HTTP POST request. The request body MUST be a valid
+SAML 1.0 or 1.1 request XML document of document type “text/xml”.</p>
+
+<p><a name="head4.2.3"></a></p>
+
+<h3 id="423-saml-request-values"><strong>4.2.3 SAML request values</strong></h3>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">RequestID</code> [REQUIRED] - unique identifier for the request</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">IssueInstant</code> [REQUIRED] - timestamp of the request</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">samlp:AssertionArtifact</code> [REQUIRED] - the valid CAS Service Ticket obtained as a response
+parameter at login. See section <a href="#head2.2.4">2.2.4</a>.</p>
+  </li>
+</ul>
+
+<p><a name="head4.2.4"></a></p>
+
+<h3 id="424-example-of-samlvalidate-post-request"><strong>4.2.4 Example of /samlValidate POST request</strong></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>POST /cas/samlValidate?TARGET<span class="o">=</span>
+Host: cas.example.com
+Content-Length: 491
+Content-Type: text/xml
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;SOAP-ENV:Envelope</span> <span class="na">xmlns:SOAP-ENV=</span><span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;SOAP-ENV:Header/&gt;</span>
+	<span class="nt">&lt;SOAP-ENV:Body&gt;</span>
+		<span class="nt">&lt;samlp:Request</span> <span class="na">xmlns:samlp=</span><span class="s">"urn:oasis:names:tc:SAML:1.0:protocol"</span> <span class="na">MajorVersion=</span><span class="s">"1"</span> <span class="na">MinorVersion=</span><span class="s">"1"</span> <span class="na">RequestID=</span><span class="s">"_192.168.16.51.1024506224022"</span> <span class="na">IssueInstant=</span><span class="s">"2002-06-19T17:03:44.022Z"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;samlp:AssertionArtifact&gt;</span>ST-1-u4hrm3td92cLxpCvrjylcas.example.com<span class="nt">&lt;/samlp:AssertionArtifact&gt;</span>
+		<span class="nt">&lt;/samlp:Request&gt;</span>
+	<span class="nt">&lt;/SOAP-ENV:Body&gt;</span>
+<span class="nt">&lt;/SOAP-ENV:Envelope&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><a name="head4.2.5"></a></p>
+
+<h3 id="425-saml-response"><strong>4.2.5 SAML response</strong></h3>
+
+<p>CAS Server response to a <code class="language-plaintext highlighter-rouge">/samlValidate</code> request. MUST be a SAML 1.1 response.</p>
+
+<p>Example SAML 1.1 validation response:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+</pre></td><td class="rouge-code"><pre>
+<span class="nt">&lt;SOAP-ENV:Envelope</span> <span class="na">xmlns:SOAP-ENV=</span><span class="s">"http://schemas.xmlsoap.org/soap/envelope/"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;SOAP-ENV:Header</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;SOAP-ENV:Body&gt;</span>
+    <span class="nt">&lt;Response</span> <span class="na">xmlns=</span><span class="s">"urn:oasis:names:tc:SAML:1.0:protocol"</span> <span class="na">xmlns:saml=</span><span class="s">"urn:oasis:names:tc:SAML:1.0:assertion"</span>
+    <span class="na">xmlns:samlp=</span><span class="s">"urn:oasis:names:tc:SAML:1.0:protocol"</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">IssueInstant=</span><span class="s">"2008-12-10T14:12:14.817Z"</span>
+    <span class="na">MajorVersion=</span><span class="s">"1"</span> <span class="na">MinorVersion=</span><span class="s">"1"</span> <span class="na">Recipient=</span><span class="s">"https://eiger.iad.vt.edu/dat/home.do"</span>
+    <span class="na">ResponseID=</span><span class="s">"_5c94b5431c540365e5a70b2874b75996"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;Status&gt;</span>
+        <span class="nt">&lt;StatusCode</span> <span class="na">Value=</span><span class="s">"samlp:Success"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/StatusCode&gt;</span>
+      <span class="nt">&lt;/Status&gt;</span>
+      <span class="nt">&lt;Assertion</span> <span class="na">xmlns=</span><span class="s">"urn:oasis:names:tc:SAML:1.0:assertion"</span> <span class="na">AssertionID=</span><span class="s">"_e5c23ff7a3889e12fa01802a47331653"</span>
+      <span class="na">IssueInstant=</span><span class="s">"2008-12-10T14:12:14.817Z"</span> <span class="na">Issuer=</span><span class="s">"localhost"</span> <span class="na">MajorVersion=</span><span class="s">"1"</span>
+      <span class="na">MinorVersion=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;Conditions</span> <span class="na">NotBefore=</span><span class="s">"2008-12-10T14:12:14.817Z"</span> <span class="na">NotOnOrAfter=</span><span class="s">"2008-12-10T14:12:44.817Z"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;AudienceRestrictionCondition&gt;</span>
+            <span class="nt">&lt;Audience&gt;</span>
+              https://some-service.example.com/app/
+            <span class="nt">&lt;/Audience&gt;</span>
+          <span class="nt">&lt;/AudienceRestrictionCondition&gt;</span>
+        <span class="nt">&lt;/Conditions&gt;</span>
+        <span class="nt">&lt;AttributeStatement&gt;</span>
+          <span class="nt">&lt;Subject&gt;</span>
+            <span class="nt">&lt;NameIdentifier&gt;</span>johnq<span class="nt">&lt;/NameIdentifier&gt;</span>
+            <span class="nt">&lt;SubjectConfirmation&gt;</span>
+              <span class="nt">&lt;ConfirmationMethod&gt;</span>
+                urn:oasis:names:tc:SAML:1.0:cm:artifact
+              <span class="nt">&lt;/ConfirmationMethod&gt;</span>
+            <span class="nt">&lt;/SubjectConfirmation&gt;</span>
+          <span class="nt">&lt;/Subject&gt;</span>
+          <span class="nt">&lt;Attribute</span> <span class="na">AttributeName=</span><span class="s">"uid"</span> <span class="na">AttributeNamespace=</span><span class="s">"http://www.ja-sig.org/products/cas/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;AttributeValue&gt;</span>12345<span class="nt">&lt;/AttributeValue&gt;</span>
+          <span class="nt">&lt;/Attribute&gt;</span>
+          <span class="nt">&lt;Attribute</span> <span class="na">AttributeName=</span><span class="s">"groupMembership"</span> <span class="na">AttributeNamespace=</span><span class="s">"http://www.ja-sig.org/products/cas/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;AttributeValue&gt;</span>
+              uugid=middleware.staff,ou=Groups,dc=vt,dc=edu
+            <span class="nt">&lt;/AttributeValue&gt;</span>
+          <span class="nt">&lt;/Attribute&gt;</span>
+          <span class="nt">&lt;Attribute</span> <span class="na">AttributeName=</span><span class="s">"eduPersonAffiliation"</span> <span class="na">AttributeNamespace=</span><span class="s">"http://www.ja-sig.org/products/cas/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;AttributeValue&gt;</span>staff<span class="nt">&lt;/AttributeValue&gt;</span>
+          <span class="nt">&lt;/Attribute&gt;</span>
+          <span class="nt">&lt;Attribute</span> <span class="na">AttributeName=</span><span class="s">"accountState"</span> <span class="na">AttributeNamespace=</span><span class="s">"http://www.ja-sig.org/products/cas/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;AttributeValue&gt;</span>ACTIVE<span class="nt">&lt;/AttributeValue&gt;</span>
+          <span class="nt">&lt;/Attribute&gt;</span>
+        <span class="nt">&lt;/AttributeStatement&gt;</span>
+        <span class="nt">&lt;AuthenticationStatement</span> <span class="na">AuthenticationInstant=</span><span class="s">"2008-12-10T14:12:14.741Z"</span>
+        <span class="na">AuthenticationMethod=</span><span class="s">"urn:oasis:names:tc:SAML:1.0:am:password"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;Subject&gt;</span>
+            <span class="nt">&lt;NameIdentifier&gt;</span>johnq<span class="nt">&lt;/NameIdentifier&gt;</span>
+            <span class="nt">&lt;SubjectConfirmation&gt;</span>
+              <span class="nt">&lt;ConfirmationMethod&gt;</span>
+                urn:oasis:names:tc:SAML:1.0:cm:artifact
+              <span class="nt">&lt;/ConfirmationMethod&gt;</span>
+            <span class="nt">&lt;/SubjectConfirmation&gt;</span>
+          <span class="nt">&lt;/Subject&gt;</span>
+        <span class="nt">&lt;/AuthenticationStatement&gt;</span>
+      <span class="nt">&lt;/Assertion&gt;</span>
+    <span class="nt">&lt;/Response&gt;</span>
+  <span class="nt">&lt;/SOAP-ENV:Body&gt;</span>
+<span class="nt">&lt;/SOAP-ENV:Envelope&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><a name="head4.2.5.1"></a></p>
+
+<h3 id="4251-saml-cas-response-attributes"><strong>4.2.5.1 SAML CAS response attributes</strong></h3>
+
+<p>The following additional attributes might be provided within the SAML response:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">longTermAuthenticationRequestTokenUsed</code> - If Long Term Ticket Granting
+Tickets (Remember-Me) are supported by the CAS Server (see Section <a href="#head4.1">4.1</a>), the
+SAML response MUST include this attribute to indicate remembered logins
+to the CAS client.</li>
+</ul>
+
+<p><a name="head_appdx_a"></a></p>
+
+<h1 id="appendix-a-cas-response-xml-schema"><strong>Appendix A: CAS response XML schema</strong></h1>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+</pre></td><td class="rouge-code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;xs:schema</span> <span class="na">xmlns:xs=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+           <span class="na">xmlns:cas=</span><span class="s">"http://www.yale.edu/tp/cas"</span>
+           <span class="na">targetNamespace=</span><span class="s">"http://www.yale.edu/tp/cas"</span>
+           <span class="na">elementFormDefault=</span><span class="s">"qualified"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;xs:annotation&gt;</span>
+    <span class="nt">&lt;xs:documentation&gt;</span>
+      The following is the schema for the Central Authentication Service (CAS) version 3.0 protocol response.<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+      This covers the responses for the following endpoints: /serviceValidate, /proxyValidate, /p3/serviceValidate, /p3/proxyValidate, /proxy.<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+      This specification is subject to change.<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+
+      Schema version: 3.0.3<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+
+      History:<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+      3.0   initial version for CAS 3.0 protocol spec <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+      3.0.3 fixed attributes memberOf / xs:any clash, added documentation.<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xs:documentation&gt;</span>
+  <span class="nt">&lt;/xs:annotation&gt;</span>
+  <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"serviceResponse"</span> <span class="na">type=</span><span class="s">"cas:ServiceResponseType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:annotation&gt;</span>
+      <span class="nt">&lt;xs:documentation&gt;</span>The service Response.<span class="nt">&lt;/xs:documentation&gt;</span>
+    <span class="nt">&lt;/xs:annotation&gt;</span>
+  <span class="nt">&lt;/xs:element&gt;</span>
+  <span class="nt">&lt;xs:complexType</span> <span class="na">name=</span><span class="s">"ServiceResponseType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:choice&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"authenticationSuccess"</span> <span class="na">type=</span><span class="s">"cas:AuthenticationSuccessType"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"authenticationFailure"</span> <span class="na">type=</span><span class="s">"cas:AuthenticationFailureType"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"proxySuccess"</span> <span class="na">type=</span><span class="s">"cas:ProxySuccessType"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"proxyFailure"</span> <span class="na">type=</span><span class="s">"cas:ProxyFailureType"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xs:choice&gt;</span>
+  <span class="nt">&lt;/xs:complexType&gt;</span>
+  <span class="nt">&lt;xs:complexType</span> <span class="na">name=</span><span class="s">"AuthenticationSuccessType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:sequence&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"user"</span> <span class="na">type=</span><span class="s">"xs:string"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:annotation&gt;</span>
+          <span class="nt">&lt;xs:documentation&gt;</span>The username which authenticated successfully.<span class="nt">&lt;/xs:documentation&gt;</span>
+        <span class="nt">&lt;/xs:annotation&gt;</span>
+      <span class="nt">&lt;/xs:element&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"attributes"</span> <span class="na">type=</span><span class="s">"cas:AttributesType"</span> <span class="na">minOccurs=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:annotation&gt;</span>
+          <span class="nt">&lt;xs:documentation&gt;</span>Optional attributes.<span class="nt">&lt;/xs:documentation&gt;</span>
+        <span class="nt">&lt;/xs:annotation&gt;</span>
+      <span class="nt">&lt;/xs:element&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"proxyGrantingTicket"</span> <span class="na">type=</span><span class="s">"xs:string"</span> <span class="na">minOccurs=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:annotation&gt;</span>
+          <span class="nt">&lt;xs:documentation&gt;</span>Optional PGT.<span class="nt">&lt;/xs:documentation&gt;</span>
+        <span class="nt">&lt;/xs:annotation&gt;</span>
+      <span class="nt">&lt;/xs:element&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"proxies"</span> <span class="na">type=</span><span class="s">"cas:ProxiesType"</span> <span class="na">minOccurs=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:annotation&gt;</span>
+          <span class="nt">&lt;xs:documentation&gt;</span>Optional type of proxies.<span class="nt">&lt;/xs:documentation&gt;</span>
+        <span class="nt">&lt;/xs:annotation&gt;</span>
+      <span class="nt">&lt;/xs:element&gt;</span>
+    <span class="nt">&lt;/xs:sequence&gt;</span>
+  <span class="nt">&lt;/xs:complexType&gt;</span>
+  <span class="nt">&lt;xs:complexType</span> <span class="na">name=</span><span class="s">"ProxiesType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:sequence&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"proxy"</span> <span class="na">type=</span><span class="s">"xs:string"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xs:sequence&gt;</span>
+  <span class="nt">&lt;/xs:complexType&gt;</span>
+  <span class="nt">&lt;xs:complexType</span> <span class="na">name=</span><span class="s">"AuthenticationFailureType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:simpleContent&gt;</span>
+      <span class="nt">&lt;xs:extension</span> <span class="na">base=</span><span class="s">"xs:string"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:attribute</span> <span class="na">name=</span><span class="s">"code"</span> <span class="na">type=</span><span class="s">"xs:string"</span> <span class="na">use=</span><span class="s">"required"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;xs:annotation&gt;</span>
+            <span class="nt">&lt;xs:documentation&gt;</span>The error code on authentication failure.<span class="nt">&lt;/xs:documentation&gt;</span>
+          <span class="nt">&lt;/xs:annotation&gt;</span>
+        <span class="nt">&lt;/xs:attribute&gt;</span>
+      <span class="nt">&lt;/xs:extension&gt;</span>
+    <span class="nt">&lt;/xs:simpleContent&gt;</span>
+  <span class="nt">&lt;/xs:complexType&gt;</span>
+  <span class="nt">&lt;xs:complexType</span> <span class="na">name=</span><span class="s">"ProxySuccessType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:sequence&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"proxyTicket"</span> <span class="na">type=</span><span class="s">"xs:string"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:annotation&gt;</span>
+          <span class="nt">&lt;xs:documentation&gt;</span>The PT.<span class="nt">&lt;/xs:documentation&gt;</span>
+        <span class="nt">&lt;/xs:annotation&gt;</span>
+      <span class="nt">&lt;/xs:element&gt;</span>
+    <span class="nt">&lt;/xs:sequence&gt;</span>
+  <span class="nt">&lt;/xs:complexType&gt;</span>
+  <span class="nt">&lt;xs:complexType</span> <span class="na">name=</span><span class="s">"ProxyFailureType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:simpleContent&gt;</span>
+      <span class="nt">&lt;xs:extension</span> <span class="na">base=</span><span class="s">"xs:string"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:attribute</span> <span class="na">name=</span><span class="s">"code"</span> <span class="na">type=</span><span class="s">"xs:string"</span> <span class="na">use=</span><span class="s">"required"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;xs:annotation&gt;</span>
+            <span class="nt">&lt;xs:documentation&gt;</span>The error code on proxy failure.<span class="nt">&lt;/xs:documentation&gt;</span>
+          <span class="nt">&lt;/xs:annotation&gt;</span>
+        <span class="nt">&lt;/xs:attribute&gt;</span>
+      <span class="nt">&lt;/xs:extension&gt;</span>
+    <span class="nt">&lt;/xs:simpleContent&gt;</span>
+  <span class="nt">&lt;/xs:complexType&gt;</span>
+  <span class="nt">&lt;xs:complexType</span> <span class="na">name=</span><span class="s">"AttributesType"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xs:sequence&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"authenticationDate"</span> <span class="na">type=</span><span class="s">"xs:dateTime"</span> <span class="na">minOccurs=</span><span class="s">"1"</span> <span class="na">maxOccurs=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"longTermAuthenticationRequestTokenUsed"</span> <span class="na">type=</span><span class="s">"xs:boolean"</span> <span class="na">minOccurs=</span><span class="s">"1"</span> <span class="na">maxOccurs=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:annotation&gt;</span>
+          <span class="nt">&lt;xs:documentation&gt;</span>true if a long-term (Remember-Me) token was used<span class="nt">&lt;/xs:documentation&gt;</span>
+        <span class="nt">&lt;/xs:annotation&gt;</span>
+      <span class="nt">&lt;/xs:element&gt;</span>
+      <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"isFromNewLogin"</span> <span class="na">type=</span><span class="s">"xs:boolean"</span> <span class="na">minOccurs=</span><span class="s">"1"</span> <span class="na">maxOccurs=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:annotation&gt;</span>
+          <span class="nt">&lt;xs:documentation&gt;</span>true if this was from a new, interactive login. If login was from a non-interactive login (e.g. Remember-Me), this value is false or might be omitted.<span class="nt">&lt;/xs:documentation&gt;</span>
+        <span class="nt">&lt;/xs:annotation&gt;</span>
+      <span class="nt">&lt;/xs:element&gt;</span>
+      <span class="nt">&lt;xs:any</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span> <span class="na">processContents=</span><span class="s">"lax"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xs:annotation&gt;</span>
+          <span class="nt">&lt;xs:documentation&gt;</span>Any user specific attribute elements. May contain memberOf or any other elements.<span class="nt">&lt;/xs:documentation&gt;</span>
+        <span class="nt">&lt;/xs:annotation&gt;</span>
+      <span class="nt">&lt;/xs:any&gt;</span>
+    <span class="nt">&lt;/xs:sequence&gt;</span>
+  <span class="nt">&lt;/xs:complexType&gt;</span>
+<span class="nt">&lt;/xs:schema&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<blockquote>
+  <p>Note: As user attributes can be extended by the CAS Server implementer (see</p>
+  <xs:any> schema definition), it is RECOMMENDED to form custom attributes
+  as using the following format:
+</xs:any>
+</blockquote>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;cas:attributes&gt;</span>
+    ...
+    <span class="nt">&lt;cas:</span><span class="err">[attribute-name]</span><span class="nt">&gt;</span>VALUE<span class="err">&lt;</span>/cas:[attribute-name]&gt;
+<span class="nt">&lt;/cas:attributes&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<blockquote>
+  <p>Example response with custom attribute:</p>
+</blockquote>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;cas:attributes&gt;</span>
+    <span class="nt">&lt;cas:authenticationDate&gt;</span>2015-11-12T09:30:10Z<span class="nt">&lt;/cas:authenticationDate&gt;</span>
+    <span class="nt">&lt;cas:longTermAuthenticationRequestTokenUsed&gt;</span>true<span class="nt">&lt;/cas:longTermAuthenticationRequestTokenUsed&gt;</span>
+    <span class="nt">&lt;cas:isFromNewLogin&gt;</span>true<span class="nt">&lt;/cas:isFromNewLogin&gt;</span>
+    <span class="nt">&lt;cas:myAttribute&gt;</span>myValue<span class="nt">&lt;/cas:myAttribute&gt;</span>
+<span class="nt">&lt;/cas:attributes&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><a name="head_appdx_b"></a></p>
+
+<h1 id="appendix-b-safe-redirection"><strong>Appendix B: Safe redirection</strong></h1>
+
+<p>After a successful login, safely redirecting the client from CAS to its final
+destination must be handled with care. In most cases, the client has sent
+credentials to the CAS server over a POST request. By this specification, the
+CAS server must then forward the user to the application with a GET request.</p>
+
+<p>The HTTP/1.1 RFC[<a href="#3">3</a>] provides a response code of 303: See Other, which
+provides for the desired behavior: a script that receives data through a POST
+request can, through a 303 redirection, forward the browser to another URL
+through a GET request. However, not all browsers have implemented this behavior
+correctly.</p>
+
+<p>The RECOMMENDED method of redirection is thus JavaScript. A page containing a
+<code class="language-plaintext highlighter-rouge">window.location.href</code> in the following manner performs adequately:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre> <span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Yale Central Authentication Service<span class="nt">&lt;/title&gt;</span>
+        <span class="nt">&lt;script&gt;</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="o">=</span><span class="dl">"</span><span class="s2">https://portal.yale.edu/Login?ticket=ST-...</span><span class="dl">"</span>
+<span class="nx">mce_href</span><span class="o">=</span><span class="dl">"</span><span class="s2">https://portal.yale.edu/Login?ticket=ST-...</span><span class="dl">"</span><span class="p">;</span><span class="s2">`
+       </span><span class="nt">&lt;/script&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;noscript&gt;</span>
+            <span class="nt">&lt;p&gt;</span>CAS login successful.<span class="nt">&lt;/p&gt;</span>
+            <span class="nt">&lt;p&gt;</span>  Click <span class="nt">&lt;a</span> <span class="na">xhref=</span><span class="s">"https://portal.yale.edu/Login?ticket=ST-..."</span>
+<span class="na">mce_href=</span><span class="s">"https://portal.yale.edu/Login?ticket=ST-..."</span><span class="nt">&gt;</span>here<span class="nt">&lt;/a&gt;</span>
+            to access the service you requested.<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>  <span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/noscript&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+ <span class="nt">&lt;/html&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Additionally, CAS should disable browser caching by setting all of the various
+cache-related headers:</p>
+
+<ul>
+  <li>
+    <p>Pragma: no-cache</p>
+  </li>
+  <li>
+    <p>Cache-Control: no-store</p>
+  </li>
+  <li>
+    <p>Expires: [RFC 1123[<a href="#6">6</a>] date equal to or before now]</p>
+  </li>
+</ul>
+
+<p>The introduction of the login ticket removed the possibility of CAS accepting
+credentials that were cached and replayed by a browser. However, early versions
+of Apple’s Safari browser contained a bug where through usage of the Back
+button, Safari could be coerced into presenting the client’s credentials to the
+service it is trying to access. CAS can prevent this behavior by not
+automatically redirecting if it detects that the remote browser is one of these
+early versions of Safari. Instead, CAS should display a page that states login
+was successful, and provide a link to the requested service. The client must
+then manually click to proceed.</p>
+
+<p><a name="head_appdx_c"></a></p>
+
+<h1 id="appendix-c-logout-xml-document"><strong>Appendix C: Logout XML document</strong></h1>
+
+<p>When SLO is supported by the CAS Server, it will callback to each of the
+services that are registered with the system and send a POST request with the
+following SAML Logout Request XML document:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>  <span class="nt">&lt;samlp:LogoutRequest</span> <span class="na">xmlns:samlp=</span><span class="s">"urn:oasis:names:tc:SAML:2.0:protocol"</span>
+     <span class="na">ID=</span><span class="s">"[RANDOM ID]"</span> <span class="na">Version=</span><span class="s">"2.0"</span> <span class="na">IssueInstant=</span><span class="s">"[CURRENT DATE/TIME]"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;saml:NameID</span> <span class="na">xmlns:saml=</span><span class="s">"urn:oasis:names:tc:SAML:2.0:assertion"</span><span class="nt">&gt;</span>
+      @NOT_USED@
+    <span class="nt">&lt;/saml:NameID&gt;</span>
+    <span class="nt">&lt;samlp:SessionIndex&gt;</span>[SESSION IDENTIFIER]<span class="nt">&lt;/samlp:SessionIndex&gt;</span>
+  <span class="nt">&lt;/samlp:LogoutRequest&gt;</span>`
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><a name="head_appdx_d"></a></p>
+
+<h1 id="appendix-d-references"><strong>Appendix D: References</strong></h1>
+
+<p><a name="1"></a>[1] Bradner, S., “Key words for use in RFCs to Indicate Requirement
+Levels”, <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>, Harvard University,
+March 1997.</p>
+
+<p><a name="2"></a>[2] Berners-Lee, T., Fielding, R., Frystyk, H., “Hypertext Transfer
+Protocol - HTTP/1.0”, <a href="http://www.ietf.org/rfc/rfc1945.txt">RFC 1945</a>,
+MIT/LCS, UC Irvine, MIT/LCS, May 1996.</p>
+
+<p><a name="3"></a>[3] Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L.,
+Leach, P., Berners-Lee, T., “Hypertext Transfer Protocol - HTTP/1.1”, <a href="http://www.ietf.org/rfc/rfc2068.txt">RFC
+2068</a>, UC Irvine, Compaq/W3C, Compaq,
+W3C/MIT, Xerox, Microsoft, W3C/MIT, June 1999.</p>
+
+<p><a name="4"></a>[4] Berners-Lee, T., Masinter, L., and MaCahill, M., “Uniform
+Resource Locators (URL)”, <a href="http://www.ietf.org/rfc/rfc1738.txt">RFC 1738</a>,
+CERN, Xerox Corporation, University of Minnesota, December 1994.</p>
+
+<p><a name="5"></a>[5] Kristol, D., Montulli, L., “HTTP State Management Mechanism”,
+<a href="http://www.ietf.org/rfc/rfc2965.txt">RFC 2965</a>, Bell Laboratories/Lucent
+Technologies, Epinions.com, Inc., October 2000.</p>
+
+<p><a name="6"></a>[6] Braden, R., “Requirements for Internet Hosts - Application and
+Support”, <a href="http://www.ietf.org/rfc/rfc1123.txt">RFC 1123</a>, Internet
+Engineering Task Force, October 1989.</p>
+
+<p><a name="7"></a>[7] OASIS SAML 1.1 standard, saml.xml.org, December 2009.</p>
+
+<p><a name="8"></a>[8] <a href="http://www.Apereo.org/cas">Apereo CAS Server</a> reference
+implementation</p>
+
+<p><a name="head_appdx_e"></a></p>
+
+<h1 id="appendix-e-cas-license"><strong>Appendix E: CAS License</strong></h1>
+
+<p>Licensed to Apereo under one or more contributor license agreements. See the
+NOTICE file distributed with this work for additional information regarding
+copyright ownership. Apereo licenses this file to you under the Apache License,
+Version 2.0 (the “License”); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at the following location:</p>
+
+<p>http://www.apache.org/licenses/LICENSE-2.0</p>
+
+<p>Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.</p>
+
+<p><a name="head_appdx_f"></a></p>
+
+<h1 id="appendix-f-yale-license"><strong>Appendix F: YALE License</strong></h1>
+
+<p>Copyright (c) 2000-2005 Yale University.</p>
+
+<p>THIS SOFTWARE IS PROVIDED “AS IS,” AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE, ARE EXPRESSLY DISCLAIMED. IN NO EVENT SHALL
+YALE UNIVERSITY OR ITS EMPLOYEES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED, THE
+COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED IN ADVANCE OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+
+<p>Redistribution and use of this software in source or binary forms, with or
+without modification, are permitted, provided that the following conditions are
+met:</p>
+
+<ol>
+  <li>
+    <p>Any redistribution must include the above copyright notice and disclaimer
+and this list of conditions in any related documentation and, if feasible,
+in the redistributed software.</p>
+  </li>
+  <li>
+    <p>Any redistribution must include the acknowledgment, “This product includes
+software developed by Yale University,” in any related documentation and, if
+feasible, in the redistributed software.</p>
+  </li>
+  <li>
+    <p>The names “Yale” and “Yale University” must not be used to endorse or
+promote products derived from this software.</p>
+  </li>
+</ol>
+
+<p><a name="head_appdx_g"></a></p>
+
+<h1 id="appendix-g-changes-to-this-document"><strong>Appendix G: Changes to this Document</strong></h1>
+
+<p>May 4, 2005: v1.0 - initial release for CAS 1.0 and CAS 2.0, Copyright © 2005, Yale University</p>
+
+<p>March 2, 2012: v1.0.1 - fixed “noscropt” typo. apetro per amazurek with credit
+to Faraz Khan at ASU for catching the typo.</p>
+
+<p>April, 2013: v3.0 - CAS 3.0 protocol, Apereo copyright, Apache License 2.0</p>
+
+<p>January, 2014: v3.0.1 - Attribute occurrence</p>
+
+<p>September, 2015: v3.0.2 - Format parameter</p>
+
+<p>December, 2017: v3.0.3 - Fixed ServiceValidate XSD schema</p>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Protocols';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

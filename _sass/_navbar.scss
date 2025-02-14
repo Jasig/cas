@@ -1,0 +1,104 @@
+.navbar-cas {
+  border-width: 0;
+  background-color: #153e50;
+  color: #ffffff;
+  font-family: arial, sans-serif;
+  top: 0;
+  position: fixed;
+  width: 100%;
+  border-radius: 0;
+
+  h1 {
+    //font-size: 16px;
+    //text-align: right;
+    //padding-right: 5px;
+
+    font-size: 1.10rem;
+    text-align: right;
+    margin-left: 10px;
+    margin-top: 15px;
+    float: left;
+  }
+
+  .logo {
+    padding: 3px;
+    //height: 28px;
+    width: 56px;
+    margin: 7px 2px 5px 0;
+    //margin-right: 2px;
+    //margin-left: 0;
+  }
+}
+
+.navbar {
+  padding: 0;
+}
+
+.navbar-toggler {
+  float: left;
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-right: 5px;
+  margin-bottom: 3px;
+}
+
+.navbar-cas li > a, .navbar-toggler {
+  color: #efefef;
+}
+
+.navbar-cas .dropdown-menu li a {
+  color: #2A4888;
+}
+
+.navbar-cas .dropdown-menu li > a {
+  padding-left: 30px;
+}
+
+.navbar-cas li > a:hover, .navbar-cas li > a:focus, .navbar-cas .open, .navbar-cas .open > a, .navbar-cas .open > a:hover, .navbar-cas .open > a:focus {
+  background-color: #2A4888;
+  color: #fff;
+}
+
+.navbar-toggler, .close {
+  outline: 0;
+}
+
+.navbar-toggler .icon-bar {
+  background-color: #fff;
+}
+
+.navbar-nav .nav-item {
+  float: none;
+  margin-left: 1rem;
+}
+
+.navbar-nav .nav-item+.nav-item {
+  //margin-left: 0;
+}
+
+@media (min-width: 34em) {
+}
+
+@media (min-width: 48em) {
+  .navbar-cas {
+    position: relative;
+    background-color: #0090ff;
+  }
+
+  .navbar-cas li > a {
+    color: #efefef;
+    padding: 0 .5rem;
+  }
+
+  .navbar-nav .nav-item {
+    float: left;
+  }
+}
+
+@media (min-width: 62em) {
+
+}
+
+@media (min-width: 75em) {
+
+}

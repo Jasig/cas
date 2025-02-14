@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Delegate authentication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="overview">Overview</h1>
+<p>The CAS server implements the CAS protocol on server side and may even behave like an OAuth provider, an OpenID provider or a SAML IdP. Whatever the protocol, the CAS server is first of all a server.</p>
+
+<p>But the CAS server can also act as a client using the <a href="https://github.com/leleuj/pac4j">pac4j library</a> and delegate the authentication to:</p>
+
+<ul>
+  <li>another CAS server (using CAS protocol)</li>
+  <li>an OAuth provider (using OAuth protocol): Facebook, Twitter, Google, LinkedIn, Yahoo and several other providers</li>
+  <li>an OpenID provider (using OpenID protocol): myopenid.com and Google.</li>
+</ul>
+
+<p>Support is enabled by including the following dependency in the Maven WAR overlay:</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.jasig.cas&lt;/groupId&gt;
+  &lt;artifactId&gt;cas-server-support-pac4j&lt;/artifactId&gt;
+  &lt;version&gt;${cas.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h2 id="how-to-use-casoauthopenid-client-support-in-cas-applications">How to use CAS/OAuth/OpenID client support in CAS applications?</h2>
+
+<h3 id="information-returned-by-a-delegated-authentication">Information returned by a delegated authentication</h3>
+
+<p>Once you have configured (see information below) your CAS server to act as an OAuth, CAS or OpenID client, users will be able to authenticate at a OAuth/CAS/OpenID provider (like Facebook) instead of authenticating directly inside the CAS server.</p>
+
+<p>In the CAS server, after this kind of delegated authentication, users have specific authentication data.</p>
+
+<p>The <code>Authentication</code> object has:</p>
+
+<ul>
+  <li>the attribute <code>AuthenticationManager.AUTHENTICATION_METHOD_ATTRIBUTE</code> (authenticationMethod) set to <em><code>org.jasig.cas.support.pac4j.authentication.handler.support.ClientAuthenticationHandler</code></em></li>
+  <li>the attribute <em>clientName</em> set to the type of the provider used during authentication process.</li>
+</ul>
+
+<p>The <code>Principal</code> object of the <code>Authentication</code> object has:</p>
+
+<ul>
+  <li>an identifier which is the profile type + # + the identifier of the user for this provider (example : FacebookProfile#0000000001)</li>
+  <li>attributes populated by the data retrieved from the provider (first name, last name, birthdate…)</li>
+</ul>
+
+<h3 id="how-to-send-profile-attributes-to-cas-client-applications">How to send profile attributes to CAS client applications?</h3>
+
+<p>In CAS applications, through service ticket validation, user information are pushed to the CAS client and therefore to the application itself.</p>
+
+<p>The identifier of the user is always pushed to the CAS client. For user attributes, it involves both the configuration at the server and the way of validating service tickets.</p>
+
+<p>On CAS server side, to push attributes to the CAS client, it should be configured in the <code>deployerConfigContext.xml</code> file for the expected service:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;serviceRegistryDao&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.InMemoryServiceRegistryDaoImpl&quot;</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;registeredServices&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;list&gt;</span>
+     <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.RegisteredServiceImpl&quot;</span><span class="nt">&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;id&quot;</span> <span class="na">value=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">value=</span><span class="s">&quot;HTTP&quot;</span> <span class="nt">/&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">value=</span><span class="s">&quot;Only Allows HTTP Urls&quot;</span> <span class="nt">/&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;serviceId&quot;</span> <span class="na">value=</span><span class="s">&quot;http://**&quot;</span> <span class="nt">/&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;evaluationOrder&quot;</span> <span class="na">value=</span><span class="s">&quot;10000001&quot;</span> <span class="nt">/&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;allowedAttributes&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;list&gt;</span>
+          <span class="c">&lt;!-- facebook --&gt;</span>
+          <span class="nt">&lt;value&gt;</span>name<span class="nt">&lt;/value&gt;</span>
+          <span class="nt">&lt;value&gt;</span>first_name<span class="nt">&lt;/value&gt;</span>
+          <span class="nt">&lt;value&gt;</span>middle_name<span class="nt">&lt;/value&gt;</span>
+...
+</code></pre></div>
+
+<p>On CAS client side, to receive attributes, you need to use the SAML validation or the new CAS 3.0 validation (/p3/serviceValidate url).</p>
+
+<h3 id="how-to-recreate-user-profiles-in-cas-applications">How to recreate user profiles in CAS applications?</h3>
+
+<p>In the CAS server, the complete user profile is known but when attributes are sent back to the CAS client applications, there is some kind of “CAS serialization” which makes data uneasy to be restored at their original state.</p>
+
+<p>Though, you can now completely rebuild the original user profile from data returned in the CAS <code>Assertion</code>.</p>
+
+<p>After validating the service ticket, an <code>Assertion</code> is available in the CAS client from which you can get the identifier and the attributes of the authenticated user using the pac4j library:</p>
+
+<div class="highlight"><pre><code class="java"><span class="kd">final</span> <span class="n">AttributePrincipal</span> <span class="n">principal</span> <span class="o">=</span> <span class="n">assertion</span><span class="o">.</span><span class="na">getPrincipal</span><span class="o">();</span>
+<span class="kd">final</span> <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">principal</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+<span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">principal</span><span class="o">.</span><span class="na">getAttributes</span><span class="o">();</span>
+</code></pre></div>
+
+<p>As the identifier stores the kind of profile in its own definition (<code>*clientName#idAtProvider*</code>), you can use the <code>org.pac4j.core.profile.ProfileHelper.buildProfile(id, attributes)</code> method to recreate the original profile:</p>
+
+<div class="highlight"><pre><code class="java"><span class="kd">final</span> <span class="n">FacebookProfile</span> <span class="n">rebuiltProfileOnCasClientSide</span> <span class="o">=</span> <span class="o">(</span><span class="n">FacebookProfile</span><span class="o">)</span> <span class="n">ProfileHelper</span><span class="o">.</span><span class="na">buildProfile</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">attributes</span><span class="o">);</span>
+</code></pre></div>
+
+<p>and then use it in your application!</p>
+
+<h2 id="configuration">Configuration</h2>
+
+<h3 id="add-the-required-pac4j--libraries">Add the required pac4j-* libraries</h3>
+
+<p>To add CAS client support, add the following dependency:</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.pac4j&lt;/groupId&gt;
+  &lt;artifactId&gt;pac4j-cas&lt;/artifactId&gt;
+  &lt;version&gt;${pac4j.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>To add OAuth client support, add the following dependency:</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.pac4j&lt;/groupId&gt;
+  &lt;artifactId&gt;pac4j-oauth&lt;/artifactId&gt;
+  &lt;version&gt;${pac4j.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>To add OpenID client support, add the following dependency:</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.pac4j&lt;/groupId&gt;
+  &lt;artifactId&gt;pac4j-openid&lt;/artifactId&gt;
+  &lt;version&gt;${pac4j.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h3 id="add-the-needed-clients">Add the needed clients</h3>
+
+<p>A provider is a server which can authenticate user (like Google, Yahoo…) instead of a CAS server. If you want to delegate the CAS authentication to Twitter for example, you have to add an OAuth client for the provider: Twitter. Clients classes are defined in the pac4j library.</p>
+
+<p>All the needed clients to authenticate against providers must be declared in the <code>applicationContext.xml</code> file:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;facebook1&quot;</span> <span class="na">class=</span><span class="s">&quot;org.pac4j.oauth.client.FacebookClient&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;key&quot;</span> <span class="na">value=</span><span class="s">&quot;fbkey&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;secret&quot;</span> <span class="na">value=</span><span class="s">&quot;fbsecret&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;scope&quot;</span> <span class="na">value=</span><span class="s">&quot;email,user_likes,user_about_me,user_birthday,user_education_history,user_hometown&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;fields&quot;</span> <span class="na">value=</span><span class="s">&quot;id,name,first_name,middle_name,last_name,gender,locale,languages,link,username,third_party_id,timezone,updated_time&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+ 
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;twitter1&quot;</span> <span class="na">class=</span><span class="s">&quot;org.pac4j.oauth.client.TwitterClient&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;key&quot;</span> <span class="na">value=</span><span class="s">&quot;twkey&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;secret&quot;</span> <span class="na">value=</span><span class="s">&quot;twsecret&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+ 
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;caswrapper1&quot;</span> <span class="na">class=</span><span class="s">&quot;org.pac4j.oauth.client.CasOAuthWrapperClient&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;key&quot;</span> <span class="na">value=</span><span class="s">&quot;this_is_the_key&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;secret&quot;</span> <span class="na">value=</span><span class="s">&quot;this_is_the_secret&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;casOAuthUrl&quot;</span> <span class="na">value=</span><span class="s">&quot;http://mycasserver2/oauth2.0&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+  
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;cas1&quot;</span> <span class="na">class=</span><span class="s">&quot;org.pac4j.cas.client.CasClient&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;casLoginUrl&quot;</span> <span class="na">value=</span><span class="s">&quot;http://mycasserver2/login&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+ 
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;myopenid1&quot;</span> <span class="na">class=</span><span class="s">&quot;org.pac4j.openid.client.MyOpenIdClient&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>For each OAuth provider, the CAS server is considered as an OAuth client and therefore should be declared also at the OAuth provider. After declaration, a key and a secret is given by the OAuth provider which has to be defined in the beans (<em>the_key_for_xxx</em> and <em>the_secret_for_xxx</em> values for the <em>key</em> and <em>secret</em> properties).</p>
+
+<p>For the CAS OAuth wrapping, the <em>casOAuthUrl</em> property must be set to the OAuth wrapping url of the other CAS server which is using OAuth wrapping (something like <em>http://mycasserver2/oauth2.0</em>).</p>
+
+<p>To simplify configuration, all clients and the CAS server login url are gathered in the same <code>Clients</code> configuration bean (in the <code>applicationContext.xml</code> file):</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;clients&quot;</span> <span class="na">class=</span><span class="s">&quot;org.pac4j.core.client.Clients&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;callbackUrl&quot;</span> <span class="na">value=</span><span class="s">&quot;http://localhost:8080/cas/login&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;clients&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;list&gt;</span>
+      <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;facebook1&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;twitter1&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;caswrapper1&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;cas1&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;myopenid1&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/list&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h3 id="add-the-client-action-in-webflow">Add the client action in webflow</h3>
+
+<p>In the <code>login-webflow.xml</code> file, the <code>ClientAction</code> must be added at the beginning of the webflow. Its role is to intercept callback calls from providers (like Facebook, Twitter…) after a delegated authentication:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;action-state</span> <span class="na">id=</span><span class="s">&quot;clientAction&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;evaluate</span> <span class="na">expression=</span><span class="s">&quot;clientAction&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;success&quot;</span> <span class="na">to=</span><span class="s">&quot;sendTicketGrantingTicket&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;error&quot;</span> <span class="na">to=</span><span class="s">&quot;ticketGrantingTicketCheck&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;transition</span> <span class="na">on=</span><span class="s">&quot;stop&quot;</span> <span class="na">to=</span><span class="s">&quot;stopWebflow&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/action-state&gt;</span>
+<span class="nt">&lt;view-state</span> <span class="na">id=</span><span class="s">&quot;stopWebflow&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<p>This <code>ClientAction</code> has to be defined in the <code>cas-servlet.xml</code> file with all the needed clients:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;clientAction&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.pac4j.web.flow.ClientAction&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;centralAuthenticationService&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;1&quot;</span> <span class="na">ref=</span><span class="s">&quot;clients&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<p>This <code>ClientAction</code> uses the <em>centralAuthenticationService</em> bean to finish the CAS authentication and references all the clients.</p>
+
+<h3 id="add-the-handler-and-the-metadata-populator-optional-for-authentication">Add the handler and the metadata populator (optional) for authentication</h3>
+
+<p>To be able to finish authenticating users in the CAS server after a remote authentication by an external provider, you have to add the <code>ClientAuthenticationHandler</code> class and might add the <code>ClientAuthenticationMetaDataPopulator</code> class (to track the provider) in the <code>deployerConfigContext.xml</code> file:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;authenticationManager&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.PolicyBasedAuthenticationManager&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg&gt;</span>
+        <span class="nt">&lt;map&gt;</span>
+        <span class="nt">&lt;/map&gt;</span>
+    <span class="nt">&lt;/constructor-arg&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;authenticationMetaDataPopulators&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;util:list&gt;</span>
+           <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.pac4j.authentication.ClientAuthenticationMetaDataPopulator&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/util:list&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;authenticationPolicy&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.authentication.AnyAuthenticationPolicy&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;primaryAuthenticationHandler&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.support.pac4j.authentication.handler.support.ClientAuthenticationHandler&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;clients&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h3 id="add-links-on-the-login-page-to-authenticate-on-remote-providers">Add links on the login page to authenticate on remote providers</h3>
+
+<p>To start authentication on a remote provider, these links must be added on the login page <code>casLoginView.jsp</code> (<em>ClientNameUrl</em> attributes are automatically created by the <code>ClientAction</code>):</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;${FacebookClientUrl}&quot;</span><span class="nt">&gt;</span>Authenticate with Facebook<span class="nt">&lt;/a&gt;</span> <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;${TwitterClientUrl}&quot;</span><span class="nt">&gt;</span>Authenticate with Twitter<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;${CasOAuthWrapperClientUrl}&quot;</span><span class="nt">&gt;</span>Authenticate with another CAS server using OAuth v2.0 protocol<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;${CasClientUrl}&quot;</span><span class="nt">&gt;</span>Authenticate with another CAS server using CAS protocol<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&quot;${MyOpenIdClientUrl}&quot;</span> <span class="na">method=</span><span class="s">&quot;POST&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;openIdUser&quot;</span> <span class="na">value=</span><span class="s">&quot;http://xxx.myopenid.com/&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Authenticate with myopenid.com&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div>
+
+<h2 id="demo">Demo</h2>
+
+<p>Take a look at this demo: <a href="https://github.com/leleuj/cas-pac4j-oauth-demo">cas-pac4j-oauth-demo</a> to see this authentication delegation mechanism in action.</p>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

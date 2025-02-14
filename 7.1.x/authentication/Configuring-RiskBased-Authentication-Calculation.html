@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen" href='/cas/stylesheets/stylesheet.css'>
+    <link rel="stylesheet" type="text/css" media="print" href='/cas/stylesheets/print.css'>
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Adaptive Risk-based Authentication</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="/cas/images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/development/">Development</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.1.x/">v7.1.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+
+            
+                <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+                <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+            
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+                
+                
+
+                <section>
+                    
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+                    
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="risk-calculation">Risk Calculation</h1>
+
+<p>One or more risk calculators may be enabled to allow an analysis of authentication requests.</p>
+
+<p>A high-level explanation of the risk calculation strategy follows:</p>
+
+<ul>
+  <li>If there is no recorded event at all present for the principal, consider the request suspicious.</li>
+  <li>If the number of recorded events for the principal based on the active criteria matches the total number of events, consider the
+request safe.</li>
+</ul>
+
+<ul id="adaptiveriskcalc" class="tab" data-tab="f3f08afb-5840-4211-b88b-74b0732802d2" data-name="adaptiveriskcalc">
+  
+      <li class="active" id="adaptiveriskcalc-ip-address">
+          <a href="#">IP Address </a>
+      </li>
+  
+      <li id="adaptiveriskcalc--i-class--fa-brands-fa-chrome-px-1----i-browser-user-agent">
+          <a href="#"><i class="fa-brands fa-chrome px-1"></i>Browser User Agent </a>
+      </li>
+  
+      <li id="adaptiveriskcalc--i-class--fa-fa-globe-px-1----i-geolocation">
+          <a href="#"><i class="fa fa-globe px-1"></i>Geolocation </a>
+      </li>
+  
+      <li id="adaptiveriskcalc--i-class--fa-fa-clock-px-1----i-date-time">
+          <a href="#"><i class="fa fa-clock px-1"></i>Date/Time </a>
+      </li>
+  
+      <li id="adaptiveriskcalc-device-fingerprint">
+          <a href="#">Device Fingerprint </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="f3f08afb-5840-4211-b88b-74b0732802d2" data-name="adaptiveriskcalc">
+  
+      <li class="active">
+<p>This calculator looks into past authentication events that match the client ip address. It is applicable if you wish
+to consider authentication requests from unknown ip addresses suspicious for the user. The story here is:</p>
+
+<blockquote>
+  <p>Find all past authentication events that match the current client ip address and calculate an averaged score.</p>
+</blockquote>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnadaptiveriskip">
+
+<li class="nav-item property-tab">
+    <a class="nav-link active" id="linkRequiredPropertiescasauthnadaptiveriskip" data-bs-toggle="tab" href="#requiredPropertiescasauthnadaptiveriskip"><i class="fa fa-hand-point-right px-1"></i>Required</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" id="linkOptionalPropertiescasauthnadaptiveriskip" data-bs-toggle="tab" href="#optionalPropertiescasauthnadaptiveriskip"><i class="fa fa-hand-spock px-1"></i>Optional</a>
+</li>
+
+<li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkSigningEncryptioncasauthnadaptiveriskip" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnadaptiveriskip"><i class="fa fa-user-secret px-1"></i>Signing &amp; Encryption</a>
+</li>
+
+<li class="nav-item property-tab" id="navRdbmsPropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkRdbmscasauthnadaptiveriskip" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnadaptiveriskip"><i class="fa fa-database px-1"></i>Hibernate &amp; JDBC</a>
+</li>
+<li class="nav-item property-tab" id="navEmailPropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkEmailcasauthnadaptiveriskip" data-bs-toggle="tab" href="#emailPropertiescasauthnadaptiveriskip"><i class="fa fa-envelope px-1"></i>Email Servers</a>
+</li>
+<li class="nav-item property-tab" id="navGroovyPropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkGroovycasauthnadaptiveriskip" data-bs-toggle="tab" href="#groovyPropertiescasauthnadaptiveriskip"><i class="fa fa-laptop-code px-1"></i>Groovy Scripting</a>
+</li>
+
+<li class="nav-item property-tab" id="navLdapPropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkLdapcasauthnadaptiveriskip" data-bs-toggle="tab" href="#ldapPropertiescasauthnadaptiveriskip"><i class="fa fa-server px-1"></i>LDAP &amp; Active Directory</a>
+</li>
+
+<li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkAuthnPredicatecasauthnadaptiveriskip" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnadaptiveriskip"><i class="fa fa-user-check px-1"></i>Authentication</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkPasswordEncodercasauthnadaptiveriskip" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnadaptiveriskip"><i class="fa fa-key px-1"></i>Password Encoding</a>
+</li>
+
+<li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkPrincipalTransformationcasauthnadaptiveriskip" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskip(this);" href="#principalTransformationPropertiescasauthnadaptiveriskip"><i class="fa fa-person-booth px-1"></i>Principal Transformation</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnadaptiveriskip">
+    <a class="nav-link" id="linkPasswordPolicycasauthnadaptiveriskip" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskip(this);" href="#passwordPolicyPropertiescasauthnadaptiveriskip"><i class="fa fa-lock px-1"></i>Password Policy</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskip(this);" id="linkNotescasauthnadaptiveriskip" data-bs-toggle="tab" href="#notescasauthnadaptiveriskip"><i class="fa fa-newspaper px-1"></i> Notes</a>
+</li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnadaptiveriskip">
+
+
+    <div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnadaptiveriskip">
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+        </sub>
+        <br><p></p>
+
+        <p></p>
+
+        <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnadaptiveriskip">
+            <thead><tr><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnadaptiveriskip"></textarea>
+    </div>
+
+    <div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnadaptiveriskip">
+
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+            flag indicates that the presence of the setting
+            is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+            the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+            configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+        </sub>
+        <br><p></p>
+
+        <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnadaptiveriskip">
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.adaptive.risk.ip.enabled=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Enable IP address checking and criteria to calculate risky authentication attempts.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.risk.RiskBasedAuthenticationIpAddressProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnadaptiveriskipenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnadaptiveriskipenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.adaptive.risk.ip.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnadaptiveriskipenabled"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnadaptiveriskipenabled"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnadaptiveriskipenabled"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnadaptiveriskipenabled"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnadaptiveriskipenabled"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnadaptiveriskipenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.adaptive.risk.ip.enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnadaptiveriskipenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    adaptive: <br>      risk: <br>        ip: <br>          enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnadaptiveriskipenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnadaptiveriskipenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.adaptive.risk.ip.enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnadaptiveriskipenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_ADAPTIVE_RISK_IP_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnadaptiveriskipenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.adaptive.risk.ip.enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnadaptiveriskip"># Enable IP address checking and criteria to calculate risky authentication attempts.
+# cas.authn.adaptive.risk.ip.enabled=false
+
+</textarea>
+    </div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnadaptiveriskip">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.1.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+    </div>
+<script>
+        window.addEventListener('load', (event) => {$("#linkRdbmscasauthnadaptiveriskip").remove();$("#linkEmailcasauthnadaptiveriskip").remove();$("#linkGroovycasauthnadaptiveriskip").remove();$("#linkSigningEncryptioncasauthnadaptiveriskip").remove();$("#linkRequiredPropertiescasauthnadaptiveriskip").remove();
+            $("#requiredPropertiescasauthnadaptiveriskip").remove();$("#linkPasswordPolicycasauthnadaptiveriskip").remove();$("#linkPrincipalTransformationcasauthnadaptiveriskip").remove();$("#linkPasswordEncodercasauthnadaptiveriskip").remove();$("#linkAuthnPredicatecasauthnadaptiveriskip").remove();$("#linkLdapcasauthnadaptiveriskip").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnadaptiveriskip");
+            let id=$("#navPillsMenuscasauthnadaptiveriskip a:visible:first").prop('id');
+            // console.log("Attempting to select tab with id " + id);
+            if (id != undefined && id != null) {
+                // console.log("Selecting first tab with link id " + id);
+                let firstTabEl = document.querySelector(`#${id}`);
+                let firstTab = new bootstrap.Tab(firstTabEl);
+                firstTab.show();
+                // console.log("Selected tab with link id " + id);
+            }
+
+            let c = $("#tableRequiredPropertiescasauthnadaptiveriskip li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navRequiredPropertiescasauthnadaptiveriskip").closest("table").remove();
+                $("#navRequiredPropertiesLeftcasauthnadaptiveriskip").closest("table").remove();
+            }
+            c = $("#tableOptionalPropertiescasauthnadaptiveriskip li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navOptionalPropertiescasauthnadaptiveriskip").closest("table").remove();
+                $("#navOptionalPropertiesLeftcasauthnadaptiveriskip").closest("table").remove();
+            }
+            c = $("#tableThirdPartyPropertiescasauthnadaptiveriskip li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navThirdPartyPropertiescasauthnadaptiveriskip").hide();
+            }
+
+        });
+    </script>
+
+</div>
+
+</li>
+  
+      <li>
+<p>This calculator looks into past authentication events that match the client’s <code class="language-plaintext highlighter-rouge">user-agent</code> string. It is applicable if you wish
+to consider authentication requests from unknown browsers suspicious for the user. The story here is:</p>
+
+<blockquote>
+  <p>Find all past authentication events that match the current client browser and calculate an averaged score.</p>
+</blockquote>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnadaptiveriskagent">
+
+<li class="nav-item property-tab">
+    <a class="nav-link active" id="linkRequiredPropertiescasauthnadaptiveriskagent" data-bs-toggle="tab" href="#requiredPropertiescasauthnadaptiveriskagent"><i class="fa fa-hand-point-right px-1"></i>Required</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" id="linkOptionalPropertiescasauthnadaptiveriskagent" data-bs-toggle="tab" href="#optionalPropertiescasauthnadaptiveriskagent"><i class="fa fa-hand-spock px-1"></i>Optional</a>
+</li>
+
+<li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkSigningEncryptioncasauthnadaptiveriskagent" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnadaptiveriskagent"><i class="fa fa-user-secret px-1"></i>Signing &amp; Encryption</a>
+</li>
+
+<li class="nav-item property-tab" id="navRdbmsPropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkRdbmscasauthnadaptiveriskagent" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnadaptiveriskagent"><i class="fa fa-database px-1"></i>Hibernate &amp; JDBC</a>
+</li>
+<li class="nav-item property-tab" id="navEmailPropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkEmailcasauthnadaptiveriskagent" data-bs-toggle="tab" href="#emailPropertiescasauthnadaptiveriskagent"><i class="fa fa-envelope px-1"></i>Email Servers</a>
+</li>
+<li class="nav-item property-tab" id="navGroovyPropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkGroovycasauthnadaptiveriskagent" data-bs-toggle="tab" href="#groovyPropertiescasauthnadaptiveriskagent"><i class="fa fa-laptop-code px-1"></i>Groovy Scripting</a>
+</li>
+
+<li class="nav-item property-tab" id="navLdapPropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkLdapcasauthnadaptiveriskagent" data-bs-toggle="tab" href="#ldapPropertiescasauthnadaptiveriskagent"><i class="fa fa-server px-1"></i>LDAP &amp; Active Directory</a>
+</li>
+
+<li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkAuthnPredicatecasauthnadaptiveriskagent" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnadaptiveriskagent"><i class="fa fa-user-check px-1"></i>Authentication</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkPasswordEncodercasauthnadaptiveriskagent" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnadaptiveriskagent"><i class="fa fa-key px-1"></i>Password Encoding</a>
+</li>
+
+<li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkPrincipalTransformationcasauthnadaptiveriskagent" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskagent(this);" href="#principalTransformationPropertiescasauthnadaptiveriskagent"><i class="fa fa-person-booth px-1"></i>Principal Transformation</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnadaptiveriskagent">
+    <a class="nav-link" id="linkPasswordPolicycasauthnadaptiveriskagent" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskagent(this);" href="#passwordPolicyPropertiescasauthnadaptiveriskagent"><i class="fa fa-lock px-1"></i>Password Policy</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskagent(this);" id="linkNotescasauthnadaptiveriskagent" data-bs-toggle="tab" href="#notescasauthnadaptiveriskagent"><i class="fa fa-newspaper px-1"></i> Notes</a>
+</li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnadaptiveriskagent">
+
+
+    <div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnadaptiveriskagent">
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+        </sub>
+        <br><p></p>
+
+        <p></p>
+
+        <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnadaptiveriskagent">
+            <thead><tr><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnadaptiveriskagent"></textarea>
+    </div>
+
+    <div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnadaptiveriskagent">
+
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+            flag indicates that the presence of the setting
+            is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+            the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+            configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+        </sub>
+        <br><p></p>
+
+        <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnadaptiveriskagent">
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.adaptive.risk.agent.enabled=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Enable user-agent checking and criteria to calculate risky authentication attempts.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.risk.RiskBasedAuthenticationUserAgentProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnadaptiveriskagentenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnadaptiveriskagentenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.adaptive.risk.agent.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnadaptiveriskagentenabled"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnadaptiveriskagentenabled"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnadaptiveriskagentenabled"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnadaptiveriskagentenabled"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnadaptiveriskagentenabled"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnadaptiveriskagentenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.adaptive.risk.agent.enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnadaptiveriskagentenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    adaptive: <br>      risk: <br>        agent: <br>          enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnadaptiveriskagentenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnadaptiveriskagentenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.adaptive.risk.agent.enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnadaptiveriskagentenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_ADAPTIVE_RISK_AGENT_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnadaptiveriskagentenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.adaptive.risk.agent.enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnadaptiveriskagent"># Enable user-agent checking and criteria to calculate risky authentication attempts.
+# cas.authn.adaptive.risk.agent.enabled=false
+
+</textarea>
+    </div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnadaptiveriskagent">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.1.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+    </div>
+<script>
+        window.addEventListener('load', (event) => {$("#linkRdbmscasauthnadaptiveriskagent").remove();$("#linkEmailcasauthnadaptiveriskagent").remove();$("#linkGroovycasauthnadaptiveriskagent").remove();$("#linkSigningEncryptioncasauthnadaptiveriskagent").remove();$("#linkRequiredPropertiescasauthnadaptiveriskagent").remove();
+            $("#requiredPropertiescasauthnadaptiveriskagent").remove();$("#linkPasswordPolicycasauthnadaptiveriskagent").remove();$("#linkPrincipalTransformationcasauthnadaptiveriskagent").remove();$("#linkPasswordEncodercasauthnadaptiveriskagent").remove();$("#linkAuthnPredicatecasauthnadaptiveriskagent").remove();$("#linkLdapcasauthnadaptiveriskagent").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnadaptiveriskagent");
+            let id=$("#navPillsMenuscasauthnadaptiveriskagent a:visible:first").prop('id');
+            // console.log("Attempting to select tab with id " + id);
+            if (id != undefined && id != null) {
+                // console.log("Selecting first tab with link id " + id);
+                let firstTabEl = document.querySelector(`#${id}`);
+                let firstTab = new bootstrap.Tab(firstTabEl);
+                firstTab.show();
+                // console.log("Selected tab with link id " + id);
+            }
+
+            let c = $("#tableRequiredPropertiescasauthnadaptiveriskagent li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navRequiredPropertiescasauthnadaptiveriskagent").closest("table").remove();
+                $("#navRequiredPropertiesLeftcasauthnadaptiveriskagent").closest("table").remove();
+            }
+            c = $("#tableOptionalPropertiescasauthnadaptiveriskagent li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navOptionalPropertiescasauthnadaptiveriskagent").closest("table").remove();
+                $("#navOptionalPropertiesLeftcasauthnadaptiveriskagent").closest("table").remove();
+            }
+            c = $("#tableThirdPartyPropertiescasauthnadaptiveriskagent li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navThirdPartyPropertiescasauthnadaptiveriskagent").hide();
+            }
+
+        });
+    </script>
+
+</div>
+
+</li>
+  
+      <li>
+<p>This calculator looks into past authentication events that contain geolocation data, and compares those with the current geolocation.
+If current geolocation data is unavailable, it will attempt to geocode the location based on the current client ip address. This feature
+mostly depends on whether or not geodata is made available to CAS via the client browser and
+requires <a href="GeoTracking-Authentication-Requests.html">geotracking of authentication requests</a>.</p>
+
+<p>The story here is:</p>
+
+<blockquote>
+  <p>Find all past authentication events that match the current client location and calculate an average score.</p>
+</blockquote>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnadaptiveriskgeolocation">
+
+<li class="nav-item property-tab">
+    <a class="nav-link active" id="linkRequiredPropertiescasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#requiredPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-hand-point-right px-1"></i>Required</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" id="linkOptionalPropertiescasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#optionalPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-hand-spock px-1"></i>Optional</a>
+</li>
+
+<li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkSigningEncryptioncasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-user-secret px-1"></i>Signing &amp; Encryption</a>
+</li>
+
+<li class="nav-item property-tab" id="navRdbmsPropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkRdbmscasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-database px-1"></i>Hibernate &amp; JDBC</a>
+</li>
+<li class="nav-item property-tab" id="navEmailPropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkEmailcasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#emailPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-envelope px-1"></i>Email Servers</a>
+</li>
+<li class="nav-item property-tab" id="navGroovyPropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkGroovycasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#groovyPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-laptop-code px-1"></i>Groovy Scripting</a>
+</li>
+
+<li class="nav-item property-tab" id="navLdapPropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkLdapcasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#ldapPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-server px-1"></i>LDAP &amp; Active Directory</a>
+</li>
+
+<li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkAuthnPredicatecasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-user-check px-1"></i>Authentication</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkPasswordEncodercasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-key px-1"></i>Password Encoding</a>
+</li>
+
+<li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkPrincipalTransformationcasauthnadaptiveriskgeolocation" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskgeolocation(this);" href="#principalTransformationPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-person-booth px-1"></i>Principal Transformation</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnadaptiveriskgeolocation">
+    <a class="nav-link" id="linkPasswordPolicycasauthnadaptiveriskgeolocation" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskgeolocation(this);" href="#passwordPolicyPropertiescasauthnadaptiveriskgeolocation"><i class="fa fa-lock px-1"></i>Password Policy</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskgeolocation(this);" id="linkNotescasauthnadaptiveriskgeolocation" data-bs-toggle="tab" href="#notescasauthnadaptiveriskgeolocation"><i class="fa fa-newspaper px-1"></i> Notes</a>
+</li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnadaptiveriskgeolocation">
+
+
+    <div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnadaptiveriskgeolocation">
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+        </sub>
+        <br><p></p>
+
+        <p></p>
+
+        <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnadaptiveriskgeolocation">
+            <thead><tr><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnadaptiveriskgeolocation"></textarea>
+    </div>
+
+    <div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnadaptiveriskgeolocation">
+
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+            flag indicates that the presence of the setting
+            is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+            the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+            configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+        </sub>
+        <br><p></p>
+
+        <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnadaptiveriskgeolocation">
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.adaptive.risk.geo-location.enabled=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Enable geolocation checking and criteria to calculate risky authentication attempts.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.risk.RiskBasedAuthenticationGeoLocationProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnadaptiveriskgeolocationenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnadaptiveriskgeolocationenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.adaptive.risk.geo-location.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnadaptiveriskgeolocationenabled"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnadaptiveriskgeolocationenabled"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnadaptiveriskgeolocationenabled"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnadaptiveriskgeolocationenabled"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnadaptiveriskgeolocationenabled"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnadaptiveriskgeolocationenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.adaptive.risk.geo-location.enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnadaptiveriskgeolocationenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    adaptive: <br>      risk: <br>        geo-location: <br>          enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnadaptiveriskgeolocationenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnadaptiveriskgeolocationenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.adaptive.risk.geo-location.enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnadaptiveriskgeolocationenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_ADAPTIVE_RISK_GEO_LOCATION_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnadaptiveriskgeolocationenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.adaptive.risk.geo-location.enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnadaptiveriskgeolocation"># Enable geolocation checking and criteria to calculate risky authentication attempts.
+# cas.authn.adaptive.risk.geo-location.enabled=false
+
+</textarea>
+    </div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnadaptiveriskgeolocation">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.1.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+    </div>
+<script>
+        window.addEventListener('load', (event) => {$("#linkRdbmscasauthnadaptiveriskgeolocation").remove();$("#linkEmailcasauthnadaptiveriskgeolocation").remove();$("#linkGroovycasauthnadaptiveriskgeolocation").remove();$("#linkSigningEncryptioncasauthnadaptiveriskgeolocation").remove();$("#linkRequiredPropertiescasauthnadaptiveriskgeolocation").remove();
+            $("#requiredPropertiescasauthnadaptiveriskgeolocation").remove();$("#linkPasswordPolicycasauthnadaptiveriskgeolocation").remove();$("#linkPrincipalTransformationcasauthnadaptiveriskgeolocation").remove();$("#linkPasswordEncodercasauthnadaptiveriskgeolocation").remove();$("#linkAuthnPredicatecasauthnadaptiveriskgeolocation").remove();$("#linkLdapcasauthnadaptiveriskgeolocation").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnadaptiveriskgeolocation");
+            let id=$("#navPillsMenuscasauthnadaptiveriskgeolocation a:visible:first").prop('id');
+            // console.log("Attempting to select tab with id " + id);
+            if (id != undefined && id != null) {
+                // console.log("Selecting first tab with link id " + id);
+                let firstTabEl = document.querySelector(`#${id}`);
+                let firstTab = new bootstrap.Tab(firstTabEl);
+                firstTab.show();
+                // console.log("Selected tab with link id " + id);
+            }
+
+            let c = $("#tableRequiredPropertiescasauthnadaptiveriskgeolocation li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navRequiredPropertiescasauthnadaptiveriskgeolocation").closest("table").remove();
+                $("#navRequiredPropertiesLeftcasauthnadaptiveriskgeolocation").closest("table").remove();
+            }
+            c = $("#tableOptionalPropertiescasauthnadaptiveriskgeolocation li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navOptionalPropertiescasauthnadaptiveriskgeolocation").closest("table").remove();
+                $("#navOptionalPropertiesLeftcasauthnadaptiveriskgeolocation").closest("table").remove();
+            }
+            c = $("#tableThirdPartyPropertiescasauthnadaptiveriskgeolocation li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navThirdPartyPropertiescasauthnadaptiveriskgeolocation").hide();
+            }
+
+        });
+    </script>
+
+</div>
+
+</li>
+  
+      <li>
+<p>This calculator looks into past authentication events that fit within the defined time-window. It is applicable if you wish
+to consider authentication requests outside that window suspicious for the user. The story here is:</p>
+
+<blockquote>
+  <p>Find all past authentication events that are established X hours before/after now and calculate an averaged score.</p>
+</blockquote>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnadaptiveriskdatetime">
+
+<li class="nav-item property-tab">
+    <a class="nav-link active" id="linkRequiredPropertiescasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#requiredPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-hand-point-right px-1"></i>Required</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" id="linkOptionalPropertiescasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#optionalPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-hand-spock px-1"></i>Optional</a>
+</li>
+
+<li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkSigningEncryptioncasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-user-secret px-1"></i>Signing &amp; Encryption</a>
+</li>
+
+<li class="nav-item property-tab" id="navRdbmsPropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkRdbmscasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-database px-1"></i>Hibernate &amp; JDBC</a>
+</li>
+<li class="nav-item property-tab" id="navEmailPropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkEmailcasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#emailPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-envelope px-1"></i>Email Servers</a>
+</li>
+<li class="nav-item property-tab" id="navGroovyPropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkGroovycasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#groovyPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-laptop-code px-1"></i>Groovy Scripting</a>
+</li>
+
+<li class="nav-item property-tab" id="navLdapPropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkLdapcasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#ldapPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-server px-1"></i>LDAP &amp; Active Directory</a>
+</li>
+
+<li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkAuthnPredicatecasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnadaptiveriskdatetime"><i class="fa fa-user-check px-1"></i>Authentication</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkPasswordEncodercasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-key px-1"></i>Password Encoding</a>
+</li>
+
+<li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkPrincipalTransformationcasauthnadaptiveriskdatetime" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskdatetime(this);" href="#principalTransformationPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-person-booth px-1"></i>Principal Transformation</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnadaptiveriskdatetime">
+    <a class="nav-link" id="linkPasswordPolicycasauthnadaptiveriskdatetime" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskdatetime(this);" href="#passwordPolicyPropertiescasauthnadaptiveriskdatetime"><i class="fa fa-lock px-1"></i>Password Policy</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskdatetime(this);" id="linkNotescasauthnadaptiveriskdatetime" data-bs-toggle="tab" href="#notescasauthnadaptiveriskdatetime"><i class="fa fa-newspaper px-1"></i> Notes</a>
+</li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnadaptiveriskdatetime">
+
+
+    <div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnadaptiveriskdatetime">
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+        </sub>
+        <br><p></p>
+
+        <p></p>
+
+        <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnadaptiveriskdatetime">
+            <thead><tr><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnadaptiveriskdatetime"></textarea>
+    </div>
+
+    <div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnadaptiveriskdatetime">
+
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+            flag indicates that the presence of the setting
+            is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+            the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+            configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+        </sub>
+        <br><p></p>
+
+        <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnadaptiveriskdatetime">
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.adaptive.risk.date-time.enabled=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Enable date/time checking and criteria to calculate risky authentication attempts.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.risk.RiskBasedAuthenticationDateTimeProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnadaptiveriskdatetimeenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnadaptiveriskdatetimeenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.adaptive.risk.date-time.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnadaptiveriskdatetimeenabled"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnadaptiveriskdatetimeenabled"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnadaptiveriskdatetimeenabled"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnadaptiveriskdatetimeenabled"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnadaptiveriskdatetimeenabled"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnadaptiveriskdatetimeenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.adaptive.risk.date-time.enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnadaptiveriskdatetimeenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    adaptive: <br>      risk: <br>        date-time: <br>          enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnadaptiveriskdatetimeenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnadaptiveriskdatetimeenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.adaptive.risk.date-time.enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnadaptiveriskdatetimeenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_ADAPTIVE_RISK_DATE_TIME_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnadaptiveriskdatetimeenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.adaptive.risk.date-time.enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.adaptive.risk.date-time.window-in-hours=2</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                The hourly window used before and after each authentication event in calculation to establish a pattern that can then be compared against the threshold.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.risk.RiskBasedAuthenticationDateTimeProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnadaptiveriskdatetimewindowinhoursPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnadaptiveriskdatetimewindowinhoursPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.adaptive.risk.date-time.window-in-hours</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnadaptiveriskdatetimewindowinhours"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnadaptiveriskdatetimewindowinhours"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnadaptiveriskdatetimewindowinhours"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnadaptiveriskdatetimewindowinhours"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnadaptiveriskdatetimewindowinhours"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnadaptiveriskdatetimewindowinhours">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.adaptive.risk.date-time.window-in-hours=2
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnadaptiveriskdatetimewindowinhours">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    adaptive: <br>      risk: <br>        date-time: <br>          window-in-hours</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnadaptiveriskdatetimewindowinhours td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnadaptiveriskdatetimewindowinhours">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.adaptive.risk.date-time.window-in-hours<span class="o">=</span><span class="s2">"2"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnadaptiveriskdatetimewindowinhours">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_ADAPTIVE_RISK_DATE_TIME_WINDOW_IN_HOURS</span><span class="o">=</span><span class="s2">"2"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnadaptiveriskdatetimewindowinhours">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.adaptive.risk.date-time.window-in-hours<span class="o">=</span><span class="s2">"2"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnadaptiveriskdatetime"># Enable date/time checking and criteria to calculate risky authentication attempts.
+# cas.authn.adaptive.risk.date-time.enabled=false
+
+# The hourly window used before and after each authentication event in calculation to establish a pattern that can then be compared against the threshold.
+# cas.authn.adaptive.risk.date-time.window-in-hours=2
+
+</textarea>
+    </div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnadaptiveriskdatetime">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.1.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+    </div>
+<script>
+        window.addEventListener('load', (event) => {$("#linkRdbmscasauthnadaptiveriskdatetime").remove();$("#linkEmailcasauthnadaptiveriskdatetime").remove();$("#linkGroovycasauthnadaptiveriskdatetime").remove();$("#linkSigningEncryptioncasauthnadaptiveriskdatetime").remove();$("#linkRequiredPropertiescasauthnadaptiveriskdatetime").remove();
+            $("#requiredPropertiescasauthnadaptiveriskdatetime").remove();$("#linkPasswordPolicycasauthnadaptiveriskdatetime").remove();$("#linkPrincipalTransformationcasauthnadaptiveriskdatetime").remove();$("#linkPasswordEncodercasauthnadaptiveriskdatetime").remove();$("#linkAuthnPredicatecasauthnadaptiveriskdatetime").remove();$("#linkLdapcasauthnadaptiveriskdatetime").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnadaptiveriskdatetime");
+            let id=$("#navPillsMenuscasauthnadaptiveriskdatetime a:visible:first").prop('id');
+            // console.log("Attempting to select tab with id " + id);
+            if (id != undefined && id != null) {
+                // console.log("Selecting first tab with link id " + id);
+                let firstTabEl = document.querySelector(`#${id}`);
+                let firstTab = new bootstrap.Tab(firstTabEl);
+                firstTab.show();
+                // console.log("Selected tab with link id " + id);
+            }
+
+            let c = $("#tableRequiredPropertiescasauthnadaptiveriskdatetime li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navRequiredPropertiescasauthnadaptiveriskdatetime").closest("table").remove();
+                $("#navRequiredPropertiesLeftcasauthnadaptiveriskdatetime").closest("table").remove();
+            }
+            c = $("#tableOptionalPropertiescasauthnadaptiveriskdatetime li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navOptionalPropertiescasauthnadaptiveriskdatetime").closest("table").remove();
+                $("#navOptionalPropertiesLeftcasauthnadaptiveriskdatetime").closest("table").remove();
+            }
+            c = $("#tableThirdPartyPropertiescasauthnadaptiveriskdatetime li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navThirdPartyPropertiescasauthnadaptiveriskdatetime").hide();
+            }
+
+        });
+    </script>
+
+</div>
+
+</li>
+  
+      <li>
+<p>This calculator looks into past authentication events that match the device fingerprint. The device (browser) fingerprint 
+is calculated via client-side Javascript and collected during authentication events.</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnadaptiveriskdevicefingerprint">
+
+<li class="nav-item property-tab">
+    <a class="nav-link active" id="linkRequiredPropertiescasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#requiredPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-hand-point-right px-1"></i>Required</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" id="linkOptionalPropertiescasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#optionalPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-hand-spock px-1"></i>Optional</a>
+</li>
+
+<li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkSigningEncryptioncasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-user-secret px-1"></i>Signing &amp; Encryption</a>
+</li>
+
+<li class="nav-item property-tab" id="navRdbmsPropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkRdbmscasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-database px-1"></i>Hibernate &amp; JDBC</a>
+</li>
+<li class="nav-item property-tab" id="navEmailPropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkEmailcasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#emailPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-envelope px-1"></i>Email Servers</a>
+</li>
+<li class="nav-item property-tab" id="navGroovyPropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkGroovycasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#groovyPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-laptop-code px-1"></i>Groovy Scripting</a>
+</li>
+
+<li class="nav-item property-tab" id="navLdapPropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkLdapcasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#ldapPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-server px-1"></i>LDAP &amp; Active Directory</a>
+</li>
+
+<li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkAuthnPredicatecasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-user-check px-1"></i>Authentication</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkPasswordEncodercasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-key px-1"></i>Password Encoding</a>
+</li>
+
+<li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkPrincipalTransformationcasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskdevicefingerprint(this);" href="#principalTransformationPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-person-booth px-1"></i>Principal Transformation</a>
+</li>
+
+<li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnadaptiveriskdevicefingerprint">
+    <a class="nav-link" id="linkPasswordPolicycasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskdevicefingerprint(this);" href="#passwordPolicyPropertiescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-lock px-1"></i>Password Policy</a>
+</li>
+<li class="nav-item property-tab">
+    <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnadaptiveriskdevicefingerprint(this);" id="linkNotescasauthnadaptiveriskdevicefingerprint" data-bs-toggle="tab" href="#notescasauthnadaptiveriskdevicefingerprint"><i class="fa fa-newspaper px-1"></i> Notes</a>
+</li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnadaptiveriskdevicefingerprint">
+
+
+    <div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnadaptiveriskdevicefingerprint">
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+        </sub>
+        <br><p></p>
+
+        <p></p>
+
+        <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnadaptiveriskdevicefingerprint">
+            <thead><tr><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnadaptiveriskdevicefingerprint"></textarea>
+    </div>
+
+    <div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnadaptiveriskdevicefingerprint">
+
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+            flag indicates that the presence of the setting
+            is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+            the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+            configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+        </sub>
+        <br><p></p>
+
+        <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnadaptiveriskdevicefingerprint">
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.adaptive.risk.device-fingerprint.enabled=false</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Enable date/time checking and criteria to calculate risky authentication attempts.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.core.authentication.risk.RiskBasedAuthenticationDeviceFingerprintProperties.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnadaptiveriskdevicefingerprintenabledPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnadaptiveriskdevicefingerprintenabledPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.adaptive.risk.device-fingerprint.enabled</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnadaptiveriskdevicefingerprintenabled"><i class="fa-brands fa-java px-1"></i>Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnadaptiveriskdevicefingerprintenabled"><i class="fa fa-file-code px-1"></i>YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnadaptiveriskdevicefingerprintenabled"><i class="fa fa-laptop px-1"></i>System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnadaptiveriskdevicefingerprintenabled"><i class="fa fa-laptop-code px-1"></i>Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnadaptiveriskdevicefingerprintenabled"><i class="fa fa-terminal px-1"></i>Command-line Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnadaptiveriskdevicefingerprintenabled">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.adaptive.risk.device-fingerprint.enabled=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnadaptiveriskdevicefingerprintenabled">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    adaptive: <br>      risk: <br>        device-fingerprint: <br>          enabled</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnadaptiveriskdevicefingerprintenabled td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnadaptiveriskdevicefingerprintenabled">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.adaptive.risk.device-fingerprint.enabled<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnadaptiveriskdevicefingerprintenabled">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_ADAPTIVE_RISK_DEVICE_FINGERPRINT_ENABLED</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnadaptiveriskdevicefingerprintenabled">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.adaptive.risk.device-fingerprint.enabled<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnadaptiveriskdevicefingerprint"># Enable date/time checking and criteria to calculate risky authentication attempts.
+# cas.authn.adaptive.risk.device-fingerprint.enabled=false
+
+</textarea>
+    </div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnadaptiveriskdevicefingerprint">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.1.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+    </div>
+<script>
+        window.addEventListener('load', (event) => {$("#linkRdbmscasauthnadaptiveriskdevicefingerprint").remove();$("#linkEmailcasauthnadaptiveriskdevicefingerprint").remove();$("#linkGroovycasauthnadaptiveriskdevicefingerprint").remove();$("#linkSigningEncryptioncasauthnadaptiveriskdevicefingerprint").remove();$("#linkRequiredPropertiescasauthnadaptiveriskdevicefingerprint").remove();
+            $("#requiredPropertiescasauthnadaptiveriskdevicefingerprint").remove();$("#linkPasswordPolicycasauthnadaptiveriskdevicefingerprint").remove();$("#linkPrincipalTransformationcasauthnadaptiveriskdevicefingerprint").remove();$("#linkPasswordEncodercasauthnadaptiveriskdevicefingerprint").remove();$("#linkAuthnPredicatecasauthnadaptiveriskdevicefingerprint").remove();$("#linkLdapcasauthnadaptiveriskdevicefingerprint").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnadaptiveriskdevicefingerprint");
+            let id=$("#navPillsMenuscasauthnadaptiveriskdevicefingerprint a:visible:first").prop('id');
+            // console.log("Attempting to select tab with id " + id);
+            if (id != undefined && id != null) {
+                // console.log("Selecting first tab with link id " + id);
+                let firstTabEl = document.querySelector(`#${id}`);
+                let firstTab = new bootstrap.Tab(firstTabEl);
+                firstTab.show();
+                // console.log("Selected tab with link id " + id);
+            }
+
+            let c = $("#tableRequiredPropertiescasauthnadaptiveriskdevicefingerprint li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navRequiredPropertiescasauthnadaptiveriskdevicefingerprint").closest("table").remove();
+                $("#navRequiredPropertiesLeftcasauthnadaptiveriskdevicefingerprint").closest("table").remove();
+            }
+            c = $("#tableOptionalPropertiescasauthnadaptiveriskdevicefingerprint li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navOptionalPropertiescasauthnadaptiveriskdevicefingerprint").closest("table").remove();
+                $("#navOptionalPropertiesLeftcasauthnadaptiveriskdevicefingerprint").closest("table").remove();
+            }
+            c = $("#tableThirdPartyPropertiescasauthnadaptiveriskdevicefingerprint li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navThirdPartyPropertiescasauthnadaptiveriskdevicefingerprint").hide();
+            }
+
+        });
+    </script>
+
+</div>
+
+</li>
+  
+</ul>
+
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tether@2.0.0/dist/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="/cas/javascripts/URI.js"></script>
+    <script src="/cas/javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+    <script>
+        let pageSection = 'Authentication';
+        let siteUrl = '';
+        let basePath = '/cas';
+
+        
+    </script>
+</body>
+
+</html>

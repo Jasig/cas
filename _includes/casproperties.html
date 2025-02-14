@@ -1,0 +1,636 @@
+<!-- fragment:keep -->
+
+{%- assign min = 1 -%}
+{%- assign max = 999999 -%}
+{%- assign diff = max | minus: min -%}
+{%- assign rbrace = "}" -%}
+{%- assign lbrace = "{" -%}
+
+{%- assign excludes = include.excludes | split: "," -%}
+{%- assign includes = include.includes | split: "," -%}
+{%- assign properties = include.properties | split: "," -%}
+{%- assign thirdParty = include.thirdParty | split: "," -%}
+{%- assign thirdPartyExactMatch = include.thirdPartyExactMatch | split: "," -%}
+{%- assign thirdPartyStartsWith = include.thirdPartyStartsWith | split: "," -%}
+{%- assign includeRsaKeys = include.includeRsaKeys -%}
+{%- assign forcePropertyTabsOnClick = include.forcePropertyTabsOnClick | default: "false" -%}
+{%- assign casPropertiesRandomNumber = include.properties
+| append: include.id
+| default: include.thirdParty
+| default: include.thirdPartyStartsWith
+| default: include.thirdPartyExactMatch
+| append: include.includes
+| append: include.excludes
+| remove: "-"
+| remove: "."
+| remove: ","
+| remove: "[0]"
+| remove: "[]"
+| truncate: 80, '' -%}
+
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+
+{%- if forcePropertyTabsOnClick == "true" -%}
+<script>
+    function enablePropertiesTab{{ casPropertiesRandomNumber }}(link) {
+        // console.log(link);
+        let id = new URL(link.href).hash;
+        console.log(`Tab link selected ${id}`);
+        $("#casPropertiesTabContent{{casPropertiesRandomNumber}} .properties-tab").removeClass("show").removeClass("active");
+        $(`.modal-body ${id}`).addClass("show").addClass("active");
+        $(`.modal-body ${id} table tr`).css("display", "block");
+    }
+
+    window.addEventListener('load', (event) => {
+        // console.log('Loaded page for configuration properties {{ casPropertiesRandomNumber }} ');
+        $("ul#navPillsMenus{{ casPropertiesRandomNumber }}").css("display", "")
+            .show().addClass("show").addClass("active");
+
+        setTimeout(() => {
+            let selector = "ul#navPillsMenus{{ casPropertiesRandomNumber }} li a:visible:first";
+            console.log(`Activating link ${selector}: ${$(selector)}`);
+            $(selector).show().addClass("show").addClass("active");
+        }, 1000);
+    });
+</script>
+{%- endif -%}
+
+<ul {% if forcePropertyTabsOnClick == "true" %} style="display:none;"  {% endif %}
+class='nav nav-tabs nav-tabs-properties' id="navPillsMenus{{ casPropertiesRandomNumber }}">
+
+<li class='nav-item property-tab'>
+    <a class='nav-link active'
+       id="linkRequiredProperties{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#requiredProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-hand-point-right px-1"></i>Required</a>
+</li>
+<li class='nav-item property-tab'>
+    <a class='nav-link'
+       id="linkOptionalProperties{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#optionalProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-hand-spock px-1"></i>Optional</a>
+</li>
+
+<li class='nav-item property-tab' id='navSigningEncryptionProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkSigningEncryption{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#signingEncryptionProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-user-secret px-1"></i>Signing & Encryption</a>
+</li>
+
+<li class='nav-item property-tab' id='navRdbmsProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkRdbms{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#rdbmsProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-database px-1"></i>Hibernate & JDBC</a>
+</li>
+
+{%- assign displayEmailServers = include.displayEmailServers | default: "true" -%}
+{%- if displayEmailServers == "true" -%}
+<li class='nav-item property-tab' id='navEmailProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkEmail{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#emailProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-envelope px-1"></i>Email Servers</a>
+</li>
+{%- endif -%}
+
+<li class='nav-item property-tab' id='navGroovyProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkGroovy{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#groovyProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-laptop-code px-1"></i>Groovy Scripting</a>
+</li>
+
+<li class='nav-item property-tab' id='navLdapProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkLdap{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#ldapProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-server px-1"></i>LDAP & Active Directory</a>
+</li>
+
+<li class='nav-item property-tab' id='navAuthnPredicateProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkAuthnPredicate{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#authnPredicateProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-user-check px-1"></i>Authentication</a>
+</li>
+
+<li class='nav-item property-tab' id='navPasswordEncoderProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkPasswordEncoder{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       {% if forcePropertyTabsOnClick == "true" %}onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);" {% endif %}
+    href='#passwordEncoderProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-key px-1"></i>Password Encoding</a>
+</li>
+
+<li class='nav-item property-tab' id='navPrincipalTransformationProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkPrincipalTransformation{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);"
+       href='#principalTransformationProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-person-booth px-1"></i>Principal Transformation</a>
+</li>
+
+<li class='nav-item property-tab' id='navPasswordPolicyProperties{{ casPropertiesRandomNumber }}'>
+    <a class='nav-link'
+       id="linkPasswordPolicy{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);"
+       href='#passwordPolicyProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-lock px-1"></i>Password Policy</a>
+</li>
+
+{%- if thirdParty.size > 0 or thirdPartyExactMatch.size > 0 or thirdPartyStartsWith.size > 0 -%}
+<li class='nav-item property-tab'>
+    <a class='nav-link'
+       id="linkThirdPartyProperties{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);"
+       href='#thirdPartyProperties{{ casPropertiesRandomNumber }}'><i class="fa fa-gears px-1"></i>Third Party</a>
+</li>
+{%- endif -%}
+
+{%- unless include.disableNotes == "true" -%}
+<li class='nav-item property-tab'>
+    <a class='nav-link'
+       onclick="javascript:enablePropertiesTab{{ casPropertiesRandomNumber }}(this);"
+       id="linkNotes{{ casPropertiesRandomNumber }}"
+       data-bs-toggle='tab'
+       href='#notes{{ casPropertiesRandomNumber }}'><i class="fa fa-newspaper px-1"></i> Notes</a>
+</li>
+{%- endunless -%}
+</ul>
+
+{%- assign signingEncryptionEnabled = false -%}
+{%- assign optionalSettingsFound = false -%}
+{%- assign requiredSettingsFound = false -%}
+{%- assign rdbmsSettingsFound = false -%}
+{%- assign emailSettingsFound = false -%}
+{%- assign ldapSettingsFound = false -%}
+{%- assign groovySettingsFound = false -%}
+{%- assign authnPredicateSettingsFound = false -%}
+{%- assign passwordEncoderSettingsFound = false -%}
+{%- assign principalTransformationSettingsFound = false -%}
+{%- assign passwordPolicySettingsFound = false -%}
+
+{%- assign textAreaRequiredProperties = blank -%}
+{%- assign textAreaOptionalProperties = blank -%}
+{%- assign textAreaCryptoProperties = blank -%}
+{%- assign textAreaPrincipalTransformationProperties = blank -%}
+{%- assign textAreaPasswordPolicyProperties = blank -%}
+{%- assign textAreaPasswordEncoderProperties = blank -%}
+
+<div class='tab-content clearfix' id="casPropertiesTabContent{{casPropertiesRandomNumber}}">
+
+
+    <div class='tab-pane properties-tab fade in active show' id='requiredProperties{{ casPropertiesRandomNumber }}'>
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+        </sub>
+        <br><p />
+
+        <p/>
+
+        <table class="cas-datatable properties {{ paginatedClass }}" id='tableRequiredProperties{{ casPropertiesRandomNumber }}'>
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+
+            {%- for prop in properties -%}
+            {%- for module in site.data[siteDataVersion] -%}
+            {%- assign moduleEntry = module[1] -%}
+            {%- for cfg in moduleEntry -%}
+            {%- assign configBlock = cfg[1] -%}
+
+            {%- for config in configBlock -%}
+            {%- if config.required == true and config.name contains prop -%}
+
+            {%- assign foundExcluded = false -%}
+            {%- for ex in excludes -%}
+            {%- if config.name contains ex -%}
+            {%- assign foundExcluded = true -%}
+            {%- endif -%}
+            {%- endfor -%}
+
+            {%- if includes.size > 0 and foundExcluded == false -%}
+            {%- assign foundIncluded = false -%}
+            {%- for inc in includes -%}
+            {%- if config.name contains inc -%}
+            {%- assign foundIncluded = true -%}
+            {%- endif -%}
+            {%- endfor -%}
+            {%- if foundIncluded == false -%}
+            {%- assign foundExcluded = true -%}
+            {%- endif -%}
+            {%- endif -%}
+
+            {%- unless foundExcluded == true -%}
+            {%- assign signingEncryptionCollected = false -%}
+            {%- if config.name contains ".crypto" -%}
+            {%- assign signingEncryptionEnabled = true -%}
+            {%- assign signingEncryptionCollected = true -%}
+            {%- endif -%}
+            {%- if config.name contains ".jpa" or config.name contains ".jdbc" -%}
+            {%- assign rdbmsSettingsFound = true -%}
+            {%- endif -%}
+            {%- if config.name contains ".mail" -%}
+            {%- assign emailSettingsFound = true -%}
+            {%- endif -%}
+            {%- if config.name contains "groovy" or config.name contains "script" -%}
+            {%- assign groovySettingsFound = true -%}
+            {%- endif -%}
+            {%- if config.name contains ".ldap" -%}
+            {%- assign ldapSettingsFound = true -%}
+            {%- endif -%}
+            {%- if config.name contains ".credential-criteria" -%}
+            {%- assign authnPredicateSettingsFound = true -%}
+            {%- endif -%}
+            {%- assign passwordEncoderSettingsFound = false -%}
+            {%- if config.name contains ".password-encoder" -%}
+            {%- assign passwordEncoderSettingsFound = true -%}
+            {%- endif -%}
+            {%- assign principalTransformationSettingsFound = false -%}
+            {%- if config.name contains ".principal-transformation" -%}
+            {%- assign principalTransformationSettingsFound = true -%}
+            {%- endif -%}
+            {%- assign passwordPolicySettingsFound = false -%}
+            {%- if config.name contains ".password-policy" -%}
+            {%- assign passwordPolicySettingsFound = true -%}
+            {%- endif -%}
+
+            {%- assign requiredSettingsFound = true -%}
+            {%- assign textAreaRequiredProperties = textAreaRequiredProperties
+            | append: "# "
+            | append: config.shortDescription | strip_html
+            | append: "&#13;&#10;"
+            | append: "# "
+            | append: config.name | replace: "[]", "[0]"
+            | append: "="
+            | append: config.defaultValue
+            | append: "&#13;&#10;"
+            | append: "&#13;&#10;" -%}
+
+            {%- capture renderedProperties -%}{% include_cached casproperty.html
+            name=config.name
+            owner=config.owner
+            defaultValue=config.defaultValue
+            description=config.description
+            duration=config.duration
+            regexPattern=config.regexPattern
+            expressionLanguage=config.expressionLanguage
+            deprecationLevel=config.deprecationLevel
+            deprecationReplacement=config.deprecationReplacement %}{%- endcapture -%}
+            {{ renderedProperties | markdownify }}
+            {%- if signingEncryptionCollected == true -%}
+            {%- assign textAreaCryptoProperties = textAreaCryptoProperties | append: renderedProperties -%}
+            {%- endif -%}
+            {%- if passwordPolicySettingsFound == true -%}
+            {%- assign textAreaPasswordPolicyProperties = textAreaPasswordPolicyProperties | append: renderedProperties -%}
+            {%- endif -%}
+            {%- if passwordEncoderSettingsFound == true -%}
+            {%- assign textAreaPasswordEncoderProperties = textAreaPasswordEncoderProperties | append: renderedProperties -%}
+            {%- endif -%}
+            {%- if principalTransformationSettingsFound == true -%}
+            {%- assign textAreaPrincipalTransformationProperties = textAreaPrincipalTransformationProperties | append: renderedProperties -%}
+            {%- endif -%}
+            {%- endunless -%}
+
+            {%- endif -%}
+            {%- endfor -%}
+            {%- endfor -%}
+            {%- endfor -%}
+            {%- endfor -%}
+
+            </tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;"
+                  id="copyAreaRequiredProperties{{ casPropertiesRandomNumber }}">{{ textAreaRequiredProperties }}</textarea>
+    </div>
+
+    <div class='tab-pane properties-tab fade in' id='optionalProperties{{ casPropertiesRandomNumber }}'>
+
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+            flag indicates that the presence of the setting
+            is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+            the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+            configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+        </sub>
+        <br><p />
+
+        <table class="cas-datatable properties {{ paginatedClass }}" id='tableOptionalProperties{{ casPropertiesRandomNumber }}'>
+            <thead><tr><th></th></tr></thead>
+            <tbody>
+
+            {%- for prop in properties -%}
+            {%- for module in site.data[siteDataVersion] -%}
+            {%- assign moduleEntry = module[1] -%}
+            {%- for cfg in moduleEntry -%}
+            {%- assign configBlock = cfg[1] -%}
+
+            {%- for config in configBlock -%}
+            {%- if config.name contains prop -%}
+            {%- unless config.required == true -%}
+            {%- assign foundExcluded = false -%}
+            {%- for ex in excludes -%}
+            {%- if config.name contains ex -%}
+            {%- assign foundExcluded = true -%}
+            {%- endif -%}
+            {%- endfor -%}
+
+            {%- if includes.size > 0 and foundExcluded == false -%}
+            {%- assign foundIncluded = false -%}
+            {%- for inc in includes -%}
+            {%- if config.name contains inc -%}
+            {%- assign foundIncluded = true -%}
+            {%- endif -%}
+            {%- endfor -%}
+            {%- if foundIncluded == false -%}
+            {%- assign foundExcluded = true -%}
+            {%- endif -%}
+            {%- endif -%}
+
+            {%- unless foundExcluded == true -%}
+            {%- assign signingEncryptionCollected = false -%}
+
+            {%- if config.name contains ".crypto" -%}
+            {%- assign signingEncryptionEnabled = true -%}
+            {%- assign signingEncryptionCollected = true -%}
+            {%- endif -%}
+
+            {%- if config.name contains ".jpa" or config.name contains ".jdbc" -%}
+            {%- assign rdbmsSettingsFound = true -%}
+            {%- endif -%}
+            {%- if config.name contains ".mail" -%}
+            {%- assign emailSettingsFound = true -%}
+            {%- endif -%}
+            {%- if config.name contains "groovy" or config.name contains "script" -%}
+            {%- assign groovySettingsFound = true -%}
+            {%- endif -%}
+            {%- if config.name contains ".ldap" -%}
+            {%- assign ldapSettingsFound = true -%}
+            {%- endif -%}
+            {%- if config.name contains ".credential-criteria" -%}
+            {%- assign authnPredicateSettingsFound = true -%}
+            {%- endif -%}
+            {%- assign passwordEncoderSettingsFound = false -%}
+            {%- if config.name contains ".password-encoder" -%}
+            {%- assign passwordEncoderSettingsFound = true -%}
+            {%- endif -%}
+            {%- assign principalTransformationSettingsFound = false -%}
+            {%- if config.name contains ".principal-transformation" -%}
+            {%- assign principalTransformationSettingsFound = true -%}
+            {%- endif -%}
+            {%- assign passwordPolicySettingsFound = false -%}
+            {%- if config.name contains ".password-policy" -%}
+            {%- assign passwordPolicySettingsFound = true -%}
+            {%- endif -%}
+
+            {%- assign optionalSettingsFound = true -%}
+            {%- assign textAreaOptionalProperties = textAreaOptionalProperties
+            | append: "# "
+            | append: config.shortDescription | strip_html
+            | append: "&#13;&#10;"
+            | append: "# "
+            | append: config.name | replace: "[]", "[0]"
+            | append: "="
+            | append: config.defaultValue
+            | append: "&#13;&#10;"
+            | append: "&#13;&#10;" -%}
+            {%- capture renderedProperties -%} {% include_cached casproperty.html
+            name=config.name
+            owner=config.owner
+            defaultValue=config.defaultValue
+            description=config.description
+            duration=config.duration
+            regexPattern=config.regexPattern
+            expressionLanguage=config.expressionLanguage
+            deprecationLevel=config.deprecationLevel
+            deprecationReplacement=config.deprecationReplacement %}{%- endcapture -%}
+            {{ renderedProperties | markdownify }}
+            {%- if signingEncryptionCollected == true -%}
+            {%- assign textAreaCryptoProperties = textAreaCryptoProperties | append: renderedProperties -%}
+            {%- endif -%}
+            {%- if passwordPolicySettingsFound == true -%}
+            {%- assign textAreaPasswordPolicyProperties = textAreaPasswordPolicyProperties | append: renderedProperties -%}
+            {%- endif -%}
+            {%- if passwordEncoderSettingsFound == true -%}
+            {%- assign textAreaPasswordEncoderProperties = textAreaPasswordEncoderProperties | append: renderedProperties -%}
+            {%- endif -%}
+            {%- if principalTransformationSettingsFound == true -%}
+            {%- assign textAreaPrincipalTransformationProperties = textAreaPrincipalTransformationProperties | append: renderedProperties -%}
+            {%- endif -%}
+            {%- endunless -%}
+            {%- endunless -%}
+            {%- endif -%}
+            {%- endfor -%}
+            {%- endfor -%}
+            {%- endfor -%}
+            {%- endfor -%}
+
+            </tbody>
+        </table>
+
+        <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalProperties{{ casPropertiesRandomNumber }}">{{ textAreaOptionalProperties }}</textarea>
+    </div>
+
+
+    {%- if thirdParty.size > 0 or thirdPartyExactMatch.size > 0 or thirdPartyStartsWith.size > 0 -%}
+    <div class='tab-pane properties-tab fade in' id='thirdPartyProperties{{ casPropertiesRandomNumber }}'>
+        <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+        <sub>
+            The configuration settings listed below are tagged as <i>Third Party</i> in the CAS configuration metadata. This flag indicates that the configuration setting is not controlled, owned or managed by the CAS ecosystem, and affects functionality that is offered by a third-party library, such as Spring Boot or Spring Cloud to CAS. For additional info, you might have to visit the third-party source to find more details.
+        </sub>
+        <br><p />
+
+        {%- assign tpsw = include.thirdPartyStartsWith -%}
+        {%- assign tp = include.thirdParty -%}
+        {%- assign tpem = include.thirdPartyExactMatch -%}
+
+        {%- include_cached thirdpartyproperties.html
+        id=casPropertiesRandomNumber
+        thirdPartyStartsWith=tpsw
+        thirdParty=tp
+        thirdPartyExactMatch=tpem
+        -%}
+    </div>
+    {%- endif -%}
+
+    {%- if signingEncryptionEnabled == true -%}
+    <div class='tab-pane properties-tab fade in' id='signingEncryptionProperties{{ casPropertiesRandomNumber }}'>
+        <table class="cas-datatable properties"
+               id='tableSigningEncryptionProperties{{ casPropertiesRandomNumber }}'>
+            <thead><tr><th></th></tr></thead>
+            <tbody>{{ textAreaCryptoProperties }} </tbody>
+        </table>
+
+        {%- capture signingEncConfig -%}{% include_cached {{ version }}/signing-encryption-configuration.md includeRsaKeys=includeRsaKeys %}{%- endcapture -%}
+        {{ signingEncConfig | markdownify }}
+    </div>
+    {%- endif -%}
+
+    {%- if rdbmsSettingsFound == true -%}
+    <div class='tab-pane properties-tab fade in' id='rdbmsProperties{{ casPropertiesRandomNumber }}'>
+        {%- capture rdbmsConfig -%} {% include_cached {{ version }}/rdbms-configuration.md %}{%- endcapture -%}
+        {{ rdbmsConfig | markdownify }}
+    </div>
+    {%- endif -%}
+
+    {%- if emailSettingsFound == true -%}
+    <div class='tab-pane properties-tab fade in' id='emailProperties{{ casPropertiesRandomNumber }}'>
+        {%- capture emailConfig -%}{% include_cached {{ version }}/email-notifications-configuration.md %}{%- endcapture -%}
+        {{ emailConfig | markdownify }}
+    </div>
+    {%- endif -%}
+
+    {%- if groovySettingsFound == true -%}
+    <div class='tab-pane properties-tab fade in' id='groovyProperties{{ casPropertiesRandomNumber }}'>
+        <p/>CAS takes advantage of Apache Groovy in forms of either embedded or external scripts that allow one to, by default,
+        dynamically build constructs, attributes, access strategies and a lot more. To activate the functionality
+        described here, you may need to prepare CAS to support and integrate with Apache Groovy.
+        <br/><p>Please <a href="{{ baseUrl }}/integration/Apache-Groovy-Scripting.html">review this guide</a> to configure your build.</p>
+    </div>
+    {%- endif -%}
+
+    {%- if ldapSettingsFound == true -%}
+    <div class='tab-pane properties-tab fade in' id='ldapProperties{{ casPropertiesRandomNumber }}'>
+        {%- capture ldapConfig -%} {% include_cached {{ version }}/ldap-configuration.md %}{%- endcapture -%}
+        {{ ldapConfig | markdownify }}
+    </div>
+    {%- endif -%}
+
+
+    {%- unless textAreaPasswordEncoderProperties == blank -%}
+    <div class='tab-pane properties-tab fade in' id='passwordEncoderProperties{{ casPropertiesRandomNumber }}'>
+
+        <table class="cas-datatable properties"
+               id='tablePasswordEncoderProperties{{ casPropertiesRandomNumber }}'>
+            <thead><tr><th></th></tr></thead>
+            <tbody>{{ textAreaPasswordEncoderProperties }} </tbody>
+        </table>
+
+        {%- capture passwordEncoderConfig -%}{% include_cached {{ version }}/password-encoding-configuration.md %}{%- endcapture -%}
+        {{ passwordEncoderConfig | markdownify }}
+    </div>
+    {%- endunless -%}
+
+    {%- unless textAreaPasswordPolicyProperties == blank -%}
+    <div class='tab-pane properties-tab fade in' id='passwordPolicyProperties{{ casPropertiesRandomNumber }}'>
+        <p/>
+        <table class="cas-datatable properties"
+               id='tablePasswordPolicyProperties{{ casPropertiesRandomNumber }}'>
+            <thead><tr><th></th></tr></thead>
+            <tbody>{{ textAreaPasswordPolicyProperties }} </tbody>
+        </table>
+
+        {%- capture passwordPolicyConfig -%}{% include_cached {{ version }}/password-policy-configuration.md %}{%- endcapture -%}
+        {{ passwordPolicyConfig | markdownify }}
+    </div>
+    {%- endunless -%}
+
+    {%- unless textAreaPrincipalTransformationProperties == blank -%}
+    <div class='tab-pane properties-tab fade in' id='principalTransformationProperties{{ casPropertiesRandomNumber }}'>
+        <p/>
+        <table class="cas-datatable properties"
+               id='tablePrincipalTransformationProperties{{ casPropertiesRandomNumber }}'>
+            <thead><tr><th></th></tr></thead>
+            <tbody>{{ textAreaPrincipalTransformationProperties }} </tbody>
+        </table>
+
+        {%- capture principalTransformationConfig -%}{% include_cached {{ version }}/principal-transformation-configuration.md %}{%- endcapture -%}
+        {{ principalTransformationConfig | markdownify }}
+    </div>
+    {%- endunless -%}
+
+    {%- if authnPredicateSettingsFound == true -%}
+    <div class="tab-pane properties-tab fade in" id="authnPredicateProperties{{ casPropertiesRandomNumber }}">
+        {%- capture authnConfig -%}{% include_cached {{ version }}/authentication-credential-selection-configuration.md %}{%- endcapture -%}
+        {{ authnConfig | markdownify }}
+    </div>
+    {%- endif -%}
+
+    {%- unless include.disableNotes == "true" -%}
+    <div class='tab-pane properties-tab fade in' id='notes{{ casPropertiesRandomNumber }}'>
+        {%- capture notesConfig -%}{%- include_cached config-guidelines.md %}{%- endcapture -%}
+        {{ notesConfig | markdownify }}
+    </div>
+    {%- endunless -%}
+
+    <script>
+        window.addEventListener('load', (event) => {
+
+            {%- unless optionalSettingsFound -%}
+            $("#linkOptionalProperties{{ casPropertiesRandomNumber }}").remove();
+            {%- endunless -%}
+            {%- unless rdbmsSettingsFound -%}
+            $("#linkRdbms{{ casPropertiesRandomNumber }}").remove();
+            {%- endunless -%}
+            {%- unless emailSettingsFound -%}
+            $("#linkEmail{{ casPropertiesRandomNumber }}").remove();
+            {%- endunless -%}
+            {%- unless groovySettingsFound -%}
+            $("#linkGroovy{{ casPropertiesRandomNumber }}").remove();
+            {%- endunless -%}
+            {%- unless signingEncryptionEnabled -%}
+            $("#linkSigningEncryption{{ casPropertiesRandomNumber }}").remove();
+            {%- endunless -%}
+            {%- unless requiredSettingsFound -%}
+            $("#linkRequiredProperties{{ casPropertiesRandomNumber }}").remove();
+            $("#requiredProperties{{ casPropertiesRandomNumber }}").remove();
+            {%- endunless -%}
+            {%- if textAreaPasswordPolicyProperties == blank or textAreaPasswordPolicyProperties == '' -%}
+            $("#linkPasswordPolicy{{ casPropertiesRandomNumber }}").remove();
+            {%- endif -%}
+            {%- if textAreaPrincipalTransformationProperties == blank or textAreaPrincipalTransformationProperties == '' -%}
+            $("#linkPrincipalTransformation{{ casPropertiesRandomNumber }}").remove();
+            {%- endif -%}
+            {%- if textAreaPasswordEncoderProperties == blank or textAreaPasswordEncoderProperties == '' -%}
+            $("#linkPasswordEncoder{{ casPropertiesRandomNumber }}").remove();
+            {%- endif -%}
+            {%- unless authnPredicateSettingsFound -%}
+            $("#linkAuthnPredicate{{ casPropertiesRandomNumber }}").remove();
+            {%- endunless -%}
+            {%- unless ldapSettingsFound -%}
+            $("#linkLdap{{ casPropertiesRandomNumber }}").remove();
+            {%- endunless -%}
+
+            // console.log("Checking for visible link menu in: navPillsMenus{{ casPropertiesRandomNumber }}");
+            let id=$("#navPillsMenus{{ casPropertiesRandomNumber }} a:visible:first").prop('id');
+            // console.log("Attempting to select tab with id " + id);
+            if (id != undefined && id != null) {
+                // console.log("Selecting first tab with link id " + id);
+                let firstTabEl = document.querySelector(`#${id}`);
+                let firstTab = new bootstrap.Tab(firstTabEl);
+                firstTab.show();
+                // console.log("Selected tab with link id " + id);
+            }
+
+            let c = $("#tableRequiredProperties{{ casPropertiesRandomNumber }} li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navRequiredProperties{{ casPropertiesRandomNumber }}").closest("table").remove();
+                $("#navRequiredPropertiesLeft{{ casPropertiesRandomNumber }}").closest("table").remove();
+            }
+            c = $("#tableOptionalProperties{{ casPropertiesRandomNumber }} li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navOptionalProperties{{ casPropertiesRandomNumber }}").closest("table").remove();
+                $("#navOptionalPropertiesLeft{{ casPropertiesRandomNumber }}").closest("table").remove();
+            }
+            c = $("#tableThirdPartyProperties{{ casPropertiesRandomNumber }} li.property-name code").length;
+            if (c <= ROWS) {
+                $("#navThirdPartyProperties{{ casPropertiesRandomNumber }}").hide();
+            }
+
+        });
+    </script>
+
+</div>

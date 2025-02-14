@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Release Notes</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="../../images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+            <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+                
+
+                <section>
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+
+                    <div id="cas-docs-container">
+                        <h1 id="700-rc3-release-notes">7.0.0-RC3 Release Notes</h1>
+
+<p>We strongly recommend that you take advantage of the release candidates as they come out. Waiting for a <code class="language-plaintext highlighter-rouge">GA</code> release is only going to set
+you up for unpleasant surprises. A <code class="language-plaintext highlighter-rouge">GA</code> is <a href="https://apereo.github.io/2017/03/08/the-myth-of-ga-rel/">a tag and nothing more</a>. Note
+that CAS releases are <em>strictly</em> time-based releases; they are not scheduled or based on specific benchmarks,
+statistics or completion of features. To gain confidence in a particular
+release, it is strongly recommended that you start early by experimenting with release candidates and/or follow-up snapshots.</p>
+
+<h2 id="apereo-membership">Apereo Membership</h2>
+
+<p>If you benefit from Apereo CAS as free and open-source software, we invite you
+to <a href="https://www.apereo.org/content/apereo-membership">join the Apereo Foundation</a>
+and financially support the project at a capacity that best suits your deployment. Note that all development activity is performed
+<em>almost exclusively</em> on a voluntary basis with no expectations, commitments or strings attached. Having the financial means to better
+sustain engineering activities will allow the developer community to allocate <em>dedicated and committed</em> time for long-term support,
+maintenance and release planning, especially when it comes to addressing critical and security issues in a timely manner.</p>
+
+<h2 id="get-involved">Get Involved</h2>
+
+<ul>
+  <li>Start your CAS deployment today. Try out features and <a href="/cas/Mailing-Lists.html">share feedback</a>.</li>
+  <li>Better yet, <a href="/cas/developer/Contributor-Guidelines.html">contribute patches</a>.</li>
+  <li>Suggest and apply documentation improvements.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://github.com/apereo/cas/milestones">Release Schedule</a></li>
+  <li><a href="/cas/developer/Release-Policy.html">Release Policy</a></li>
+</ul>
+
+<h2 id="system-requirements">System Requirements</h2>
+
+<p>The JDK baseline requirement for this CAS release is and <strong>MUST</strong> be JDK <code class="language-plaintext highlighter-rouge">17</code>. All compatible distributions
+such as Amazon Corretto, Zulu, Eclipse Temurin, etc should work and are implicitly supported.</p>
+
+<h2 id="new--noteworthy">New &amp; Noteworthy</h2>
+
+<p>The following items are new improvements and enhancements presented in this release.</p>
+
+<h3 id="spring-boot-3">Spring Boot 3</h3>
+
+<p>The migration of the entire codebase to Spring Boot <code class="language-plaintext highlighter-rouge">3.0.0</code> and Jakarta APIs is now complete. This is a major change and upgrade across the board
+that affects almost every CAS module and dependency. As a result, a very large number of internal libraries are 
+also upgraded to remain compatible. These include Spring Data, Spring Security, Spring Cloud, Spring Shell, Pac4j and many many more.</p>
+
+<p>Switching to Spring Boot <code class="language-plaintext highlighter-rouge">3.0.0</code> also means that CAS has now switched to support <a href="https://jakarta.ee/release/10/">Jakarta EE 10</a> and 
+Servlet specification <code class="language-plaintext highlighter-rouge">6.0.0</code>. This change does impact supported servlet containers such as Apache Tomcat and Undertow, where 
+the minimum supported version is now required to be <code class="language-plaintext highlighter-rouge">10.1.x</code> and <code class="language-plaintext highlighter-rouge">2.3.x</code>, accordingly.</p>
+
+<ul>
+  <li>Jetty does not support the servlet specification <code class="language-plaintext highlighter-rouge">6.0.0</code> yet. Deployments that use an embedded Jetty 
+servlet container may need to downgrade the version of the Servlet specification manually to <code class="language-plaintext highlighter-rouge">5.0.0</code>. It is likely that this might 
+be sorted out prior to the final GA release by the time Jetty <code class="language-plaintext highlighter-rouge">12</code> is released.</li>
+  <li>A handful of dependencies and libraries (i.e. OpenSAML, Pac4j, Spring Retry,) have yet to provide a final release version compatible with Spring Boot <code class="language-plaintext highlighter-rouge">3</code> 
+and/or Jakarta APIs. These should hopefully finalize and publish a GA release in the next few release candidates.</li>
+  <li>Apache BVal has been replaced with Hibernate Validator as the primary library for bean validation. The former provides no support for Jakarta APIs, yet.</li>
+  <li>Support for Spring Cloud Sleuth has been removed, and will later on be replaced with Micrometer Tracing.</li>
+  <li>The <a href="https://github.com/pingidentity/scim2">SCIM 2</a> library is replaced with an alternative that supports Jakarta APIs.</li>
+</ul>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Usage Warning</strong><p>Remember that this is a major upgrade and may possibly
+be somewhat disruptive in the beginning. While most if not all CAS-specific configuration should remain exactly the same, 
+you may encounter unexpected hiccups and mishaps along the way. We recommend that you start early by experimenting with 
+release candidates and/or follow-up snapshots. For additional warranties, please see the project license.</p>
+</div>
+
+<h3 id="testing-strategy">Testing Strategy</h3>
+
+<p>The collection of end-to-end browser tests based on Puppeteer continue to grow to cover more use cases
+and scenarios. At the moment, total number of jobs stands at approximately <code class="language-plaintext highlighter-rouge">377</code> distinct scenarios. The overall
+test coverage of the CAS codebase is approximately <code class="language-plaintext highlighter-rouge">94%</code>.</p>
+
+<h3 id="apache-http-client-5">Apache Http Client 5</h3>
+
+<p>The migration of the entire codebase to Apache Http Client <code class="language-plaintext highlighter-rouge">5.2.x</code> is now complete. While this upgrade should remain largely invisible,
+it is a major change that affects all CAS components that deal with the HTTP layer or support and interact with REST APIs.</p>
+
+<h3 id="docker-integration-tests">Docker Integration Tests</h3>
+
+<p>Several Docker images that are used for integration tests are now updated to use more recent versions. Those are:</p>
+
+<ul>
+  <li>MongoDb</li>
+  <li>Apache Cassandra</li>
+  <li>AWS Localstack</li>
+  <li>DynamoDb</li>
+  <li>InfluxDb</li>
+  <li>MariaDb</li>
+  <li>MySQL</li>
+  <li>CAS Server</li>
+  <li>SCIM Server</li>
+</ul>
+
+<h3 id="twilio-sendgrid">Twilio SendGrid</h3>
+
+<p>You may also instruct CAS to use <a href="../notifications/Sending-Email-Configuration.html">Twilio SendGrid</a> for sending emails.</p>
+
+<h3 id="cas-intializr-ui">CAS Intializr UI</h3>
+
+<p>The <a href="https://getcas.apereo.org/ui">CAS Initializr</a> project now provides a user interface:</p>
+
+<p><img width="1600" alt="image" src="https://user-images.githubusercontent.com/1205228/205378501-a0e6ad1b-bf81-42ea-8a69-5ad13c0dde39.png"></p>
+
+<p>Note that CAS Initializr is now updated to support generating projects based on JDK <code class="language-plaintext highlighter-rouge">17</code> and CAS <code class="language-plaintext highlighter-rouge">7</code>.</p>
+
+<h3 id="passwordless-authentication">Passwordless Authentication</h3>
+
+<p>A significant amount of work has been done to allow the <a href="../authentication/Passwordless-Authentication.html">passwordless authentication</a>
+to support impersonation, via its own token-based traditional flow as well as delegation authentication flows. Puppeteer tests are made available
+to cover quite a number of scenarios and use cases.</p>
+
+<h3 id="openid-connect-jwks">OpenID Connect JWKS</h3>
+
+<p>The ability to manage and store <a href="../authentication/OIDC-Authentication-JWKS-Storage.html">OpenID Connect JWKS</a> resources is now split
+to support relational databases and MongoDb separately via dedicated extension modules.</p>
+
+<h3 id="saml2-delegated-authentication-metadata">SAML2 Delegated Authentication Metadata</h3>
+
+<p>SAML2 service provider metadata used and managed during <a href="../integration/Delegate-Authentication-SAML.html">delegated authentication</a> 
+can now be stored in MongoDb.</p>
+
+<h2 id="other-stuff">Other Stuff</h2>
+
+<ul>
+  <li>The session cookie (i.e. <code class="language-plaintext highlighter-rouge">DISSESSION</code>) typically used for distributed session management when CAS is acting as a SAML2 identity provider can now be signed 
+and encrypted.</li>
+  <li>The <a href="../integration/Attribute-Release-PrincipalId-Groovy.html">Groovy username provider</a> is now able to support better caching techniques.</li>
+  <li>Support for OpenID Connect <code class="language-plaintext highlighter-rouge">unmet_authentication_requirements</code> error code is now available.</li>
+  <li>Email templates and SMS notification messages for <a href="../mfa/Simple-Multifactor-Authentication.html">Simple Multifactor Authentication</a> now have access to both 
+<code class="language-plaintext highlighter-rouge">token</code> and <code class="language-plaintext highlighter-rouge">tokenWithoutPrefix</code> variables.</li>
+  <li>Additional options to control <a href="../logging/Logging.html">logging stacktraces in summary mode</a> are now available.</li>
+  <li>Negative skew values are now supported for SAML2 responses when skew values are defined for SAML2 registered services.</li>
+  <li>Multiple email attribute names can now be specified in the configuration, when locating email addresses for principals.</li>
+  <li>The <a href="../integration/Attribute-Release-Policy-ReturnAllowed.html">Return Allowed</a> attribute release policy is now able to support inline Groovy scripts.</li>
+  <li>Dependency and module versions used by CAS <a href="../installation/Dependency-Management-Versions.html">are now documented</a>.</li>
+  <li>Small documentation improvements to ensure default values for settings are picked up dynamically and correctly as much as possible.</li>
+</ul>
+
+<h2 id="library-upgrades">Library Upgrades</h2>
+
+<ul>
+  <li>Spring</li>
+  <li>Spring Boot</li>
+  <li>Spring Security</li>
+  <li>Spring Data</li>
+  <li>Apache Tomcat</li>
+  <li>Spring Integration</li>
+  <li>Spring Shell</li>
+  <li>Spring Retry</li>
+  <li>Spring Cloud</li>
+  <li>Jetty</li>
+  <li>Undertow</li>
+  <li>Slf4j</li>
+  <li>Logback</li>
+  <li>Jakarta Servlet API</li>
+  <li>Pac4j</li>
+  <li>Apache Http Client</li>
+  <li>Apache CXF</li>
+  <li>Classgraph</li>
+  <li>Hibernate</li>
+  <li>Hibernate Validator</li>
+  <li>OpenSAML</li>
+  <li>Apache CXF</li>
+  <li>Nimbus</li>
+  <li>Person Directory</li>
+  <li>Spring Webflow</li>
+  <li>Inspektr</li>
+  <li>Amazon SDK</li>
+</ul>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+
+    <script>
+        let pageSection = 'Planning';
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+</body>
+
+</html>

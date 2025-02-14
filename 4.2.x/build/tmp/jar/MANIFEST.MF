@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Implementation-Vendor: org.jasig.cas
+Implementation-Title: cas-server-documentation
+Implementation-Version: 4.2.8-SNAPSHOT
+Created-By: org.jasig.cas
+

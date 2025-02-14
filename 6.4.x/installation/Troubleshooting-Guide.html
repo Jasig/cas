@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - Troubleshooting Guide</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            
+<h1 id="troubleshooting-guide">Troubleshooting Guide</h1>
+
+<p>A number of common questions and answers are gathered here. Please watch for updates as this is likely to grow as time/development moves on.</p>
+
+<h2 id="review-logs">Review Logs</h2>
+
+<p>CAS server logs are the best resource for determining the root cause of the problem, provided you have configured the appropriate log levels. 
+Specifically you want to make sure <code class="language-plaintext highlighter-rouge">DEBUG</code> levels are turned on the <code class="language-plaintext highlighter-rouge">org.apereo</code> package in the log configuration:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;Logger</span> <span class="na">name=</span><span class="s">"org.apereo"</span> <span class="na">level=</span><span class="s">"trace"</span> <span class="na">additivity=</span><span class="s">"false"</span> <span class="na">includeLocation=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">"console"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">"file"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/Logger&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>When changes are applied, restart the server environment and observe the log files to get a better 
+understanding of CAS behavior. For more info, please <a href="../logging/Logging.html">review  this guide</a> on how to configure logs with CAS.</p>
+
+<p>Note that the above configuration block only addresses logging behavior of CAS components; not those
+upon which CAS depends. Consult the log4j configuration and turn on appropriate <code class="language-plaintext highlighter-rouge">DEBUG</code> logs for each relevant component.
+Those are usually your best data source for diagnostics and troubleshooting.</p>
+
+<p>If your container of choice is <a href="https://tomcat.apache.org/tomcat-9.0-doc/logging.html">Apache Tomcat</a>, 
+you may also want to look into your <code class="language-plaintext highlighter-rouge">catalina.out</code>
+and <code class="language-plaintext highlighter-rouge">localhost-X-Y-Z.log</code> log files to learn more about source of issues.</p>
+
+<h2 id="deployment-problem-x-configuration-issue-can-you-help">Deployment Problem; X Configuration Issue. Can You Help?</h2>
+
+<p><a href="#review-logs">Study this</a>.</p>
+
+<h2 id="how-do-i-tuneextend-mongodb-mysql-spring-webflow-etc">How do I tune/extend MongoDb, MySQL, Spring Webflow, etc?</h2>
+
+<p>If you have a question about tuning and configuration of external components utilized by CAS
+and you have a need to achieve more advanced use cases other than what the CAS defaults offer, your question is best
+addressed by the community in charge of that component’s development and support. As a general rule,
+you should always pick a technology with which you are most familiar, or otherwise, shoot a question to
+the Spring Webflow, MongoDb, Hazelcast, etc forums to have experts review and recommend ideas.</p>
+
+<p>Typical questions in this category that are best answered elsewhere are:</p>
+
+<ul>
+  <li>How do I configure SSL for Apache Tomcat, Jetty, etc?</li>
+  <li>How do I pass variables from one flow to the next in Spring webflow?</li>
+  <li>How do I tune up a hazelcast cluster?</li>
+  <li>What is the recommended strategy for making MongoDb highly available?</li>
+</ul>
+
+<h2 id="using-snapshot-versions">Using <code class="language-plaintext highlighter-rouge">SNAPSHOT</code> Versions</h2>
+
+<p>There may be cases where you learn that a fix is available for the defect or behavior relevant for your CAS deployments and you may be advised to upgrade to the current available <code class="language-plaintext highlighter-rouge">SNAPSHOT</code> release. Depending on your <a href="WAR-Overlay-Installation.html">choice of installation</a>, you will need to find the setting in your deployment configuration and build scripts that describes your <em>current</em> CAS version and bump that to the next <code class="language-plaintext highlighter-rouge">SNAPSHOT</code>. The build scripts should also have additional instructions on how to obtain and build <code class="language-plaintext highlighter-rouge">SNAPSHOT</code> releases in README files and such.</p>
+
+<p>To find out what <code class="language-plaintext highlighter-rouge">SNAPSHOT</code> version applies to your deployment, you can either look at the release schedule or the appropriate branch of the CAS codebase. For instance, if you have deployed CAS <code class="language-plaintext highlighter-rouge">2.0.4</code> and the release schedule shows the next release is targeted for a <code class="language-plaintext highlighter-rouge">2.0.5</code>, then the available <code class="language-plaintext highlighter-rouge">SNAPSHOT</code> release would be <code class="language-plaintext highlighter-rouge">2.0.5-SNAPSHOT</code>. You can also take a look at the milestone setting assigned to the issue/pull request and determine the <code class="language-plaintext highlighter-rouge">SNAPSHOT</code> release. <code class="language-plaintext highlighter-rouge">SNAPSHOT</code> releases are always postfixed with <code class="language-plaintext highlighter-rouge">-SNAPSHOT</code>. If the assigned milestone to an issue is for instance <code class="language-plaintext highlighter-rouge">1.2.5-RC1</code>, then the <code class="language-plaintext highlighter-rouge">SNAPSHOT</code> release would be <code class="language-plaintext highlighter-rouge">1.2.5-RC1-SNAPSHOT</code>.</p>
+
+<h2 id="configuring-ssl-behind-load-balancerproxy">Configuring SSL Behind Load Balancer/Proxy</h2>
+
+<p>You might be running CAS inside a <a href="Configuring-Servlet-Container.html">servlet container</a> such as Apache Tomcat behind some sort of proxy such as haproxy, Apache httpd, etc where the proxy is handling the SSL termination. The connections to the user are secured via <code class="language-plaintext highlighter-rouge">https</code>, yet those between the proxy and CAS service are just <code class="language-plaintext highlighter-rouge">http</code>.</p>
+
+<p>With this setup, the CAS login screen may still warn you about a non-secure connection. There is no setting in CAS that would allow you to control/adjust this, as this is entirely controlled by the container itself. All CAS cares about is whether the incoming connection request identifies itself as a secure connection. So to remove the warning, you will need to look into your container’s configuration and docs to see how the connection may be secured between the proxy and CAS.</p>
+
+<p>For <a href="https://tomcat.apache.org/tomcat-9.0-doc/config/http.html">Apache Tomcat</a>, you may be able to adjust the connector that talks to the proxy with a <code class="language-plaintext highlighter-rouge">secure=true</code> attribute.</p>
+
+<h2 id="application-x-redirected-you-too-many-times">Application X “redirected you too many times”</h2>
+
+<p>“Too many redirect” errors are usually cause by service ticket validation failure events, generally 
+caused by application misconfiguration. 
+Ticket validation failure may be caused by expired or unrecognized tickets, SSL-related 
+issues and such. Examine your CAS logs and you will find the cause.</p>
+
+<h2 id="not-receiving-attributes">Not Receiving Attributes</h2>
+
+<p>If your client application is not receiving attributes, you will need to make sure:</p>
+
+<ol>
+  <li>The client is using a version of <a href="../protocol/CAS-Protocol.html">CAS protocol</a> that is able to release attributes.</li>
+  <li>The client, predicated on #1, is hitting the appropriate endpoint for service ticket validation (i.e. <code class="language-plaintext highlighter-rouge">/p3/serviceValidate</code>).</li>
+  <li>The CAS server itself is <a href="../integration/Attribute-Resolution.html">resolving and retrieving attributes</a> correctly.</li>
+  <li>The CAS server is authorized to <a href="../integration/Attribute-Release.html">release attributes</a> to that particular client application inside its service registry.</li>
+</ol>
+
+<p>Please <a href="../services/Service-Management.html">review this guide</a> to better understand the CAS service registry.</p>
+
+<h2 id="application-not-authorized">Application Not Authorized</h2>
+
+<p>You may encounter this error, when the requesting application/service url cannot be found in your CAS service registry. When an 
+authentication request is submitted to the CAS <code class="language-plaintext highlighter-rouge">login</code> endpoint, the destination application is indicated as a url parameter which 
+will be checked against the CAS service registry to determine if the application is allowed to use CAS. If the url is not found, this 
+message will be displayed back. Since service definitions in the registry have the ability to be defined by a url pattern, 
+it is entirely possible that the pattern in the registry for the service definition is misconfigured and does not produce a successful match 
+for the requested application url.</p>
+
+<p>Please <a href="../services/Service-Management.html">review this guide</a> to better understand the CAS service registry.</p>
+
+<h2 id="invalidexpired-cas-tickets">Invalid/Expired CAS Tickets</h2>
+
+<p>You may experience <code class="language-plaintext highlighter-rouge">INVAILD_TICKET</code> related errors when attempting to use a CAS ticket whose expiration policy dictates that the ticket 
+has expired. The CAS log should further explain in more detail if the ticket is considered expired, but for diagnostic purposes, 
+you may want to adjust the <a href="../ticketing/Configuring-Ticket-Expiration-Policy.html">ticket expiration policy configuration</a> to remove and troubleshoot this error.</p>
+
+<p>Furthermore, if the ticket itself cannot be located in the CAS ticket registry the ticket is also considered invalid. You will need 
+to observe the ticket used and compare it with the value that exists in the ticket registry to ensure that the ticket id provided is valid.</p>
+
+<h2 id="out-of-heap-memory-error">Out of Heap Memory Error</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>java.lang.OutOfMemoryError: GC overhead limit exceeded
+        at java.util.Arrays.copyOfRange<span class="o">(</span>Arrays.java:3658<span class="o">)</span>
+        at java.lang.StringBuffer.toString<span class="o">(</span>StringBuffer.java:671<span class="o">)</span>
+        at 
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>You may encounter this error, when in all likelihood, a cache-based ticket registry such as EhCache is used whose eviction policy 
+is not correctly configured. Objects and tickets are cached inside the registry storage back-end tend to linger around longer than 
+they should or the eviction policy is not doing a good enough job to clean unused tickets that may be marked as expired by CAS.</p>
+
+<p>To troubleshoot, you can configure the JVM to perform a heap dump prior to exiting, which you should set up immediately so you have 
+some additional information if/when it happens next time. The follow system properties should do the trick:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nt">-XX</span>:+HeapDumpOnOutOfMemoryError <span class="nt">-XX</span>:HeapDumpPath<span class="o">=</span><span class="s2">"/path/to/jvm-dump.hprof"</span> 
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Also ensure that your container is configured to have enough memory available. For Apache Tomcat, the following setting as an environment variable may be configured:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nv">CATALINA_OPTS</span><span class="o">=</span><span class="nt">-Xms1000m</span> <span class="nt">-Xmx2000m</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>You will want to profile your server with something like <a href="https://visualvm.github.io/">JVisualVM</a>. This will help you see what is actually 
+going on with your memory.</p>
+
+<p>You might also consider taking periodic heap dumps using the JMap tool or <a href="http://www.yourkit.com/java/profiler/">YourKit Java profiler</a> 
+and analyzing offline using some analysis tool.</p>
+
+<p>Finally, review the eviction policy of your ticket registry and ensure the values that determine object lifetime are appropriate for your environment.</p>
+
+<h2 id="ssl--certificates">SSL &amp; Certificates</h2>
+
+<h3 id="pkix-path-building-failed">PKIX Path Building Failed</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre>Sep 28, 2009 4:13:26 PM org.apereo.cas.client.validation.AbstractCasProtocolUrlBasedTicketValidator retrieveResponseFromServer
+SEVERE: javax.net.ssl.SSLHandshakeException:
+sun.security.validator.ValidatorException: PKIX path building failed:
+sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+javax.net.ssl.SSLHandshakeException:
+sun.security.validator.ValidatorException: PKIX path building failed:
+sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+      at com.sun.net.ssl.internal.ssl.Alerts.getSSLException<span class="o">(</span>Unknown Source<span class="o">)</span>
+      at com.sun.net.ssl.internal.ssl.SSLSocketImpl.fatal<span class="o">(</span>Unknown Source<span class="o">)</span>
+      at com.sun.net.ssl.internal.ssl.Handshaker.fatalSE<span class="o">(</span>Unknown Source<span class="o">)</span>
+      at com.sun.net.ssl.internal.ssl.Handshaker.fatalSE<span class="o">(</span>Unknown Source<span class="o">)</span>
+      at com.sun.net.ssl.internal.ssl.ClientHandshaker.serverCertificate<span class="o">(</span>Unknown Source<span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>PKIX path building errors are the most common SSL errors. The problem here is that the CAS client does not trust the certificate presented by the 
+CAS server; most often this occurs because of using a <em>self-signed certificate</em> on the CAS server. To resolve this error, import the CAS server 
+certificate into the system truststore of the CAS client. If the certificate is issued by your own PKI, it is better to import the root certificate of your PKI into the CAS client truststore.</p>
+
+<p>By default the Java system truststore is at <code class="language-plaintext highlighter-rouge">$JAVA_HOME/jre/lib/security/cacerts</code>. The certificate to be imported <strong>MUST</strong> be a DER-encoded file. 
+If the contents of the certificate file are binary, it’s likely DER-encoded; if the file begins with the text <code class="language-plaintext highlighter-rouge">---BEGIN CERTIFICATE---</code>, it is PEM-encoded and needs to be converted to DER encoding.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>keytool <span class="nt">-import</span> <span class="nt">-keystore</span> <span class="nv">$JAVA_HOME</span>/jre/lib/security/cacerts <span class="nt">-file</span> tmp/cert.der <span class="nt">-alias</span> certName
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>If you have multiple java editions installed on your machine, make sure that the app / web server is pointing to the correct JDK/JRE version 
+(The one to which the certificate has been exported correctly) One common mistake that occurs while generating self-validated certificates is that the <code class="language-plaintext highlighter-rouge">JAVA_HOME</code> might be different than that used by the server.</p>
+
+<h3 id="no-subject-alternative-names">No subject alternative names</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>javax.net.ssl.SSLHandshakeException: java.security.cert.CertificateException: No subject alternative names present
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>This is a hostname/SSL certificate CN mismatch. This commonly happens when a self-signed certificate issued to localhost is placed on a machine that 
+is accessed by IP address. It should be noted that generating a certificate with an IP address for a common name, e.g. <code class="language-plaintext highlighter-rouge">CN=192.168.1.1,OU=Middleware,dc=vt,dc=edu</code>, will not work in most cases where the client making the connection is Java.</p>
+
+<h3 id="https-hostname-wrong">HTTPS hostname wrong</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>java.lang.RuntimeException: java.io.IOException: HTTPS <span class="nb">hostname </span>wrong:  should be &lt;eiger.iad.vt.edu&gt;
+    org.apereo.cas.client.validation.Saml11TicketValidator.retrieveResponseFromServer<span class="o">(</span>Saml11TicketValidator.java:203<span class="o">)</span>
+    org.apereo.cas.client.validation.AbstractUrlBasedTicketValidator.validate<span class="o">(</span>AbstractUrlBasedTicketValidator.java:185<span class="o">)</span>
+    org.apereo.cas.client.validation.AbstractTicketValidationFilter.doFilter
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The above error occurs most commonly when the CAS client ticket validator attempts to contact the CAS server and is presented a certificate whose 
+CN does not match the fully-qualified host name of the CAS server. There are a few common root causes of this mismatch:</p>
+
+<ul>
+  <li>CAS client misconfiguration</li>
+  <li>Complex multi-tier server environment (e.g. clustered CAS server)</li>
+  <li>Host name too broad for scope of wildcard certificate</li>
+</ul>
+
+<p>It is also worth checking that the certificate your CAS server is using for SSL encryption matches the one the client is checking against.</p>
+
+<h3 id="no-name-matching-x-found">No name matching X found</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>Caused by: java.security.cert.CertificateException: No name matching cas.server found
+    at sun.security.util.HostnameChecker.matchDNS<span class="o">(</span>Unknown Source<span class="o">)</span> ~[?:1.8.0_77]
+    at sun.security.util.HostnameChecker
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Same as above.</p>
+
+<h3 id="wildcard-certificates">Wildcard Certificates</h3>
+
+<p>Java support for wildcard certificates is limited to hosts strictly in the same domain as the wildcard. For example, a certificate with <code class="language-plaintext highlighter-rouge">CN=.vt.edu</code> matches hosts <strong><code class="language-plaintext highlighter-rouge">a.vt.edu</code></strong> and <strong><code class="language-plaintext highlighter-rouge">b.vt.edu</code></strong>, but <em>not</em> <strong><code class="language-plaintext highlighter-rouge">a.b.vt.edu</code></strong>.</p>
+
+<h3 id="unrecognized-name-error">Unrecognized Name Error</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>javax.net.ssl.SSLProtocolException: handshake alert: unrecognized_name
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The above error occurs mainly in Oracle JDK CAS Server installations. In JDK, SNI (Server Name Indication) is enabled by default. When the HTTPD Server 
+does not send the correct Server Name back, the JDK HTTP Connection refuses to connect and the exception stated above is thrown.</p>
+
+<p>You must ensure your HTTPD Server is sending back the correct hostname. E.g. in Apache HTTPD, you must set the ServerAlias in the SSL vhost:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>ServerName your.ssl-server.name
+ServerAlias your.ssl-server.name
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Alternatively, you can disable the SNI detection in JDK, by adding this flag to the Java options of your CAS Servers’ application server configuration:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nt">-Djsse</span>.enableSNIExtension<span class="o">=</span><span class="nb">false</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="when-all-else-fails">When All Else Fails</h3>
+
+<p>If you have read, understood, and tried all the troubleshooting tips on this page and continue to have problems, 
+please perform an SSL trace and attach it to a posting to the 
+CAS mailing lists. An SSL trace is written to 
+STDOUT when the following system property is set, <code class="language-plaintext highlighter-rouge">javax.net.debug=ssl</code>. 
+An example follows of how to do this in the Tomcat servlet container.</p>
+
+<p>Sample <code class="language-plaintext highlighter-rouge">setenv.sh</code> Tomcat Script follows:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="c"># Uncomment the next 4 lines for custom SSL keystore</span>
+<span class="c"># used by all deployed applications</span>
+<span class="c"># KEYSTORE="$HOME/path/to/custom.keystore"</span>
+<span class="c"># CATALINA_OPTS=$CATALINA_OPTS" -Djavax.net.ssl.keyStore=$KEYSTORE"</span>
+<span class="c"># CATALINA_OPTS=$CATALINA_OPTS" -Djavax.net.ssl.keyStoreType=BKS"</span>
+<span class="c"># CATALINA_OPTS=$CATALINA_OPTS" -Djavax.net.ssl.keyStorePassword=changeit"</span>
+ 
+<span class="c"># Uncomment the next 4 lines to allow custom SSL trust store</span>
+<span class="c"># used by all deployed applications</span>
+<span class="c"># TRUSTSTORE="$HOME/path/to/custom.truststore"</span>
+<span class="c"># CATALINA_OPTS=$CATALINA_OPTS" -Djavax.net.ssl.trustStore=$TRUSTSTORE"</span>
+<span class="c"># CATALINA_OPTS=$CATALINA_OPTS" -Djavax.net.ssl.trustStoreType=BKS"</span>
+<span class="c"># CATALINA_OPTS=$CATALINA_OPTS" -Djavax.net.ssl.trustStorePassword=changeit"</span>
+ 
+<span class="c"># Uncomment the next line to print SSL debug trace in catalina.out</span>
+<span class="c"># CATALINA_OPTS=$CATALINA_OPTS" -Djavax.net.debug=ssl"</span>
+ 
+<span class="nb">export </span>CATALINA_OPTS
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Installation';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single sign-on, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+    
+
+
+
+
+
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - OpenID Connect Authentication</title>
+
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="hidden-sm-down">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-md-2">
+                    <a href="../../index.html">
+                        <img class="undecorated" src="../../images/cas_logo.png">
+                    </a>
+                </div>
+                <div class="col-xs-8 col-md-6">
+                    <h1>Enterprise Identity for All Earthlings and Beyond</h1>
+<p><sub>Identity, Single Sign-On and Access Management</sub></p>
+                </div>
+                <div class="hidden-sm-down col-md-4">
+                    <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+        <button onclick="navigateSidebar()" id="sidebarNavButton">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container">
+<!--            <button id="navigationNavButton" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"-->
+<!--                    aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+            <div class="navbar-collapse collapse" id="navbarsExample04">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                    <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                    <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                    <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Versions</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                            
+                            
+                            <a class="dropdown-item" href="/cas/7.0.x/">v7.0.x</a>
+                            
+                            
+                            
+                            <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                            
+                            
+
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+            <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+                
+
+                <section>
+                    <nav id="docsNavBar">
+                        <span id="toolbarIcons"></span>
+                    </nav>
+
+                    <div id="cas-docs-container">
+                        
+<h1 id="webfinger-issuer-discovery---openid-connect-authentication">WebFinger Issuer Discovery - OpenID Connect Authentication</h1>
+
+<p>OpenID Provider Issuer discovery is the process of determining the 
+location of the OpenID Connect Provider. Issuer discovery is optional; if a Relying Party 
+knows the OP’s Issuer location through an out-of-band mechanism, it can skip this step.</p>
+
+<p>Issuer discovery requires the following information to make a discovery request:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">resource</code></td>
+      <td>Required. Identifier for the target End-User that is the subject of the discovery request.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">host</code></td>
+      <td>Server where a WebFinger service is hosted.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">rel</code></td>
+      <td>URI identifying the type of service whose location is being requested: <code class="language-plaintext highlighter-rouge">http://openid.net/specs/connect/1.0/issuer</code>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>To start discovery of OpenID endpoints, the End-User supplies an Identifier to 
+the Relying Party. The RP applies normalization rules to the Identifier to
+determine the Resource and Host. Then it makes an HTTP <code class="language-plaintext highlighter-rouge">GET</code> request to the CAS 
+WebFinger endpoint with the <code class="language-plaintext highlighter-rouge">resource</code> and <code class="language-plaintext highlighter-rouge">rel</code> parameters to obtain 
+the location of the requested service. The Issuer location <strong>MUST</strong> be returned in the WebFinger response as the value 
+of the <code class="language-plaintext highlighter-rouge">href</code> member of a links array element with <code class="language-plaintext highlighter-rouge">rel</code> member value <code class="language-plaintext highlighter-rouge">http://openid.net/specs/connect/1.0/issuer</code>.</p>
+
+<p>Example invocation of the <code class="language-plaintext highlighter-rouge">webfinger</code> endpoint follows:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>curl https://sso.example.org/cas/oidc/.well-known/webfinger?resource<span class="o">=</span>acct:casuser@somewhere.example.org
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>The expected response shall match the following example:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"acct:casuser@somewhere.example.org"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"links"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://openid.net/specs/connect/1.0/issuer"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://sso.example.org/cas/oidc/"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h2 id="webfinger-resource-userinfo">WebFinger Resource UserInfo</h2>
+
+<p>To determine the correct issuer, resources that are provided to 
+the <code class="language-plaintext highlighter-rouge">webfinger</code> discovery endpoint using the <code class="language-plaintext highlighter-rouge">acct</code> URI scheme
+can be located and fetched using external user repositories via <code class="language-plaintext highlighter-rouge">email</code> or <code class="language-plaintext highlighter-rouge">username</code>.</p>
+
+<div class="alert alert-warning">
+<img class="emoji" title=":warning:" alt=":warning:" src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png" height="20" width="20"> <strong>Usage Warning!</strong><p>The default repository implementation will
+echo back the provided email or username, etc as it is <strong>ONLY</strong> relevant for demo/testing purposes.</p>
+</div>
+
+<p>The following user-info repository choices are available for configuration and production use.</p>
+
+<h3 id="groovy-userinfo-repository">Groovy UserInfo Repository</h3>
+
+<p>The task of locating accounts linked to webfinger resources can be handled 
+using an external Groovy script whose outline would match the following:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre><span class="kt">def</span> <span class="nf">findByUsername</span><span class="o">(</span><span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">def</span> <span class="o">(</span><span class="n">username</span><span class="o">,</span><span class="n">logger</span><span class="o">)</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="k">return</span> <span class="o">[</span><span class="nl">username:</span> <span class="n">username</span><span class="o">]</span>
+<span class="o">}</span>
+
+<span class="kt">def</span> <span class="nf">findByEmailAddress</span><span class="o">(</span><span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">def</span> <span class="o">(</span><span class="n">email</span><span class="o">,</span><span class="n">logger</span><span class="o">)</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="k">return</span> <span class="o">[</span><span class="nl">email:</span> <span class="n">email</span><span class="o">]</span>
+<span class="o">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>The expected return value from the script is a <code class="language-plaintext highlighter-rouge">Map</code> that contains 
+key-value objects, representing user account details. An empty <code class="language-plaintext highlighter-rouge">Map</code>
+would indicate the absence of the user record, leading to a <code class="language-plaintext highlighter-rouge">404</code> 
+response status back to the relying party.</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnoidcwebfingeruserinfogroovy">
+
+    <li class="nav-item property-tab">
+        <a class="nav-link active" id="linkRequiredPropertiescasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#requiredPropertiescasauthnoidcwebfingeruserinfogroovy">Required</a>
+    </li>
+    <li class="nav-item property-tab">
+        <a class="nav-link" id="linkOptionalPropertiescasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#optionalPropertiescasauthnoidcwebfingeruserinfogroovy">Optional</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnoidcwebfingeruserinfogroovy">
+        <a class="nav-link" id="linkSigningEncryptioncasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnoidcwebfingeruserinfogroovy">Signing &amp; Encryption</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navRdbmsPropertiescasauthnoidcwebfingeruserinfogroovy">
+        <a class="nav-link" id="linkRdbmscasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnoidcwebfingeruserinfogroovy">Hibernate &amp; JDBC</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navEmailPropertiescasauthnoidcwebfingeruserinfogroovy">
+        <a class="nav-link" id="linkEmailcasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#emailPropertiescasauthnoidcwebfingeruserinfogroovy">Email Servers</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navLdapPropertiescasauthnoidcwebfingeruserinfogroovy">
+        <a class="nav-link" id="linkLdapcasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#ldapPropertiescasauthnoidcwebfingeruserinfogroovy">LDAP &amp; Active Directory</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnoidcwebfingeruserinfogroovy">
+        <a class="nav-link" id="linkAuthnPredicatecasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnoidcwebfingeruserinfogroovy">Authentication</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnoidcwebfingeruserinfogroovy">
+        <a class="nav-link" id="linkPasswordEncodercasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnoidcwebfingeruserinfogroovy">Password Encoding</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnoidcwebfingeruserinfogroovy">
+        <a class="nav-link" id="linkPrincipalTransformationcasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnoidcwebfingeruserinfogroovy(this);" href="#principalTransformationPropertiescasauthnoidcwebfingeruserinfogroovy">Principal Transformation</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnoidcwebfingeruserinfogroovy">
+        <a class="nav-link" id="linkPasswordPolicycasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnoidcwebfingeruserinfogroovy(this);" href="#passwordPolicyPropertiescasauthnoidcwebfingeruserinfogroovy">Password Policy</a>
+    </li>
+<li class="nav-item property-tab">
+        <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnoidcwebfingeruserinfogroovy(this);" id="linkNotescasauthnoidcwebfingeruserinfogroovy" data-bs-toggle="tab" href="#notescasauthnoidcwebfingeruserinfogroovy">Notes</a>
+    </li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnoidcwebfingeruserinfogroovy">
+
+
+<div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnoidcwebfingeruserinfogroovy">
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+    </sub>
+    <br><p></p>
+
+    <p></p>
+        
+    <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnoidcwebfingeruserinfogroovy">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.oidc.webfinger.user-info.groovy.location=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                The location of the resource. Resources can be URLs, or files found either on the classpath or outside somewhere in the file system. </p>
+<p></p> In the event the configured resource is a Groovy script, specially if the script set to reload on changes, you may need to adjust the total number of <code>inotify</code> instances. On Linux, you may need to add the following line to <code>/etc/sysctl.conf</code>: <code>fs.inotify.max_user_instances = 256</code>. <p></p> You can check the current value via <code>cat /proc/sys/fs/inotify/max_user_instances</code>. <p></p> In situations and scenarios where CAS is able to automatically watch the underlying resource for changes and detect updates and modifications dynamically, you may be able to specify the following setting as either an environment variable or system property with a value of <code>false</code> to disable the resource watcher: <code>org.apereo.cas.util.io.PathWatcherService</code>.
+                    <p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.oidc.OidcWebFingerProperties.Groovy.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnoidcwebfingeruserinfogroovylocationPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnoidcwebfingeruserinfogroovylocationPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.oidc.webfinger.user-info.groovy.location</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnoidcwebfingeruserinfogroovylocation">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnoidcwebfingeruserinfogroovylocation">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnoidcwebfingeruserinfogroovylocation">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnoidcwebfingeruserinfogroovylocation">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnoidcwebfingeruserinfogroovylocation">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnoidcwebfingeruserinfogroovylocation">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.oidc.webfinger.user-info.groovy.location=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnoidcwebfingeruserinfogroovylocation">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    oidc: <br>      webfinger: <br>        user-info: <br>          groovy: <br>            location</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnoidcwebfingeruserinfogroovylocation td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnoidcwebfingeruserinfogroovylocation">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.oidc.webfinger.user-info.groovy.location<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnoidcwebfingeruserinfogroovylocation">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_OIDC_WEBFINGER_USER_INFO_GROOVY_LOCATION</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnoidcwebfingeruserinfogroovylocation">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.oidc.webfinger.user-info.groovy.location<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnoidcwebfingeruserinfogroovy"># The location of the resource.
+# cas.authn.oidc.webfinger.user-info.groovy.location=
+
+</textarea>
+</div>
+
+<div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnoidcwebfingeruserinfogroovy">
+
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+        flag indicates that the presence of the setting
+        is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+        the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+        configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+    </sub>
+    <br><p></p>
+
+    <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnoidcwebfingeruserinfogroovy">
+    <thead><tr><th></th></tr></thead>
+    <tbody></tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnoidcwebfingeruserinfogroovy"></textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnoidcwebfingeruserinfogroovy">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.0.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+</div>
+<script>
+    window.addEventListener('load', (event) => {$("#linkOptionalPropertiescasauthnoidcwebfingeruserinfogroovy").remove();$("#linkRdbmscasauthnoidcwebfingeruserinfogroovy").remove();$("#linkEmailcasauthnoidcwebfingeruserinfogroovy").remove();$("#linkSigningEncryptioncasauthnoidcwebfingeruserinfogroovy").remove();$("#linkPasswordPolicycasauthnoidcwebfingeruserinfogroovy").remove();$("#linkPrincipalTransformationcasauthnoidcwebfingeruserinfogroovy").remove();$("#linkPasswordEncodercasauthnoidcwebfingeruserinfogroovy").remove();$("#linkAuthnPredicatecasauthnoidcwebfingeruserinfogroovy").remove();$("#linkLdapcasauthnoidcwebfingeruserinfogroovy").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnoidcwebfingeruserinfogroovy");
+        let id=$("#navPillsMenuscasauthnoidcwebfingeruserinfogroovy a:visible:first").prop('id');
+        // console.log("Attempting to select tab with id " + id);
+        if (id != undefined && id != null) {
+            // console.log("Selecting first tab with link id " + id);
+            let firstTabEl = document.querySelector(`#${id}`);
+            let firstTab = new bootstrap.Tab(firstTabEl);
+            firstTab.show();
+            // console.log("Selected tab with link id " + id);
+        }
+
+        let c = $("#tableRequiredPropertiescasauthnoidcwebfingeruserinfogroovy li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navRequiredPropertiescasauthnoidcwebfingeruserinfogroovy").closest("table").remove();
+            $("#navRequiredPropertiesLeftcasauthnoidcwebfingeruserinfogroovy").closest("table").remove();
+        }
+        c = $("#tableOptionalPropertiescasauthnoidcwebfingeruserinfogroovy li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navOptionalPropertiescasauthnoidcwebfingeruserinfogroovy").closest("table").remove();
+            $("#navOptionalPropertiesLeftcasauthnoidcwebfingeruserinfogroovy").closest("table").remove();
+        }
+        c = $("#tableThirdPartyPropertiescasauthnoidcwebfingeruserinfogroovy li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navThirdPartyPropertiescasauthnoidcwebfingeruserinfogroovy").hide();
+        }
+        
+    });
+</script>
+
+</div>
+
+<h3 id="rest-userinfo-repository">REST UserInfo Repository</h3>
+
+<p>The REST repository allows the CAS server to reach to a remote REST 
+endpoint via the configured HTTP method to fetch user account information.</p>
+
+<p>Query data is passed via either <code class="language-plaintext highlighter-rouge">email</code> or <code class="language-plaintext highlighter-rouge">username</code> HTTP headers. 
+The response that is returned must be accompanied by a <code class="language-plaintext highlighter-rouge">200</code>
+status code where the body should contain <code class="language-plaintext highlighter-rouge">Map</code> representing the 
+user account information. All other responses will lead to a <code class="language-plaintext highlighter-rouge">404</code> 
+response status back to the relying party.</p>
+
+<!-- fragment:keep -->
+<p>The following settings and properties are available from the CAS configuration catalog:</p>
+<ul class="nav nav-tabs nav-tabs-properties" id="navPillsMenuscasauthnoidcwebfingeruserinforest">
+
+    <li class="nav-item property-tab">
+        <a class="nav-link active" id="linkRequiredPropertiescasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#requiredPropertiescasauthnoidcwebfingeruserinforest">Required</a>
+    </li>
+    <li class="nav-item property-tab">
+        <a class="nav-link" id="linkOptionalPropertiescasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#optionalPropertiescasauthnoidcwebfingeruserinforest">Optional</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navSigningEncryptionPropertiescasauthnoidcwebfingeruserinforest">
+        <a class="nav-link" id="linkSigningEncryptioncasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#signingEncryptionPropertiescasauthnoidcwebfingeruserinforest">Signing &amp; Encryption</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navRdbmsPropertiescasauthnoidcwebfingeruserinforest">
+        <a class="nav-link" id="linkRdbmscasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#rdbmsPropertiescasauthnoidcwebfingeruserinforest">Hibernate &amp; JDBC</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navEmailPropertiescasauthnoidcwebfingeruserinforest">
+        <a class="nav-link" id="linkEmailcasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#emailPropertiescasauthnoidcwebfingeruserinforest">Email Servers</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navLdapPropertiescasauthnoidcwebfingeruserinforest">
+        <a class="nav-link" id="linkLdapcasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#ldapPropertiescasauthnoidcwebfingeruserinforest">LDAP &amp; Active Directory</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navAuthnPredicatePropertiescasauthnoidcwebfingeruserinforest">
+        <a class="nav-link" id="linkAuthnPredicatecasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#authnPredicatePropertiescasauthnoidcwebfingeruserinforest">Authentication</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordEncoderPropertiescasauthnoidcwebfingeruserinforest">
+        <a class="nav-link" id="linkPasswordEncodercasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#passwordEncoderPropertiescasauthnoidcwebfingeruserinforest">Password Encoding</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPrincipalTransformationPropertiescasauthnoidcwebfingeruserinforest">
+        <a class="nav-link" id="linkPrincipalTransformationcasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnoidcwebfingeruserinforest(this);" href="#principalTransformationPropertiescasauthnoidcwebfingeruserinforest">Principal Transformation</a>
+    </li>
+
+    <li class="nav-item property-tab" id="navPasswordPolicyPropertiescasauthnoidcwebfingeruserinforest">
+        <a class="nav-link" id="linkPasswordPolicycasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" onclick="javascript:enablePropertiesTabcasauthnoidcwebfingeruserinforest(this);" href="#passwordPolicyPropertiescasauthnoidcwebfingeruserinforest">Password Policy</a>
+    </li>
+<li class="nav-item property-tab">
+        <a class="nav-link" onclick="javascript:enablePropertiesTabcasauthnoidcwebfingeruserinforest(this);" id="linkNotescasauthnoidcwebfingeruserinforest" data-bs-toggle="tab" href="#notescasauthnoidcwebfingeruserinforest">Notes</a>
+    </li>
+</ul>
+<div class="tab-content clearfix" id="casPropertiesTabContentcasauthnoidcwebfingeruserinforest">
+
+
+<div class="tab-pane properties-tab fade in active show" id="requiredPropertiescasauthnoidcwebfingeruserinforest">
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Required</i></u> in the CAS configuration metadata. This flag indicates that the presence of the setting may be needed to activate or affect the behavior of the CAS feature and generally should be reviewed, possibly owned and adjusted. If the setting is assigned a default value, you do not need to strictly put the setting in your copy of the configuration, but should review it nonetheless to make sure it matches your deployment expectations.
+    </sub>
+    <br><p></p>
+
+    <p></p>
+        
+    <table class="cas-datatable properties " id="tableRequiredPropertiescasauthnoidcwebfingeruserinforest">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.oidc.webfinger.user-info.rest.url=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                The endpoint URL to contact and retrieve attributes.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.oidc.OidcWebFingerProperties.Rest.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnoidcwebfingeruserinforesturlPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnoidcwebfingeruserinforesturlPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.oidc.webfinger.user-info.rest.url</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnoidcwebfingeruserinforesturl">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnoidcwebfingeruserinforesturl">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnoidcwebfingeruserinforesturl">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnoidcwebfingeruserinforesturl">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnoidcwebfingeruserinforesturl">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnoidcwebfingeruserinforesturl">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.oidc.webfinger.user-info.rest.url=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnoidcwebfingeruserinforesturl">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    oidc: <br>      webfinger: <br>        user-info: <br>          rest: <br>            url</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnoidcwebfingeruserinforesturl td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnoidcwebfingeruserinforesturl">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.oidc.webfinger.user-info.rest.url<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnoidcwebfingeruserinforesturl">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_OIDC_WEBFINGER_USER_INFO_REST_URL</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnoidcwebfingeruserinforesturl">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.oidc.webfinger.user-info.rest.url<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaRequiredPropertiescasauthnoidcwebfingeruserinforest"># The endpoint URL to contact and retrieve attributes.
+# cas.authn.oidc.webfinger.user-info.rest.url=
+
+</textarea>
+</div>
+
+<div class="tab-pane properties-tab fade in" id="optionalPropertiescasauthnoidcwebfingeruserinforest">
+
+    <i style="vertical-align: sub;" class="fas fa-info-circle small"></i>
+    <sub>
+        The configuration settings listed below are tagged as <u><i>Optional</i></u> in the CAS configuration metadata. This
+        flag indicates that the presence of the setting
+        is not immediately necessary in the end-user CAS configuration, because a default value is assigned or
+        the activation of the feature is not conditionally controlled by the setting value. In other words, you should only include this field in your
+        configuration <strong>if you need to modify the default value</strong> or <strong>if you need to turn on the feature</strong> controlled by the setting.
+    </sub>
+    <br><p></p>
+
+    <table class="cas-datatable properties " id="tableOptionalPropertiescasauthnoidcwebfingeruserinforest">
+    <thead><tr><th></th></tr></thead>
+    <tbody>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.oidc.webfinger.user-info.rest.basic-auth-password=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                If REST endpoint is protected via basic authentication, specify the password for authentication.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.oidc.OidcWebFingerProperties.Rest.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnoidcwebfingeruserinforestbasicauthpasswordPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnoidcwebfingeruserinforestbasicauthpasswordPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.oidc.webfinger.user-info.rest.basic-auth-password</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnoidcwebfingeruserinforestbasicauthpassword">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnoidcwebfingeruserinforestbasicauthpassword">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnoidcwebfingeruserinforestbasicauthpassword">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnoidcwebfingeruserinforestbasicauthpassword">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnoidcwebfingeruserinforestbasicauthpassword">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnoidcwebfingeruserinforestbasicauthpassword">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.oidc.webfinger.user-info.rest.basic-auth-password=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnoidcwebfingeruserinforestbasicauthpassword">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    oidc: <br>      webfinger: <br>        user-info: <br>          rest: <br>            basic-auth-password</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnoidcwebfingeruserinforestbasicauthpassword td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnoidcwebfingeruserinforestbasicauthpassword">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.oidc.webfinger.user-info.rest.basic-auth-password<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnoidcwebfingeruserinforestbasicauthpassword">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_OIDC_WEBFINGER_USER_INFO_REST_BASIC_AUTH_PASSWORD</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnoidcwebfingeruserinforestbasicauthpassword">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.oidc.webfinger.user-info.rest.basic-auth-password<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.oidc.webfinger.user-info.rest.basic-auth-username=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                If REST endpoint is protected via basic authentication, specify the username for authentication.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.oidc.OidcWebFingerProperties.Rest.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnoidcwebfingeruserinforestbasicauthusernamePropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnoidcwebfingeruserinforestbasicauthusernamePropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.oidc.webfinger.user-info.rest.basic-auth-username</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnoidcwebfingeruserinforestbasicauthusername">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnoidcwebfingeruserinforestbasicauthusername">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnoidcwebfingeruserinforestbasicauthusername">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnoidcwebfingeruserinforestbasicauthusername">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnoidcwebfingeruserinforestbasicauthusername">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnoidcwebfingeruserinforestbasicauthusername">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.oidc.webfinger.user-info.rest.basic-auth-username=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnoidcwebfingeruserinforestbasicauthusername">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    oidc: <br>      webfinger: <br>        user-info: <br>          rest: <br>            basic-auth-username</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnoidcwebfingeruserinforestbasicauthusername td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnoidcwebfingeruserinforestbasicauthusername">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.oidc.webfinger.user-info.rest.basic-auth-username<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnoidcwebfingeruserinforestbasicauthusername">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_OIDC_WEBFINGER_USER_INFO_REST_BASIC_AUTH_USERNAME</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnoidcwebfingeruserinforestbasicauthusername">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.oidc.webfinger.user-info.rest.basic-auth-username<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.oidc.webfinger.user-info.rest.headers=</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                Headers, defined as a Map, to include in the request when making the REST call. Will overwrite any header that CAS is pre-defined to send and include in the request. Key in the map should be the header name and the value in the map should be the header value.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.oidc.OidcWebFingerProperties.Rest.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnoidcwebfingeruserinforestheadersPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnoidcwebfingeruserinforestheadersPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.oidc.webfinger.user-info.rest.headers</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnoidcwebfingeruserinforestheaders">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnoidcwebfingeruserinforestheaders">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnoidcwebfingeruserinforestheaders">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnoidcwebfingeruserinforestheaders">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnoidcwebfingeruserinforestheaders">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnoidcwebfingeruserinforestheaders">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.oidc.webfinger.user-info.rest.headers=...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnoidcwebfingeruserinforestheaders">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    oidc: <br>      webfinger: <br>        user-info: <br>          rest: <br>            headers</span><span class="pi">:</span> <span class="s2">"</span><span class="s">..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnoidcwebfingeruserinforestheaders td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnoidcwebfingeruserinforestheaders">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.oidc.webfinger.user-info.rest.headers<span class="o">=</span><span class="s2">"..."</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnoidcwebfingeruserinforestheaders">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_OIDC_WEBFINGER_USER_INFO_REST_HEADERS</span><span class="o">=</span><span class="s2">"..."</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnoidcwebfingeruserinforestheaders">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.oidc.webfinger.user-info.rest.headers<span class="o">=</span><span class="s2">"..."</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+<tr>
+    <td style="border-top: 0px; border-bottom: 1px solid #dee2e6;">
+<li class="property-name text-left" style="list-style: square">
+            <code class="text-wrap">cas.authn.oidc.webfinger.user-info.rest.method=GET</code>
+        </li>
+        <div class="text-wrap">
+            <p>
+                HTTP method to use when contacting the rest endpoint. Examples include <code>GET, POST</code>, etc.
+                    </p>
+<p></p>
+<p class="small text-left"><i class="fas fa-code small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Owner"></i> <code>org.apereo.cas.configuration.model.support.oidc.OidcWebFingerProperties.Rest.</code></p>
+<p></p>
+                    <sub>
+                        <i class="fas fa-cog small" data-bs-toggle="tooltip" data-bs-placment="top" data-bs-html="true" title="Configuration Strategy"></i>
+                        <a data-bs-toggle="modal" href="#" data-bs-target="#casauthnoidcwebfingeruserinforestmethodPropertyConfig"><small>How can I configure this property?</small></a>
+                    </sub>
+                    <p class="small text-left">
+                    </p>
+<div class="modal fade" id="casauthnoidcwebfingeruserinforestmethodPropertyConfig" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">CAS Property: <code>cas.authn.oidc.webfinger.user-info.rest.method</code>
+</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Configuration properties can be included and activated using the following strategies.
+                                    <p></p>
+                                    <div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+                                        When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+                                        The only possible exception to this rule is when naming actuator endpoints; The name of the
+                                        actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode.
+                                    </p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#simplepropertycasauthnoidcwebfingeruserinforestmethod">Java Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#yamlpropertycasauthnoidcwebfingeruserinforestmethod">YAML Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#systempropertycasauthnoidcwebfingeruserinforestmethod">System Property</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#envvarcasauthnoidcwebfingeruserinforestmethod">Environment Variable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#cmdargcasauthnoidcwebfingeruserinforestmethod">Commandline Argument</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <p></p>
+                                        <div class="tab-pane fade active show" id="simplepropertycasauthnoidcwebfingeruserinforestmethod">
+                                            CAS properties can be specified using the Java configuration property syntax in any and all
+                                            <code>.properties</code> files:
+                                            <p></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>cas.authn.oidc.webfinger.user-info.rest.method=GET
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            This is the most common form of property configuration that is recognized by CAS, regardless
+                                            of the actual property source, which might in fact be managed separately outside the CAS environment, by another system
+                                            or cloud framework.
+                                        </div>
+                                        <div class="tab-pane fade" id="yamlpropertycasauthnoidcwebfingeruserinforestmethod">CAS properties can be specified using the YAML syntax:<p></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="na">cas: <br>  authn: <br>    oidc: <br>      webfinger: <br>        user-info: <br>          rest: <br>            method</span><span class="pi">:</span> <span class="s2">"</span><span class="s">GET"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <script>
+                                                setTimeout(() => {
+                                                    $('#yamlpropertycasauthnoidcwebfingeruserinforestmethod td.gl').empty();
+                                                }, 250);
+                                            </script>
+
+                                            <p></p>
+                                            Note that YAML is very specific about structure and indentation. Be sure to verify the correctness of the final result
+                                            with your YAML validator of choice.
+                                        </div>
+                                        <div class="tab-pane fade" id="systempropertycasauthnoidcwebfingeruserinforestmethod">
+                                            CAS properties can be passed to the CAS web application as system properties, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-Dcas</span>.authn.oidc.webfinger.user-info.rest.method<span class="o">=</span><span class="s2">"GET"</span> <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory. Note the placement of the system property which must be
+                                            specified before the CAS web application is launched.
+                                        </div>
+                                        <div class="tab-pane fade" id="envvarcasauthnoidcwebfingeruserinforestmethod">
+                                            CAS properties can specified as system environment variables before the CAS web application is launched:
+                                            <p></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">export </span><span class="nv">CAS_AUTHN_OIDC_WEBFINGER_USER_INFO_REST_METHOD</span><span class="o">=</span><span class="s2">"GET"</span>
+
+java <span class="nt">-jar</span> build/libs/cas.war
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container  and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                        <div class="tab-pane fade" id="cmdargcasauthnoidcwebfingeruserinforestmethod">
+                                            CAS properties can be passed to the CAS web application as command-line arguments, when the application is launched:
+                                            <p></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>java <span class="nt">-jar</span> build/libs/cas.war <span class="nt">--cas</span>.authn.oidc.webfinger.user-info.rest.method<span class="o">=</span><span class="s2">"GET"</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+
+                                            <p></p>
+                                            The above example assumes that the CAS web application is packaged as <code>cas.war</code>
+                                            with an embedded server container and can be found in the <code>build/libs</code> directory.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+    <textarea style="position:absolute; left: -10000px;" id="copyAreaOptionalPropertiescasauthnoidcwebfingeruserinforest"># If REST endpoint is protected via basic authentication, specify the password for authentication.
+# cas.authn.oidc.webfinger.user-info.rest.basic-auth-password=
+
+# If REST endpoint is protected via basic authentication, specify the username for authentication.
+# cas.authn.oidc.webfinger.user-info.rest.basic-auth-username=
+
+# Headers, defined as a Map, to include in the request when making the REST call.
+# cas.authn.oidc.webfinger.user-info.rest.headers=
+
+# HTTP method to use when contacting the rest endpoint.
+# cas.authn.oidc.webfinger.user-info.rest.method=GET
+
+</textarea>
+</div>
+<div class="tab-pane properties-tab fade in" id="notescasauthnoidcwebfingeruserinforest">
+<!-- fragment:keep -->
+
+<p></p>
+
+<h4 id="configuration-metadata">Configuration Metadata</h4>
+
+<p>The collection of configuration properties listed in this section are automatically generated from the CAS source and components that contain the actual field
+definitions, types, descriptions, modules, etc. This metadata may not always be 100% accurate, or could be lacking details and sufficient explanations.</p>
+
+<h4 id="be-selective">Be Selective</h4>
+
+<p>This section is meant as a guide only. Do NOT copy/paste the entire collection of settings into your CAS configuration; rather pick only the properties that you
+need. Do NOT enable settings unless you are certain of their purpose and do NOT copy settings into your configuration only to keep them as reference. All these
+ideas lead to upgrade headaches, maintenance nightmares and premature aging.</p>
+
+<h4 id="yagni">YAGNI</h4>
+
+<p>Note that for nearly ALL use cases, declaring and configuring properties listed here is sufficient. You should NOT have to explicitly massage a CAS XML/Java/etc
+configuration file to design an authentication handler, create attribute release policies, etc. CAS at runtime will auto-configure all required changes for you.
+If you are unsure about the meaning of a given CAS setting, do NOT turn it on without hesitation. Review the codebase or better yet, ask questions to clarify
+the intended behavior.</p>
+
+<h4 id="naming-convention">Naming Convention</h4>
+
+<p>Property names can be specified in very relaxed terms. For instance <code class="language-plaintext highlighter-rouge">cas.someProperty</code>, <code class="language-plaintext highlighter-rouge">cas.some-property</code>, <code class="language-plaintext highlighter-rouge">cas.some_property</code> are all valid names. While all
+forms are accepted by CAS, there are certain components (in CAS and other frameworks used) whose activation at runtime is conditional on a property value, where
+this property is required to have been specified in CAS configuration using kebab case. This is both true for properties that are owned by CAS as well as those
+that might be presented to the system via an external library or framework such as Spring Boot, etc.</p>
+
+<div class="alert alert-info">
+<img class="emoji" title=":information_source:" alt=":information_source:" src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png" height="20" width="20"> <strong>Note</strong> <p>
+When possible, properties should be stored in lower-case kebab format, such as <code>cas.property-name=value</code>.
+The only possible exception to this rule is when naming actuator endpoints; The name of the
+actuator endpoints (i.e. <code>ssoSessions</code>) <strong>MUST</strong> remain in camelCase mode. 
+</p>
+</div>
+
+<p>Settings and properties that are controlled by the CAS platform directly always begin with the prefix <code class="language-plaintext highlighter-rouge">cas</code>. All other settings are controlled and provided
+to CAS via other underlying frameworks and may have their own schemas and syntax. BE CAREFUL with
+the distinction. Unrecognized properties are rejected by CAS and/or frameworks upon which CAS depends. This means if you somehow misspell a property definition
+or fail to adhere to the dot-notation syntax and such, your setting is entirely refused by CAS and likely the feature it controls will never be activated in the
+way you intend.</p>
+
+<h4 id="validation">Validation</h4>
+
+<p>Configuration properties are automatically validated on CAS startup to report issues with configuration binding, specially if defined CAS settings cannot be
+recognized or validated by the configuration schema. Additional validation processes are also handled
+via <a href="/7.0.x/configuration/Configuration-Metadata-Repository.html">Configuration Metadata</a> and property migrations applied automatically on
+startup by Spring Boot and family.</p>
+
+<h4 id="indexed-settings">Indexed Settings</h4>
+
+<p>CAS settings able to accept multiple values are typically documented with an index, such as <code class="language-plaintext highlighter-rouge">cas.some.setting[0]=value</code>. The index <code class="language-plaintext highlighter-rouge">[0]</code> is meant to be
+incremented by the adopter to allow for distinct multiple configuration blocks.</p>
+
+</div>
+<script>
+    window.addEventListener('load', (event) => {$("#linkRdbmscasauthnoidcwebfingeruserinforest").remove();$("#linkEmailcasauthnoidcwebfingeruserinforest").remove();$("#linkSigningEncryptioncasauthnoidcwebfingeruserinforest").remove();$("#linkPasswordPolicycasauthnoidcwebfingeruserinforest").remove();$("#linkPrincipalTransformationcasauthnoidcwebfingeruserinforest").remove();$("#linkPasswordEncodercasauthnoidcwebfingeruserinforest").remove();$("#linkAuthnPredicatecasauthnoidcwebfingeruserinforest").remove();$("#linkLdapcasauthnoidcwebfingeruserinforest").remove();// console.log("Checking for visible link menu in: navPillsMenuscasauthnoidcwebfingeruserinforest");
+        let id=$("#navPillsMenuscasauthnoidcwebfingeruserinforest a:visible:first").prop('id');
+        // console.log("Attempting to select tab with id " + id);
+        if (id != undefined && id != null) {
+            // console.log("Selecting first tab with link id " + id);
+            let firstTabEl = document.querySelector(`#${id}`);
+            let firstTab = new bootstrap.Tab(firstTabEl);
+            firstTab.show();
+            // console.log("Selected tab with link id " + id);
+        }
+
+        let c = $("#tableRequiredPropertiescasauthnoidcwebfingeruserinforest li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navRequiredPropertiescasauthnoidcwebfingeruserinforest").closest("table").remove();
+            $("#navRequiredPropertiesLeftcasauthnoidcwebfingeruserinforest").closest("table").remove();
+        }
+        c = $("#tableOptionalPropertiescasauthnoidcwebfingeruserinforest li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navOptionalPropertiescasauthnoidcwebfingeruserinforest").closest("table").remove();
+            $("#navOptionalPropertiesLeftcasauthnoidcwebfingeruserinforest").closest("table").remove();
+        }
+        c = $("#tableThirdPartyPropertiescasauthnoidcwebfingeruserinforest li.property-name code").length;
+        if (c <= ROWS) {
+            $("#navThirdPartyPropertiescasauthnoidcwebfingeruserinforest").hide();
+        }
+        
+    });
+</script>
+
+</div>
+
+<h3 id="custom-userinfo-repository">Custom UserInfo Repository</h3>
+
+<p>It is possible to design and inject your own version of webfinger user repositories into CAS. First, you will need to design
+a <code class="language-plaintext highlighter-rouge">@AutoConfiguration</code> class to contain your own <code class="language-plaintext highlighter-rouge">OidcWebFingerUserInfoRepository</code> implementation:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre><span class="nd">@AutoConfiguration</span>
+<span class="nd">@EnableConfigurationProperties</span><span class="o">(</span><span class="nc">CasConfigurationProperties</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomWebFingerUserInfoConfiguration</span> <span class="o">{</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">OidcWebFingerUserInfoRepository</span> <span class="nf">oidcWebFingerUserInfoRepository</span><span class="o">()</span> <span class="o">{</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>Your configuration class needs to be registered with CAS. <a href="../configuration/Configuration-Management-Extensions.html">See this guide</a> for better details.</p>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+        </div>
+    </footer>
+
+    <script>
+        let pageSection = 'Protocols';
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/main.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+</body>
+
+</html>

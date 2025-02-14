@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Attribute Release</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="attribute-release">Attribute Release</h1>
+<p>Attributes are controlled by the <a href="https://github.com/Jasig/person-directory‎">Person Directory project</a> and returned to scoped services via the <a href="../protocol/SAML-Protocol.html">SAML 1.1 protocol</a> or the <a href="../protocol/CAS-Protocol.html">CAS protocol</a>. The Person Directory dependency is automatically bundled with the CAS server. Therefore, declaring an additional dependency will not be required. This Person Directory project supports both LDAP and JDBC attribute release, caching, attribute aggregation from multiple attribute sources, etc.</p>
+
+<p>Attributes pass through a two-step process:</p>
+
+<ul>
+  <li>Resolution: Done at the time of establishing the principal via <code>PrincipalResolver</code> components where attributes are resolved from various sources that are outlined below.</li>
+  <li>Release: Adopters must explicitly configure attribute release for services in order for the resolved attributes to be released to a service in the validation response. </li>
+</ul>
+
+<div class="alert alert-info"><strong>Service Management</strong><p>Attribute release may also be configured via the
+<a href="../installation/Service-Management.html">Service Management tool</a>.</p></div>
+
+<h2 id="components">Components</h2>
+<p>A PersonDirectory <code>IPersonAttributeDao</code> attribute source is defined and configured to describe the global set of attributes to be fetched for each authenticated principal. That global set of attributes is then filtered by the service manager according to service-specific attribute release rules. </p>
+
+<h3 id="person-directory">Person Directory</h3>
+<ul>
+  <li><code>MergingPersonAttributeDaoImpl</code>: Designed to query multiple <code>IPersonAttributeDaos</code> in order and merge the results into a single result set. Merging strategies may be configured via instances of <code>IAttributeMerger</code>.</li>
+  <li><code>CachingPersonAttributeDaoImpl</code>: Provides the ability to cache results of executed inner DAOs.</li>
+  <li><code>CascadingPersonAttributeDao</code>: Designed to query multiple <code>IPersonAttributeDaos</code> in order and merge the results into a single result set. As each <code>IPersonAttributesAttributeDao</code> is queried the attributes from the first <code>IPersonAttributes</code> in the result set are used as the query for the next <code>IPersonAttributesAttributeDao</code>. </li>
+  <li><code>StubPersonAttributeDao</code>: Backed by a single Map which this implementation will always return, useful for returning static values.</li>
+  <li><code>MessageFormatPersonAttributeDao</code>: Provides the ability to create attributes based on other other attribute values as arguments.</li>
+  <li><code>RegexGatewayPersonAttributeDao</code>: Conditionally execute an inner DAO if the data in the seed matches criteria set out by the configured patterns.</li>
+  <li><code>SingleRowJdbcPersonAttributeDao</code>: The implementation that maps from column names in the result of a SQL query to attribute names.</li>
+  <li><code>MultiRowJdbcPersonAttributeDao</code>: Designed to work against a table where there is a mapping of one row to many users. Should be used if the database is structured such that there is a column for attribute names and column(s) for the corresponding values.</li>
+  <li><code>XmlPersonAttributeDao</code>: XML backed person attribute DAO that supports wildcard searching.</li>
+  <li><code>LdapPersonAttributeDao</code>: Queries an LDAP directory to populate person attributes using Spring Framework.</li>
+</ul>
+
+<p>More about the Person Directory and its configurable sources <a href="https://wiki.jasig.org/display/PDM15/Person+Directory+1.5+Manual">can be found here</a>.</p>
+
+<h3 id="cas">CAS</h3>
+<p>The CAS project provides the following additional implementations:</p>
+
+<ul>
+  <li><code>LdapPersonAttributeDao</code>: Queries an LDAP directory to populate person attributes using the bundled CAS LDAP libraries.</li>
+</ul>
+
+<h3 id="sample-usage">Sample Usage</h3>
+
+<h4 id="ldap">LDAP</h4>
+<p>The following snippet assumes that connection information beans are already defined.</p>
+
+<div class="highlight"><pre><code class="xml">
+<span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;org.jasig.cas&quot;</span> <span class="na">/&gt;</span>
+<span class="nt">&lt;context:annotation-config</span> <span class="na">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ldapPersonAttributeDao&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.persondir.LdapPersonAttributeDao&quot;</span>
+      <span class="na">p:connectionFactory-ref=</span><span class="s">&quot;pooledLdapConnectionFactory&quot;</span>
+      <span class="na">p:baseDN=</span><span class="s">&quot;${ldap.baseDn}&quot;</span>
+      <span class="na">p:searchControls-ref=</span><span class="s">&quot;searchControls&quot;</span>
+      <span class="na">p:searchFilter=</span><span class="s">&quot;mail={0}&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;resultAttributeMapping&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;map&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">               | Key is LDAP attribute name, value is principal attribute name.</span>
+<span class="c">               --&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;member&quot;</span> <span class="na">value=</span><span class="s">&quot;member&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;mail&quot;</span> <span class="na">value=</span><span class="s">&quot;mail&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;displayName&quot;</span> <span class="na">value=</span><span class="s">&quot;displayName&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/map&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h4 id="jdbc">JDBC</h4>
+<p>The following snippet assumes that connection information beans are already defined.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;singleRowJdbcPersonAttributeDao&quot;</span>
+    <span class="na">class=</span><span class="s">&quot;org.jasig.services.persondir.support.jdbc.SingleRowJdbcPersonAttributeDao&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;dataSource&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;1&quot;</span> <span class="na">value=</span><span class="s">&quot;SELECT * FROM USER_DATA WHERE {0}&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;queryAttributeMapping&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;map&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;username&quot;</span> <span class="na">value=</span><span class="s">&quot;uid&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/map&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;resultAttributeMapping&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;map&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;uid&quot;</span> <span class="na">value=</span><span class="s">&quot;username&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;first_name&quot;</span> <span class="na">value=</span><span class="s">&quot;first_name&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;last_name&quot;</span> <span class="na">value=</span><span class="s">&quot;last_name&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&quot;email&quot;</span> <span class="na">value=</span><span class="s">&quot;email&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/map&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h4 id="caching-merging-and-cascading">Caching, Merging and Cascading</h4>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;mergedPersonAttributeDao&quot;</span>
+        <span class="na">class=</span><span class="s">&quot;org.jasig.services.persondir.support.CachingPersonAttributeDaoImpl&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;cacheNullResults&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;userInfoCache&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.portal.utils.cache.MapCacheFactoryBean&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;cacheFactory&quot;</span> <span class="na">ref=</span><span class="s">&quot;cacheFactory&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;cacheName&quot;</span> <span class="na">value=</span><span class="s">&quot;org.jasig.services.persondir.USER_INFO.merged&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;cachedPersonAttributesDao&quot;</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;mergedPersonAttributeDao&quot;</span>                 
+                <span class="na">class=</span><span class="s">&quot;org.jasig.services.persondir.support.MergingPersonAttributeDaoImpl&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;merger&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.services.persondir.support.merger.NoncollidingAttributeAdder&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;personAttributeDaos&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;list&gt;</span>
+                    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.services.persondir.support.CascadingPersonAttributeDao&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;personAttributeDaos&quot;</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;list&gt;</span>
+                                <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;anotherDao&quot;</span> <span class="nt">/&gt;</span>
+                            <span class="nt">&lt;/list&gt;</span>
+                        <span class="nt">&lt;/property&gt;</span>
+                    <span class="nt">&lt;/bean&gt;</span>
+                <span class="nt">&lt;/list&gt;</span>
+            <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<p>Once principal attributes are resolved, adopters may choose to allow/release each attribute per each definition in the registry. Example configuration follows:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.RegisteredServiceImpl&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;id&quot;</span> <span class="na">value=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">value=</span><span class="s">&quot;HTTPS Services&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">value=</span><span class="s">&quot;YOUR HTTP Service&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;serviceId&quot;</span> <span class="na">value=</span><span class="s">&quot;https://**&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;allowedAttributes&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;list&gt;</span>
+      <span class="nt">&lt;value&gt;</span>yourAttributeName<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/list&gt;</span>              
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h3 id="principal-id-attribute">Principal-Id Attribute</h3>
+<p>The service registry component of CAS has the ability to allow for configuration of a <code>usernameAttribute</code> to be returned for the given registered service. When this property is set for a service, CAS will return the value of the configured attribute as part of its validation process. </p>
+
+<ul>
+  <li>Ensure the attribute is available and resolved for the principal</li>
+  <li>Specify the attribute in its list of allowed attributes</li>
+  <li>Set the <code>usernameAttribute</code> property of the given service to the attribute you defined</li>
+</ul>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.RegisteredServiceImpl&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;id&quot;</span> <span class="na">value=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">value=</span><span class="s">&quot;HTTPS Services&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">value=</span><span class="s">&quot;YOUR HTTPS Service&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;serviceId&quot;</span> <span class="na">value=</span><span class="s">&quot;https://**&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;evaluationOrder&quot;</span> <span class="na">value=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;usernameAttribute&quot;</span> <span class="na">value=</span><span class="s">&quot;mail&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;allowedAttributes&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;list&gt;</span>
+      <span class="nt">&lt;value&gt;</span>someAttributeName<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/list&gt;</span>              
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h3 id="attribute-filters">Attribute Filters</h3>
+<p>The service registry component has the ability to allow for configuration of an attribute filter. Filters have the ability to do execute additional processes on the set of attributes that are allocated to the final principal for a given user id. For instance, you might want to decide that certain attribute need to be removed from the final resultset based on a user role, etc. </p>
+
+<h4 id="registeredserviceattributefilter"><code>RegisteredServiceAttributeFilter</code></h4>
+<p>If you wish to write your own filter, you need to design a class that implements this interface and as such, plug that custom instance into the specific service registry entry you intend to use. </p>
+
+<h4 id="registeredserviceregexattributefilter"><code>RegisteredServiceRegexAttributeFilter</code></h4>
+<p>A regex-aware filter responsible to make sure only attributes that match a certain  pattern are released for a given service. </p>
+
+<p>This example also demonstrates the configuration of an attribute filter that only allows for attributes whose length is 3.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.RegexRegisteredService&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;id&quot;</span> <span class="na">value=</span><span class="s">&quot;1&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">value=</span><span class="s">&quot;HTTP and IMAP on example.com&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">value=</span><span class="s">&quot;Allows HTTP(S) and IMAP(S) protocols on example.com&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;serviceId&quot;</span> <span class="na">value=</span><span class="s">&quot;^(https?|imaps?)://([A-Za-z0-9_-]+\.)*example\.com/.*&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;evaluationOrder&quot;</span> <span class="na">value=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;attributeFilter&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.services.support.RegisteredServiceRegexAttributeFilter&quot;</span> 
+            <span class="na">c:regex=</span><span class="s">&quot;^\w{3}$&quot;</span> <span class="nt">/&gt;</span> 
+   <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

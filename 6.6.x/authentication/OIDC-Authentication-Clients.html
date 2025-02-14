@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - OpenID Connect Authentication</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    
+<h1 id="clients---openid-connect-authentication">Clients - OpenID Connect Authentication</h1>
+
+<p>Clients can be registered with CAS in the following ways.</p>
+
+<h2 id="static-registration">Static Registration</h2>
+
+<p>OpenID Connect clients can be <em>statically</em> registered with CAS as such:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.OidcRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"client"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"clientSecret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"secret"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^&lt;https://the-redirect-uri&gt;"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OIDC"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Note that OpenID connect clients as service definitions are an 
+extension of <a href="OAuth-Authentication.html">OAuth services</a> in CAS. All settings 
+that apply to an OAuth service definition should equally apply here as well.</p>
+
+<div class="alert alert-info"><strong>Redirect URIs</strong><p>Client applicatin redirect URIs are specified
+using the <code>serviceId</code> field which supports regular expression patterns. If you need to support multiple URIs, you can
+try to <i>OR</i> them together or you may be able to construct the pattern that supports and matches all URIs with minor changes.</p></div>
+
+<p>The following fields are specifically available for OpenID connect services:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">clientId</code></td>
+      <td>Required. The identifier for this client application.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">clientSecret</code></td>
+      <td>Required. The secret for this client application. The client secret received from the service will be URL decoded before being compared to the secret in the CAS service definition.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">clientSecretExpiration</code></td>
+      <td>Optional. Time, measured in UTC epoch, at which the <code class="language-plaintext highlighter-rouge">client_secret</code> will expire or 0 if it will not expire.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">serviceId</code></td>
+      <td>Required. The authorized redirect URI for this OIDC client.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">supportedGrantTypes</code></td>
+      <td>Optional. Collection of supported grant types for this service.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">supportedResponseTypes</code></td>
+      <td>Optional. Collection of supported response types for this service.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">signIdToken</code></td>
+      <td>Optional. Whether ID tokens should be signed. Default is <code class="language-plaintext highlighter-rouge">true</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">jwks</code></td>
+      <td>Optional. Resource path to the keystore location that holds the keys for this application.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">jwksKeyId</code></td>
+      <td>Optional. JSON web key id to find in the keystore.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">jwksCacheDuration</code></td>
+      <td>Optional. The expiration policy time value applied to loaded/cached keys for this application.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">jwksCacheTimeUnit</code></td>
+      <td>Optional. The expiration policy time unit of measure (i.e. <code class="language-plaintext highlighter-rouge">seconds</code>, <code class="language-plaintext highlighter-rouge">minutes</code>, etc) applied to loaded/cached keys.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">encryptIdToken</code></td>
+      <td>Optional. Whether ID tokens should be encrypted. Default is <code class="language-plaintext highlighter-rouge">false</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idTokenIssuer</code></td>
+      <td>Optional. Override the <code class="language-plaintext highlighter-rouge">iss</code> claim in the ID Token, which should only be used in special circumstances. Do <strong>NOT</strong> use this setting carelessly as the ID token’s issuer <strong>MUST ALWAYS</strong> match the identity provider’s issuer.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idTokenEncryptionAlg</code></td>
+      <td>Optional. The algorithm header value used to encrypt the id token.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idTokenSigningAlg</code></td>
+      <td>Optional. The algorithm header value used to sign the id token.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">userInfoSigningAlg</code></td>
+      <td>Optional. The algorithm header value used to sign user profile responses.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">userInfoEncryptedResponseAlg</code></td>
+      <td>Optional. The algorithm header value used to encrypt user profile responses.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tokenEndpointAuthenticationMethod</code></td>
+      <td>Optional. The requested client authentication method to the token endpoint. Default is <code class="language-plaintext highlighter-rouge">client_secret_basic</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">applicationType</code></td>
+      <td>Optional. <code class="language-plaintext highlighter-rouge">web</code>, <code class="language-plaintext highlighter-rouge">native</code>, or blank. Defined the kind of the application. The default, if omitted, is <code class="language-plaintext highlighter-rouge">web</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idTokenEncryptionEncoding</code></td>
+      <td>Optional. The algorithm method header value used to encrypt the id token.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">userInfoEncryptedResponseEncoding</code></td>
+      <td>Optional. The algorithm method header value used to encrypt the user profile response.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">subjectType</code></td>
+      <td>Optional value chosen from <code class="language-plaintext highlighter-rouge">public</code> or <code class="language-plaintext highlighter-rouge">pairwise</code>. Type to use when generating principal identifiers. Default is <code class="language-plaintext highlighter-rouge">public</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sectorIdentifierUri</code></td>
+      <td>Optional. Host value of this URL is used as the sector identifier for the pairwise identifier calculation. If left undefined, the host value of the <code class="language-plaintext highlighter-rouge">serviceId</code> will be used instead.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert alert-info"><strong>Keep What You Need!</strong><p>You are encouraged to 
+only keep and maintain properties and settings needed for a 
+particular integration. It is UNNECESSARY to grab a copy of all service fields and try to 
+configure them yet again based on their default. While 
+you may wish to keep a copy as a reference, this strategy would ultimately lead to poor 
+upgrades increasing chances of breaking changes and a messy 
+deployment at that.</p></div>
+
+<p>Service definitions are typically managed and registered 
+with CAS by the <a href="../services/Service-Management.html">service management</a> facility.</p>
+
+<div class="alert alert-warning"><strong>Usage Warning!</strong><p>CAS today does not strictly 
+enforce the collection of authorized supported response/grant types for backward compatibility reasons if left blank. This means that if left 
+undefined, all grant and response types may be allowed by the service definition and related policies. Do please note that this behavior 
+is <strong>subject to change</strong> in future releases and thus, it is strongly recommended that all authorized grant/response types for 
+each profile be declared in the service definition immediately to avoid surprises in the future.</p></div>
+
+<p>An example registration record for an OpenID Connect relying party follows that allows the application with the redirect URI <code class="language-plaintext highlighter-rouge">https://app.example.org/oidc</code>
+to send authorization requests to CAS using the <em>authorization code</em> authentication flow. The registration record also instructs CAS to bypass the 
+approval/consent screen and to assume access to requested scopes and claims should be granted automatically without the user’s explicit permission.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.OidcRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"client-id"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"clientSecret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"secret"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^https://app.example.org/oidc"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MyApplication"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"bypassApprovalPrompt"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"supportedResponseTypes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.HashSet"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"code"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"supportedGrantTypes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.HashSet"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"authorization_code"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"scopes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.HashSet"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"profile"</span><span class="p">,</span><span class="w"> </span><span class="s2">"openid"</span><span class="p">,</span><span class="w"> </span><span class="s2">"email"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="dynamic-registration">Dynamic Registration</h2>
+
+<p>Client applications may dynamically be registered with CAS
+for authentication. <a href="OIDC-Authentication-Dynamic-Registration.html">See this guide</a> for more info.</p>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = 'Protocols';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

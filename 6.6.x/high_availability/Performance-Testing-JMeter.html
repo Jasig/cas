@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - JMeter Performance Testing</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    
+<h1 id="jmeter-performance-testing">JMeter Performance Testing</h1>
+
+<p>Apache JMeter is a great performance testing tool that is used heavily within the Java community.</p>
+
+<h2 id="install-jmeter">Install JMeter</h2>
+
+<ul>
+  <li>Download the <a href="http://jmeter.apache.org/download_jmeter.cgi">JMeter binary</a>.</li>
+  <li>Unzip apache-jmeter-*.tgz to your preferred location</li>
+  <li>Run <code class="language-plaintext highlighter-rouge">bin/jmeter.sh|bat</code>
+    <ul>
+      <li>Note: Mac users can also use the popular HomeBrew package manager to install JMeter.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="sample-test-scripts">Sample Test Scripts</h2>
+
+<p>Below you will find three generic runnable login scripts for the three 
+most popular CAS implementation flavors. Please feel free to edit and use for your needs.</p>
+
+<p>Although the scripts support different login methodologies, they do share some common traits.</p>
+
+<h2 id="common-settings">Common Settings</h2>
+
+<ul>
+  <li><em>User Defined Variables</em>
+    <ul>
+      <li><em>ThreadCount</em> - Number of Threads (Kind of like Users).  Recommend starting with 100 users or so.</li>
+      <li><em>Duration</em> -  How long should the test run.  Usually, the more threads(users) the longer the duration should be</li>
+      <li><em>RampUpPeriod</em> - How long to take to ramp up to full set of thread count</li>
+    </ul>
+  </li>
+  <li><em>Thread Group (or Tests)</em>:
+    <ul>
+      <li><em>Loop Count</em> - # of Loops, or more correctly the # of users to run through the test.
+        <ul>
+          <li>Count will be associated to the total users that will run through the test</li>
+          <li><em>Forever</em> check box will loop through file and keep going till manually stopped or until reaches Duration 
+from “User Defined Variables” page</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>CSV Get Users/Passwords</em>:
+    <ul>
+      <li>Name and location of file containing test user credentials</li>
+      <li>Should be in the format of <code class="language-plaintext highlighter-rouge">User,Password</code>, with no spaces between “User”, the “comma” and “Password”</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="scripts">Scripts</h2>
+
+<p>The scripts can be downloaded from <a href="https://github.com/apereo/cas/raw/master/etc/loadtests/">here</a>.</p>
+
+<h3 id="cas-protocol">CAS Protocol</h3>
+
+<p>Test script: <code class="language-plaintext highlighter-rouge">CAS_CAS.jmx</code> used to test the server acting as a CAS identity provider.</p>
+
+<ul>
+  <li>Vanilla installation of CAS using standard CAS login process</li>
+  <li>No SP (Service Provider) is needed</li>
+  <li>User Defined Variables:
+    <ul>
+      <li><em>IdPHost</em> - URL of your CAS instance</li>
+      <li><em>CasSP</em> - SP (Service Provider) URL but does not have to be active</li>
+    </ul>
+  </li>
+  <li>Test Fragments:
+    <ul>
+      <li><em>GET - CAS Login Page</em> – Access login page for a typical CAS login</li>
+      <li><em>POST - Login Credentials</em> – Post credentials from user file into CAS instance</li>
+      <li><em>GET - User Info with Service Ticket</em> – Get user info with Service Ticket that CAS generated when user logged in
+        <ul>
+          <li>Under Assertion, may need to update expected user results</li>
+        </ul>
+      </li>
+      <li><em>GET - User Logout</em> – Logout user from CAS session via CAS logout</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="oauth-protocol">OAuth Protocol</h3>
+
+<p>Test script: <code class="language-plaintext highlighter-rouge">CAS_Oauth.jmx</code> used to test the server acting as an OAuth provider.</p>
+
+<ul>
+  <li>CAS supporting OAuth login process</li>
+  <li>An active SP is optional</li>
+  <li>Script reflects the most common way that OAuth is used, the Authorization Code method</li>
+  <li><em>User Defined Variables</em>:
+    <ul>
+      <li><em>IdPHost</em> - URL of your CAS instance</li>
+      <li><em>CasSP</em> - SP (Service Provider) URL but does not have to be active</li>
+      <li><em>SpClientId</em> - The clientId of the SP within the CAS service file</li>
+      <li><em>SpRedirectUri</em> - Endpoint in SP that will be used to receive the “Authorization Code”</li>
+      <li><em>SpState</em> - CSRF token used</li>
+      <li><em>SpClientName</em> - The OAuth call type being used for authentication</li>
+      <li><em>SpResponseType</em> - The OAuth method being used, in this case “code”, which stands for <em>Authorization Code</em></li>
+      <li><em>SpClientSecret</em> - Secret phrase or word shared between the SP and CAS</li>
+    </ul>
+  </li>
+  <li><em>Test Fragments</em>:
+    <ul>
+      <li><em>Verify Service Provider</em> – Verifies URL to SP is correct (Optional, can be disabled)</li>
+      <li><em>Start CAS Login process</em> – Accessing CAS login page for OAuth with all parameters set</li>
+      <li><em>1a-1d</em> – Post login credentials for user, followed by redirects to get code in Access Token
+        <ul>
+          <li>broken into several processes due to encoding issues when testing</li>
+        </ul>
+      </li>
+      <li><em>GET - User Profile with Access Token</em> – Call to CAS to get the user’s info with Access Token
+        <ul>
+          <li>Under Assertion, may need to update expected user results</li>
+        </ul>
+      </li>
+      <li><em>GET - User Logout</em> – Logout user from CAS session via CAS logout</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="openid-connect-protocol">OpenID Connect Protocol</h3>
+
+<p>Test script: <code class="language-plaintext highlighter-rouge">CAS_OIDC.jmx</code> used to test the server acting as an OpenID Connect provider.</p>
+
+<p>The instructions and the test sequence is almost identical to the OAuth workflow, with the addition of ID token verifications.</p>
+
+<h3 id="saml2-protocol">SAML2 Protocol</h3>
+
+<p>Test script: <code class="language-plaintext highlighter-rouge">CAS_SAML2.jmx</code> used to test the server acting as a SAML2 identity provider.</p>
+
+<ul>
+  <li>CAS support for SAML2 Login process</li>
+  <li>An active SP is required.
+    <ul>
+      <li>For this test used SimpleSAMLphp</li>
+    </ul>
+  </li>
+  <li><em>User Defined Variables</em>:
+    <ul>
+      <li><em>CasSP</em> - Domain of registered CAS SP using SAML</li>
+      <li><em>ProviderId</em> - SAML EntityID stated in metadata for SP</li>
+    </ul>
+  </li>
+  <li><em>Test Fragments</em>:
+    <ul>
+      <li><em>Go To SP for CAS Login</em> – SP page protected by SAML2 that will redirect to CAS login endpoint</li>
+      <li><em>POST - Login User</em> – Post credentials from user file into CAS SAML2 login</li>
+      <li><em>POST - CAS Authorization to SP</em> – Send response from CAS to SP for processing and final request for user info
+        <ul>
+          <li>May need to updated Assertion for successful user information returned</li>
+        </ul>
+      </li>
+      <li><em>GET - User Logout</em> – Logout user from CAS session via CAS logout</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="run-test-scripts">Run Test Scripts</h2>
+
+<p>Once you have saved the test scripts to your system, you can either run within the JMeter
+GUI or via command line. It is highly recommended that the GUI be used for 
+troubleshooting the scripts to work within your environment. Then, when you actually start
+load testing, you do that via the command line.</p>
+
+<p>To activate the JMeter GUI, from the command line type:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="o">&gt;</span> /usr/local/bin/jmeter
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>This path should correspond to the location you chose to install JMeter.</p>
+
+<p>A simple example of a JMeter startup via command line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="o">&gt;</span> /usr/local/bin/jmeter <span class="nt">-n</span> <span class="nt">-t</span> your_script.jmx
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">-n</code> run JMeter in non-GUI mode.
+<code class="language-plaintext highlighter-rouge">-t</code> path to .jmx test file.</p>
+
+<p>More examples can be found on the <a href="http://jmeter.apache.org">JMeter site</a>.</p>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = 'High Availability';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

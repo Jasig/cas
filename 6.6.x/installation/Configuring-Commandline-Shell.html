@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Configuring Commandline Shell</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    
+<h1 id="command-line-shell">Command-line Shell</h1>
+
+<p>The CAS command-line shell provides the ability to query the CAS server for help on available settings/modules and
+various other utility functions.</p>
+
+<p>To invoke and work with the utility, execute:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>java <span class="nt">-jar</span> /path/to/cas-server-support-shell-<span class="nv">$casVersion</span>.jar
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>…where <code class="language-plaintext highlighter-rouge">$casVersion</code> needless to say is the CAS version that is deployed.</p>
+
+<p>The interface that is next presented will guide you through with available parameters and methods of querying.
+You will learn how to launch into the interactive shell and query the CAS engine dynamically.</p>
+
+<div class="alert alert-info"><strong>JCE Requirement</strong><p>Make sure you have the proper JCE bundle installed in your 
+Java environment that is used by CAS, specially if you need to use specific signing/encryption algorithms and methods. 
+Be sure to pick the right version of the JCE for your Java version. Java versions can be detected via the <code>java -version</code> command.</p></div>
+
+<p>Note that the <a href="WAR-Overlay-Installation.html">WAR Overlay deployment strategy</a> should already be equipped with this 
+functionality. You should not have to do anything special and extra to interact with the shell. See the relevant 
+overlay documentation for more info on how to invoke and work with the shell.</p>
+
+<h2 id="shell-commands">Shell Commands</h2>
+
+<p>The following commands are available and exposed by the CAS command-line shell.</p>
+
+<div>
+
+
+
+    
+    
+    	
+			
+			<h3>quit,exit</h3>
+			<p>Exit the shell.</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>generate-key</h3>
+			<p>Generate signing/encryption crypto keys for CAS settings</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>key-size,--key-size</code>
+			                </td>
+			                <td>
+			                    <code>Key size</code>
+			                </td>
+			                <td>
+			                    <code>256</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>cipher-text,encode-text</h3>
+			<p>Sign and encrypt text data using keys</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>value,--value</code>
+			                </td>
+			                <td>
+			                    <code>Value to put through the cipher</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>encryption-key,--encryption-key</code>
+			                </td>
+			                <td>
+			                    <code>Encryption key</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>signing-key,--signing-key</code>
+			                </td>
+			                <td>
+			                    <code>Signing key</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>encryption-key-size,--encryption-key-size</code>
+			                </td>
+			                <td>
+			                    <code>Encryption key size</code>
+			                </td>
+			                <td>
+			                    <code>256</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>signing-key-size,--signing-key-size</code>
+			                </td>
+			                <td>
+			                    <code>Signing key size</code>
+			                </td>
+			                <td>
+			                    <code>512</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>enable-encryption,--enable-encryption</code>
+			                </td>
+			                <td>
+			                    <code>Whether value should be encrypted</code>
+			                </td>
+			                <td>
+			                    <code>true</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>enable-signing,--enable-signing</code>
+			                </td>
+			                <td>
+			                    <code>Whether value should be signed</code>
+			                </td>
+			                <td>
+			                    <code>true</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+			
+			<h3>decipher-text,decode-text</h3>
+			<p>Decrypt and verify text data using keys</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>value,--value</code>
+			                </td>
+			                <td>
+			                    <code>Value to put through the cipher</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>encryption-key,--encryption-key</code>
+			                </td>
+			                <td>
+			                    <code>Encryption key</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>signing-key,--signing-key</code>
+			                </td>
+			                <td>
+			                    <code>Signing key</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>encryption-key-size,--encryption-key-size</code>
+			                </td>
+			                <td>
+			                    <code>Encryption key size</code>
+			                </td>
+			                <td>
+			                    <code>256</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>signing-key-size,--signing-key-size</code>
+			                </td>
+			                <td>
+			                    <code>Signing key size</code>
+			                </td>
+			                <td>
+			                    <code>512</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>enable-encryption,--enable-encryption</code>
+			                </td>
+			                <td>
+			                    <code>Whether value should be encrypted</code>
+			                </td>
+			                <td>
+			                    <code>true</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>enable-signing,--enable-signing</code>
+			                </td>
+			                <td>
+			                    <code>Whether value should be signed</code>
+			                </td>
+			                <td>
+			                    <code>true</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>generate-ddl</h3>
+			<p>Generate database DDL scripts</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>file,--file</code>
+			                </td>
+			                <td>
+			                    <code>DDL file to contain to generated script</code>
+			                </td>
+			                <td>
+			                    <code>/etc/cas/config/cas-db-schema.sql</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>dialect,--dialect</code>
+			                </td>
+			                <td>
+			                    <code>Database dialect class</code>
+			                </td>
+			                <td>
+			                    <code>HSQL</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>url,--url</code>
+			                </td>
+			                <td>
+			                    <code>JDBC database connection URL</code>
+			                </td>
+			                <td>
+			                    <code>jdbc:hsqldb:mem:cas</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>delimiter,--delimiter</code>
+			                </td>
+			                <td>
+			                    <code>Delimiter to use for separation of statements when generating SQL</code>
+			                </td>
+			                <td>
+			                    <code>;</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>pretty,--pretty</code>
+			                </td>
+			                <td>
+			                    <code>Format DDL scripts and pretty-print the output</code>
+			                </td>
+			                <td>
+			                    <code>false</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>dropSchema,--dropSchema</code>
+			                </td>
+			                <td>
+			                    <code>Generate DROP SQL statements in the DDL</code>
+			                </td>
+			                <td>
+			                    <code>false</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>createSchema,--createSchema</code>
+			                </td>
+			                <td>
+			                    <code>Generate DROP SQL statements in the DDL</code>
+			                </td>
+			                <td>
+			                    <code>false</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>haltOnError,--haltOnError</code>
+			                </td>
+			                <td>
+			                    <code>Halt if an error occurs during the generation process</code>
+			                </td>
+			                <td>
+			                    <code>false</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>decrypt-value</h3>
+			<p>Decrypt a CAS property value/setting via Jasypt</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>value,--value</code>
+			                </td>
+			                <td>
+			                    <code>Value to decrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>alg,--alg</code>
+			                </td>
+			                <td>
+			                    <code>Algorithm to use to decrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>provider,--provider</code>
+			                </td>
+			                <td>
+			                    <code>Security provider to use to decrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>password,--password</code>
+			                </td>
+			                <td>
+			                    <code>Password (encryption key) to decrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>initvector,--initvector,iv,--iv</code>
+			                </td>
+			                <td>
+			                    <code>Use initialization vector to encrypt</code>
+			                </td>
+			                <td>
+			                    <code>false</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>iterations,--iterations</code>
+			                </td>
+			                <td>
+			                    <code>Key obtention iterations to decrypt, default 1000</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>encrypt-value</h3>
+			<p>Encrypt a CAS property value/setting via Jasypt</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>value,--value</code>
+			                </td>
+			                <td>
+			                    <code>Value to encrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>file,--file</code>
+			                </td>
+			                <td>
+			                    <code>File to encrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>alg,--alg</code>
+			                </td>
+			                <td>
+			                    <code>Algorithm to use to encrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>provider,--provider</code>
+			                </td>
+			                <td>
+			                    <code>Security provider to use to encrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>password,--password</code>
+			                </td>
+			                <td>
+			                    <code>Password (encryption key) to encrypt</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>initvector,--initvector,iv,--iv</code>
+			                </td>
+			                <td>
+			                    <code>Use initialization vector to encrypt</code>
+			                </td>
+			                <td>
+			                    <code>false</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>iterations,--iterations</code>
+			                </td>
+			                <td>
+			                    <code>Key obtention iterations to encrypt, default 1000</code>
+			                </td>
+			                <td>
+			                    <code>__NULL__</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>jasypt-list-algorithms</h3>
+			<p>List alogrithms you can use with Jasypt for property encryption</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>includeBC,--includeBC</code>
+			                </td>
+			                <td>
+			                    <code>Include Bouncy Castle provider</code>
+			                </td>
+			                <td>
+			                    <code>false</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>jasypt-list-providers</h3>
+			<p>List encryption providers with PBE Ciphers you can use with Jasypt</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>includeBC,--includeBC</code>
+			                </td>
+			                <td>
+			                    <code>Include Bouncy Castle provider</code>
+			                </td>
+			                <td>
+			                    <code>false</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>jasypt-test-algorithms</h3>
+			<p>Test encryption algorithms you can use with Jasypt to make sure encryption and decryption both work</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>generate-full-jwt</h3>
+			<p>Generate JWT and sign it using a given keystore</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>jwks,--jwks</code>
+			                </td>
+			                <td>
+			                    <code>Path to the JWKS file used to sign the token</code>
+			                </td>
+			                <td>
+			                    <code></code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>iss,--iss</code>
+			                </td>
+			                <td>
+			                    <code>Issuer</code>
+			                </td>
+			                <td>
+			                    <code>https://localhost:8443/cas/oidc</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>claims,--claims</code>
+			                </td>
+			                <td>
+			                    <code>JWT claims as JSON</code>
+			                </td>
+			                <td>
+			                    <code>{}</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>aud,--aud</code>
+			                </td>
+			                <td>
+			                    <code>Audience</code>
+			                </td>
+			                <td>
+			                    <code>CAS</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>exp,--exp</code>
+			                </td>
+			                <td>
+			                    <code>Expiration in seconds</code>
+			                </td>
+			                <td>
+			                    <code>300</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>sub,--sub</code>
+			                </td>
+			                <td>
+			                    <code>Subject</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>generate-jwt</h3>
+			<p>Generate a JWT with given size and algorithm for signing and encryption.</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>signingSecretSize,--signingSecretSize</code>
+			                </td>
+			                <td>
+			                    <code>Size of the signing secret</code>
+			                </td>
+			                <td>
+			                    <code>256</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>encryptionSecretSize,--encryptionSecretSize</code>
+			                </td>
+			                <td>
+			                    <code>Size of the encryption secret</code>
+			                </td>
+			                <td>
+			                    <code>48</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>signingAlgorithm,--signingAlgorithm</code>
+			                </td>
+			                <td>
+			                    <code>Algorithm to use for signing</code>
+			                </td>
+			                <td>
+			                    <code>HS256</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>encryptionAlgorithm,--encryptionAlgorithm</code>
+			                </td>
+			                <td>
+			                    <code>Algorithm to use for encryption</code>
+			                </td>
+			                <td>
+			                    <code>dir</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>encryptionMethod,--encryptionMethod</code>
+			                </td>
+			                <td>
+			                    <code>Method to use for encryption</code>
+			                </td>
+			                <td>
+			                    <code>A192CBC-HS384</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>subject,--subject</code>
+			                </td>
+			                <td>
+			                    <code>Subject to use for the JWT</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>generate-oidc-jwks</h3>
+			<p>Generate OIDC JSON Web Keystore</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>jwksFile,--jwksFile</code>
+			                </td>
+			                <td>
+			                    <code>Location of the JSON web keystore file.</code>
+			                </td>
+			                <td>
+			                    <code>/etc/cas/config/keystore.jwks</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>jwksKeyId,--jwksKeyId</code>
+			                </td>
+			                <td>
+			                    <code>The key identifier to set for the generated key in the keystore.</code>
+			                </td>
+			                <td>
+			                    <code>cas</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>jwksKeySize,--jwksKeySize</code>
+			                </td>
+			                <td>
+			                    <code>The key size (an algorithm-specific) for the generated jwks.</code>
+			                </td>
+			                <td>
+			                    <code>2048</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>jwksKeyType,--jwksKeyType</code>
+			                </td>
+			                <td>
+			                    <code>The type of the JWKS used to handle signing/encryption of authentication tokens.</code>
+			                </td>
+			                <td>
+			                    <code>RSA</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>add-properties</h3>
+			<p>Add properties associated with a CAS group/module to a Properties/Yaml configuration file.</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>file,--file</code>
+			                </td>
+			                <td>
+			                    <code>Path to the CAS configuration file</code>
+			                </td>
+			                <td>
+			                    <code>/etc/cas/config/cas.properties</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>group,--group</code>
+			                </td>
+			                <td>
+			                    <code>Group/module whose associated settings should be added to the CAS configuration file</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>export-props</h3>
+			<p>Export CAS properties and settings from configuration metadata.</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>dir,--dir</code>
+			                </td>
+			                <td>
+			                    <code>Path to a directory where reference configuration files would be exported.</code>
+			                </td>
+			                <td>
+			                    <code>./etc/cas/config</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>find</h3>
+			<p>Look up properties associated with a CAS group/module.</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>name,--name</code>
+			                </td>
+			                <td>
+			                    <code>Property name regex pattern</code>
+			                </td>
+			                <td>
+			                    <code>.+</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>strict-match,--strict-match</code>
+			                </td>
+			                <td>
+			                    <code>Whether pattern should be done in strict-mode which means the matching engine tries to match the entire region for the query.</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>summary,--summary</code>
+			                </td>
+			                <td>
+			                    <code>Whether results should be presented in summarized mode</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>generate-idp-metadata</h3>
+			<p>Generate SAML2 IdP Metadata</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>metadataLocation,--metadataLocation</code>
+			                </td>
+			                <td>
+			                    <code>Directory location to hold metadata and relevant keys/certificates</code>
+			                </td>
+			                <td>
+			                    <code>/etc/cas/saml</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>entityId,--entityId</code>
+			                </td>
+			                <td>
+			                    <code>Entity ID to use for the generated metadata</code>
+			                </td>
+			                <td>
+			                    <code>cas.example.org</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>hostName,--hostName</code>
+			                </td>
+			                <td>
+			                    <code>CAS server prefix to be used at the IdP host name when generating metadata</code>
+			                </td>
+			                <td>
+			                    <code>https://cas.example.org/cas</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>scope,--scope</code>
+			                </td>
+			                <td>
+			                    <code>Scope to use when generating metadata</code>
+			                </td>
+			                <td>
+			                    <code>example.org</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>force,--force</code>
+			                </td>
+			                <td>
+			                    <code>Force metadata generation (XML only, not certs), overwriting anything at the specified location</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>subjectAltNames,--subjectAltNames</code>
+			                </td>
+			                <td>
+			                    <code>Comma separated list of other subject alternative names for the certificate (besides entityId)</code>
+			                </td>
+			                <td>
+			                    <code></code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>generate-anonymous-user</h3>
+			<p>Generate an anonymous (persistent) username identifier</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>username,--username</code>
+			                </td>
+			                <td>
+			                    <code>Authenticated username</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>service,--service</code>
+			                </td>
+			                <td>
+			                    <code>Service application URL for which CAS may generate the identifier</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>salt,--salt</code>
+			                </td>
+			                <td>
+			                    <code>Salt used to generate and encode the anonymous identifier</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>generate-yaml</h3>
+			<p>Generate a YAML registered service definition</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>file,--file</code>
+			                </td>
+			                <td>
+			                    <code>Path to the JSON service definition file</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>destination,--destination</code>
+			                </td>
+			                <td>
+			                    <code>Path to the destination YAML service definition file</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>validate-service</h3>
+			<p>Validate a given JSON/YAML service definition by path or directory</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>file,--file</code>
+			                </td>
+			                <td>
+			                    <code>Path to the JSON/YAML service definition file</code>
+			                </td>
+			                <td>
+			                    <code></code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>directory,--directory</code>
+			                </td>
+			                <td>
+			                    <code>Path to the JSON/YAML service definitions directory</code>
+			                </td>
+			                <td>
+			                    <code></code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>validate-endpoint</h3>
+			<p>Test connections to an endpoint to verify connectivity, SSL, etc</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>url,--url</code>
+			                </td>
+			                <td>
+			                    <code>Endpoint URL to test</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>proxy,--proxy</code>
+			                </td>
+			                <td>
+			                    <code>Proxy address to use when testing the endpoint url</code>
+			                </td>
+			                <td>
+			                    <code></code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>timeout,--timeout</code>
+			                </td>
+			                <td>
+			                    <code>Timeout to use in milliseconds when testing the url</code>
+			                </td>
+			                <td>
+			                    <code>5000</code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>validate-ldap</h3>
+			<p>Test connections to an LDAP server to verify connectivity, SSL, etc</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			        	<tr>
+			                <td>
+			                    <code>url,--url</code>
+			                </td>
+			                <td>
+			                    <code>LDAP URL to test, comma-separated.</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>bindDn,--bindDn</code>
+			                </td>
+			                <td>
+			                    <code>bindDn to use when testing the LDAP server</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>bindCredential,--bindCredential</code>
+			                </td>
+			                <td>
+			                    <code>bindCredential to use when testing the LDAP server</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>baseDn,--baseDn</code>
+			                </td>
+			                <td>
+			                    <code>baseDn to use when testing the LDAP server, searching for accounts (i.e. OU=some,DC=org,DC=edu)</code>
+			                </td>
+			                <td>
+			                    <code>__NONE__</code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>searchFilter,--searchFilter</code>
+			                </td>
+			                <td>
+			                    <code>Filter to use when searching for accounts (i.e. (&amp;(objectClass=*) (sAMAccountName=user)))</code>
+			                </td>
+			                <td>
+			                    <code></code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>userPassword,--userPassword</code>
+			                </td>
+			                <td>
+			                    <code>Password for the user found in the search result, to attempt authentication</code>
+			                </td>
+			                <td>
+			                    <code></code>
+			                </td>
+			            </tr>
+			        
+			        	<tr>
+			                <td>
+			                    <code>userAttributes,--userAttributes</code>
+			                </td>
+			                <td>
+			                    <code>User attributes, comma-separated, to fetch for the user found in the search result</code>
+			                </td>
+			                <td>
+			                    <code></code>
+			                </td>
+			            </tr>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+    	
+			
+			<h3>quit,exit</h3>
+			<p>Exit the shell.</p>
+			<table class="cas-datatable paginated-table">
+			    <thead>
+			        <tr>
+			          <th>Name</th>
+			          <th>Description</th>
+			          <th>Default</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        
+			    </tbody>
+			</table>
+
+    	
+    
+
+
+</div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = 'Installation';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

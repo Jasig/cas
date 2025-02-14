@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - Build Process</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    
+<h1 id="cas-build-process">CAS Build Process</h1>
+
+<p>This page documents the steps that a CAS developer/contributor should take for building a CAS server locally.</p>
+
+<div class="alert alert-warning"><strong>Usage Warning!</strong><p>
+If you are about to deploy and configure CAS, you are in the <strong>WRONG PLACE</strong>! To deploy CAS locally, use the 
+WAR Overlay method described in the project documentation for a specific CAS version. Cloning, downloading and building the 
+CAS codebase from source is <strong>ONLY</strong> required if you wish to contribute to the development of the project.
+</p></div>
+
+<h2 id="source-checkout">Source Checkout</h2>
+
+<p>The following shell commands may be used to grab the source from the repository:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>git clone <span class="nt">--recursive</span> git@github.com:apereo/cas.git cas-server
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Or a quicker clone:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>git clone <span class="nt">--recursive</span> <span class="nt">--depth</span><span class="o">=</span>1 <span class="nt">--single-branch</span> <span class="nt">--branch</span><span class="o">=</span>master git@github.com:apereo/cas.git cas-server
+<span class="c"># git fetch --unshallow</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>For a successful clone, you will need to have set up SSH keys for your account on Github.
+If that is not an option, you may clone the CAS repository under <code class="language-plaintext highlighter-rouge">https</code> via <code class="language-plaintext highlighter-rouge">https://github.com/apereo/cas.git</code>.</p>
+
+<p>You may also need to update submodules linked to the CAS repository. Newer versions of Git will do this automatically, 
+but older versions will require you to explicitly tell git to download the contents of submodules:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>git submodule update <span class="nt">--init</span> <span class="nt">--recursive</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="build">Build</h2>
+
+<p>The following shell commands may be used to build the source:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nb">cd </span>cas-server
+git checkout master
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>When done, you may build the codebase via the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>./gradlew build <span class="nt">--parallel</span> <span class="nt">-x</span> <span class="nb">test</span> <span class="nt">-x</span> javadoc <span class="nt">-x</span> check <span class="nt">--build-cache</span> <span class="nt">--configure-on-demand</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="alert alert-info"><strong>Gradle Wrapper &amp; Gum</strong>
+<p>Rather than using the Gradle Wrapper directly, you
+might want to <a href="https://github.com/kordamp/gm">use Gum</a>, which is able to 
+auto-detect the location of the Gradle Wrapper anywhere in the project structure.</p></div>
+
+<p>The following commandline boolean flags are supported by the build and can be passed in form of system properties via <code class="language-plaintext highlighter-rouge">-D</code>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Flag</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">enableRemoteDebugging</code></td>
+      <td>Allows for remote debugging via a pre-defined port (i.e. <code class="language-plaintext highlighter-rouge">5000</code>).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">remoteDebuggingSuspend</code></td>
+      <td>Set to <code class="language-plaintext highlighter-rouge">true</code> to suspend JVM remote debugging until the debugger attaches to the running session.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">verbose</code></td>
+      <td>Control the logging level for tests and output additional data about passing/failing/skipped tests.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipCheckstyle</code></td>
+      <td>Skip running Checkstyle checks.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipVersionConflict</code></td>
+      <td>If a dependency conflict is found, use the latest version rather than failing the build.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipNestedConfigMetadataGen</code></td>
+      <td>Skip generating configuration metadata for nested properties and generic collections.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipSonarqube</code></td>
+      <td>Ignore reporting results to Sonarqube.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipErrorProneCompiler</code></td>
+      <td>Skip running the <code class="language-plaintext highlighter-rouge">error-prone</code> static-analysis compiler.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">skipBootifulArtifact</code></td>
+      <td>Do not apply the Spring Boot plugin to bootify application artifacts.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ignoreJavadocFailures</code></td>
+      <td>Ignore javadoc failures and let the build resume.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ignoreFindbugsFailures</code></td>
+      <td>Ignore Findbugs failures and let the build resume.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ignoreTestFailures</code></td>
+      <td>Ignore test failures and let the build resume.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">casModules</code></td>
+      <td>Build property; Comma separated list of modules without the <code class="language-plaintext highlighter-rouge">cas-server-[support|core]</code> prefix.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">buildScript</code></td>
+      <td>Build fragment to include when building the project. Typically used by and during integration tests.</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>You can use <code class="language-plaintext highlighter-rouge">-x &lt;task&gt;</code> to entirely skip/ignore a phase in the build. (i.e. <code class="language-plaintext highlighter-rouge">-x test</code>, <code class="language-plaintext highlighter-rouge">-x check</code>).</li>
+  <li>If you have no need to let Gradle resolve/update dependencies and new module versions for you, you can take advantage of the <code class="language-plaintext highlighter-rouge">--offline</code> flag when you build which tends to make the build go a lot faster.</li>
+  <li>Using the Gradle daemon also is a big help. It should be enabled <a href="https://docs.gradle.org/current/userguide/gradle_daemon.html">by default</a>.</li>
+  <li>Enabling <a href="https://docs.gradle.org/current/userguide/build_cache.html">Gradle’s build cache</a> via <code class="language-plaintext highlighter-rouge">--build-cache</code> can also significantly improve build times.</li>
+</ul>
+
+<h2 id="tasks">Tasks</h2>
+
+<p>Available build tasks can be found using the command <code class="language-plaintext highlighter-rouge">./gradlew tasks</code>.</p>
+
+<h2 id="ide-setup">IDE Setup</h2>
+
+<p>CAS development may be carried out using any modern IDE that supports Gradle.</p>
+
+<h3 id="intellij-idea">IntelliJ IDEA</h3>
+
+<p>The following IDEA settings for Gradle may also be useful:</p>
+
+<p><img src="https://user-images.githubusercontent.com/1205228/71612835-5ea5ed80-2bbc-11ea-8f49-9746dc2b3a70.png" alt="image" /></p>
+
+<div class="alert alert-info"><p>
+You should always use the latest version of the Intellij IDEA.
+</p></div>
+
+<p>Additionally, you may need to customize the VM settings to ensure the development environment can load and index the codebase:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nt">-Xms2g</span>
+<span class="nt">-Xmx8g</span>
+
+<span class="nt">-XX</span>:+UseStringDeduplication
+<span class="nt">-XX</span>:+ParallelRefProcEnabled
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The key point for making IntelliJ IDEA handle the project nicely is to give it lots of memory (either by specifying the <code class="language-plaintext highlighter-rouge">-Xmx8g</code> VM options or in the IDE menu <code class="language-plaintext highlighter-rouge">Help -&gt; Change Memory Settings</code>).</p>
+
+<p>If you’re still running IntelliJ with a JDK 8, you may require these options instead:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td><td class="rouge-code"><pre><span class="nt">-server</span>
+<span class="nt">-Xms1g</span>
+<span class="nt">-Xmx8g</span>
+<span class="nt">-Xss16m</span>
+<span class="nt">-XX</span>:NewRatio<span class="o">=</span>3
+
+<span class="nt">-XX</span>:ReservedCodeCacheSize<span class="o">=</span>512m
+<span class="nt">-XX</span>:+UseCompressedOops
+<span class="nt">-XX</span>:SoftRefLRUPolicyMSPerMB<span class="o">=</span>50
+
+<span class="nt">-XX</span>:+CMSClassUnloadingEnabled
+<span class="nt">-XX</span>:+CMSParallelRemarkEnabled
+<span class="nt">-XX</span>:CMSInitiatingOccupancyFraction<span class="o">=</span>65
+<span class="nt">-XX</span>:+CMSScavengeBeforeRemark
+<span class="nt">-XX</span>:+UseCMSInitiatingOccupancyOnly
+
+<span class="nt">-XX</span>:MaxTenuringThreshold<span class="o">=</span>1
+<span class="nt">-XX</span>:SurvivorRatio<span class="o">=</span>8
+<span class="nt">-XX</span>:+UseCodeCacheFlushing
+<span class="nt">-XX</span>:+AggressiveOpts
+<span class="nt">-XX</span>:-TraceClassUnloading
+<span class="nt">-XX</span>:+AlwaysPreTouch
+<span class="nt">-XX</span>:+TieredCompilation
+
+<span class="nt">-Djava</span>.net.preferIPv4Stack<span class="o">=</span><span class="nb">true</span>
+<span class="nt">-Dsun</span>.io.useCanonCaches<span class="o">=</span><span class="nb">false</span>
+<span class="nt">-Djsse</span>.enableSNIExtension<span class="o">=</span><span class="nb">true</span>
+<span class="nt">-ea</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="plugins">Plugins</h4>
+
+<p>The following plugins may prove useful during development:</p>
+
+<ul>
+  <li><a href="https://plugins.jetbrains.com/plugin/1065-checkstyle-idea">Checkstyle</a></li>
+  <li><a href="https://plugins.jetbrains.com/plugin/3847-findbugs-idea">FindBugs</a></li>
+  <li><a href="https://github.com/mplushnikov/lombok-intellij-plugin">Lombok</a></li>
+</ul>
+
+<p>Once you have installed the Lombok plugin, you will also need to ensure <em>Annotation Processing</em> is turned on. You may 
+need to restart IDEA in order for changes to take full effect.</p>
+
+<p><img src="https://user-images.githubusercontent.com/1205228/35231112-287f625a-ffad-11e7-8c1a-af23ff33918d.png" alt="image" /></p>
+
+<p>Note that the CAS-provided Checkstyle rules can be imported into idea to automate a number of 
+formatting rules specially related to package imports and layouts. Once imported, the rules
+should look something like the below screenshot:</p>
+
+<p><img src="https://user-images.githubusercontent.com/1205228/42846621-b99539fc-8a2e-11e8-8128-9344bda7224d.png" alt="image" /></p>
+
+<h4 id="running-cas">Running CAS</h4>
+
+<p>It is possible to run the CAS web application directly from IDEA by 
+creating a <em>Run Configuration</em> that roughly matches the following screenshot:</p>
+
+<p><img src="https://user-images.githubusercontent.com/1205228/41805461-9ea25b76-765f-11e8-9a36-fa82d286cf09.png" alt="image" /></p>
+
+<p>This setup allows the developer to run the CAS web 
+application via an <a href="Build-Process.html#embedded-containers">embedded servlet container</a>.</p>
+
+<h3 id="eclipse">Eclipse</h3>
+
+<p>For Eclipse, execute the following commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nb">cd </span>cas-server
+./gradlew eclipse
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Then, import the project into eclipse using “General\Existing Projects into Workspace” 
+and choose “Add Gradle Nature” from the “Configure” context menu of the project.</p>
+
+<div class="alert alert-warning"><strong>YMMV</strong><p>We have had a less than ideal experience with Eclipse and its support for Gradle-based 
+projects. While time changes everything and docs grow old, it is likely that you may experience issues with how Eclipse manages to 
+resolve Gradle dependencies and build the project. In the end, you're welcome to use what works best for you as the ultimate goal 
+is to find the appropriate tooling to build and contribute to CAS.</p></div>
+
+<h2 id="testing-modules">Testing Modules</h2>
+
+<p>Please <a href="Test-Process.html">see this page</a> to learn more about the testing process and guidelines.</p>
+
+<h2 id="embedded-containers">Embedded Containers</h2>
+
+<p>The CAS project comes with a number of built-in modules that are pre-configured with embedded servlet containers such as 
+Apache Tomcat, Jetty, etc for the server web application, the management web application 
+and others. These modules are found in the <code class="language-plaintext highlighter-rouge">webapp</code> folder of the CAS project.</p>
+
+<h3 id="configure-ssl">Configure SSL</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">thekeystore</code> file must include the SSL private/public keys that are issued for your CAS server domain. You 
+will need to use the <code class="language-plaintext highlighter-rouge">keytool</code> command of the JDK to create the keystore and the certificate.</p>
+
+<p>The following commands may serve as an example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>keytool <span class="nt">-genkey</span> <span class="nt">-alias</span> cas <span class="nt">-keyalg</span> RSA <span class="nt">-validity</span> 999 <span class="se">\</span>
+    <span class="nt">-keystore</span> /etc/cas/thekeystore <span class="nt">-ext</span> <span class="nv">san</span><span class="o">=</span>dns:<span class="nv">$REPLACE_WITH_FULL_MACHINE_NAME</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Note that the validity parameter allows you to specify, in the number of days, how long the certificate should be 
+valid for. The longer the time period, the less likely you are to need to recreate it. To recreate it, you’d need 
+to delete the old one and then follow these instructions again. You may also need to provide 
+the <em>Subject Alternative Name</em> field, which can be done with <code class="language-plaintext highlighter-rouge">keytool</code> via <code class="language-plaintext highlighter-rouge">-ext san=dns:$REPLACE_WITH_FULL_MACHINE_NAME</code>.</p>
+
+<p>The response will look something like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre>Enter keystore password: changeit
+Re-enter new password: changeit
+What is your first and last name?
+  <span class="o">[</span>Unknown]:  <span class="nv">$REPLACE_WITH_FULL_MACHINE_NAME</span> <span class="o">(</span>i.e. mymachine.domain.edu<span class="o">)</span>
+What is the name of your organizational unit?
+  <span class="o">[</span>Unknown]:  Test
+What is the name of your organization?
+  <span class="o">[</span>Unknown]:  Test
+What is the name of your City or Locality?
+  <span class="o">[</span>Unknown]:  Test
+What is the name of your State or Province?
+  <span class="o">[</span>Unknown]:  Test
+What is the two-letter country code <span class="k">for </span>this unit?
+  <span class="o">[</span>Unknown]:  US
+Is <span class="nv">CN</span><span class="o">=</span><span class="nv">$FULL_MACHINE_NAME</span>, <span class="nv">OU</span><span class="o">=</span>Test, <span class="nv">O</span><span class="o">=</span>Test, <span class="nv">L</span><span class="o">=</span>Test, <span class="nv">ST</span><span class="o">=</span>Test, <span class="nv">C</span><span class="o">=</span>US correct?
+  <span class="o">[</span>no]:  <span class="nb">yes</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>In your <code class="language-plaintext highlighter-rouge">/etc/hosts</code> file (on Windows: <code class="language-plaintext highlighter-rouge">C:\Windows\System32\Drivers\etc\hosts</code>), you may also need to add the following entry:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>127.0.0.1 mymachine.domain.edu
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The certificate exported out of your keystore needs to also be imported into the Java platform’s global keystore:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c"># Export the certificate into a file</span>
+keytool <span class="nt">-export</span> <span class="nt">-file</span> /etc/cas/config/cas.crt <span class="nt">-keystore</span> /etc/cas/thekeystore <span class="nt">-alias</span> cas
+
+<span class="c"># Import the certificate into the global keystore</span>
+<span class="nb">sudo </span>keytool <span class="nt">-import</span> <span class="nt">-file</span> /etc/cas/config/cas.crt <span class="nt">-alias</span> cas <span class="nt">-keystore</span> <span class="nv">$JAVA_HOME</span>/lib/security/cacerts
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>…where <code class="language-plaintext highlighter-rouge">JAVA_HOME</code> is where you have the JDK installed (i.e <code class="language-plaintext highlighter-rouge">/Library/Java/JavaVirtualMachines/jdk[version].jdk/Contents/Home</code>).</p>
+
+<p>On Windows, Administration right should be granted to the console instead 
+of <code class="language-plaintext highlighter-rouge">sudo</code>, and <code class="language-plaintext highlighter-rouge">$JAVA_HOME/lib/security/cacerts</code> should be changed to <code class="language-plaintext highlighter-rouge">"%JAVA_HOME%/lib/security/cacerts"</code> instead.</p>
+
+<h3 id="deploy">Deploy</h3>
+
+<p>Execute the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nb">cd </span>webapp/cas-server-webapp-tomcat
+
+../../gradlew build bootRun <span class="nt">--parallel</span> <span class="nt">--offline</span> <span class="nt">--configure-on-demand</span> <span class="nt">--build-cache</span> <span class="nt">--stacktrace</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The response will look something like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>...
+INFO <span class="o">[</span>org.apereo.cas.web.CasWebApplication] - &lt;Started CasWebApplication <span class="k">in </span>21.893 seconds <span class="o">(</span>JVM running <span class="k">for </span>36.888<span class="o">)&gt;</span>
+...
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>By default CAS will be available at <code class="language-plaintext highlighter-rouge">https://mymachine.domain.edu:8443/cas</code></p>
+
+<h3 id="remote-debugging">Remote Debugging</h3>
+
+<p>The embedded container instance is pre-configured to listen to debugger requests on port <code class="language-plaintext highlighter-rouge">5000</code> provided you 
+specify the <code class="language-plaintext highlighter-rouge">enableRemoteDebugging</code> parameter. For external container 
+deployments, <a href="https://wiki.apache.org/tomcat/FAQ">such as Apache Tomcat</a>, the following example 
+shows what needs configuring in the <code class="language-plaintext highlighter-rouge">bin/startup.sh|bat</code> file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nb">export </span><span class="nv">JPDA_ADDRESS</span><span class="o">=</span>5000
+<span class="nb">export </span><span class="nv">JPDA_TRANSPORT</span><span class="o">=</span>dt_socket
+bin/catalina.sh jpda start
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>When you’re done, create a remote debugger configuration in your IDE that connects to this port and you will be able to step into the code.</p>
+
+<h2 id="manual-submodule-testing">Manual Submodule Testing</h2>
+
+<p>Please <a href="Test-Process.html">see this page</a> to learn more about the testing process and guidelines.</p>
+
+<h2 id="sample-build-aliases">Sample Build Aliases</h2>
+
+<p>Below are some examples of convenient build aliases for quickly running a local cas server from the project or 
+installing dependencies from the project for use in the cas-overlay.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="rouge-code"><pre><span class="c"># Adjust the cas alias to the location of cas project folder</span>
+<span class="nb">alias </span><span class="nv">cas</span><span class="o">=</span><span class="s1">'cd ~/Workspace/cas'</span>
+
+<span class="c"># Run CAS with module selections</span>
+<span class="c"># $&gt; bc oidc,gauth</span>
+<span class="k">function </span>bc<span class="o">()</span> <span class="o">{</span>
+  clear
+  cas
+  <span class="nb">cd </span>webapp/cas-server-webapp-tomcat
+  <span class="nv">casmodules</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-z</span> <span class="s2">"</span><span class="nv">$casmodules</span><span class="s2">"</span> <span class="o">]</span> <span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Loading CAS Modules: </span><span class="k">${</span><span class="nv">casmodules</span><span class="k">}</span><span class="s2">"</span>
+  <span class="k">fi</span>
+
+  <span class="c"># Could also use: gm -b ./build.gradle</span>
+  ../../gradlew build bootRun <span class="se">\</span>
+    <span class="nt">--configure-on-demand</span> <span class="nt">--build-cache</span> <span class="se">\</span>
+    <span class="nt">--parallel</span> <span class="nt">-x</span> <span class="nb">test</span> <span class="nt">-x</span> javadoc <span class="nt">-x</span> check <span class="nt">-DenableRemoteDebugging</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+    <span class="nt">--stacktrace</span> <span class="nt">-DskipNestedConfigMetadataGen</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+    <span class="nt">-DremoteDebuggingSuspend</span><span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
+    <span class="nt">-DcasModules</span><span class="o">=</span><span class="k">${</span><span class="nv">casmodules</span><span class="k">}</span>
+<span class="o">}</span>
+
+<span class="c"># Install JARs/WARs for use with a CAS overlay project</span>
+<span class="nb">alias </span><span class="nv">bci</span><span class="o">=</span><span class="s1">'clear; cas; \
+    ./gradlew clean build publishToMavenLocal \ 
+    --configure-on-demand \
+    --build-cache --parallel \
+    -x test -x javadoc -x check --stacktrace \
+    -DskipNestedConfigMetadataGen=true \
+    -DskipBootifulArtifact=true'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = 'Developer';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

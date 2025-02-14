@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - Troubleshooting Guide</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="troubleshooting-guide">Troubleshooting Guide</h1>
+
+<h2 id="authentication">Authentication</h2>
+
+<h3 id="login-form-clearing-credentials-on-submission">Login Form Clearing Credentials on Submission</h3>
+<p>You may encounter an issue where upon submission of credentials on the login form, the screen clears the input data and asks the user again to repopulate the form. The CAS Server log may also indicate the received login ticket is invalid and therefore unable to accept the authentication request.</p>
+
+<p>The CAS server itself initiates a web session upon authentication requests that by default is configured to last for 5 minutes. The state of the session is managed at server-side and thus, once the session expires any authentication activity on the client side such as submission of the login form is disregarded until a new session a regenerated. Another possible cause may be related to a clustered CAS environment where CAS nodes are protected by a load balancer whose “timeout” is configured less than the default session expiration timeout of CAS. Thus, once the authentication form is submitted and the request is routed to the load balancer, it is seen as a new request and is redirected back to a CAS node for authentication. </p>
+
+<p>To remedy the problem, the  suggestion is to configure the default CAS session timeout to be an appropriate value that matches the time a given user is expected to stay on the login screen. Similarly, the same change may be applied to the load balancer to treat authentication requests within a longer time span.</p>
+
+<h2 id="ssl">SSL</h2>
+
+<h3 id="pkix-path-building-failed">PKIX Path Building Failed</h3>
+
+<div class="highlight"><pre><code class="bash">Sep 28, 2009 4:13:26 PM org.jasig.cas.client.validation.AbstractCasProtocolUrlBasedTicketValidator retrieveResponseFromServer
+SEVERE: javax.net.ssl.SSLHandshakeException:
+sun.security.validator.ValidatorException: PKIX path building failed:
+sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+javax.net.ssl.SSLHandshakeException:
+sun.security.validator.ValidatorException: PKIX path building failed:
+sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+      at com.sun.net.ssl.internal.ssl.Alerts.getSSLException<span class="o">(</span>Unknown Source<span class="o">)</span>
+      at com.sun.net.ssl.internal.ssl.SSLSocketImpl.fatal<span class="o">(</span>Unknown Source<span class="o">)</span>
+      at com.sun.net.ssl.internal.ssl.Handshaker.fatalSE<span class="o">(</span>Unknown Source<span class="o">)</span>
+      at com.sun.net.ssl.internal.ssl.Handshaker.fatalSE<span class="o">(</span>Unknown Source<span class="o">)</span>
+      at com.sun.net.ssl.internal.ssl.ClientHandshaker.serverCertificate<span class="o">(</span>Unknown Source<span class="o">)</span>
+</code></pre></div>
+
+<p>PKIX path building errors are the most common SSL errors. The problem here is that the CAS client does not trust the certificate presented by the CAS server; most often this occurs because of using a <em>self-signed certificate</em> on the CAS server. To resolve this error, import the CAS server certificate into the system truststore of the CAS client. If the certificate is issued by your own PKI, it is better to import the root certificate of your PKI into the CAS client truststore. </p>
+
+<p>By default the Java system truststore is at <code>$JAVA_HOME/jre/lib/security/cacerts</code>. The certificate to be imported <strong>MUST</strong> be a DER-encoded file. If the contents of the certificate file are binary, it’s likely DER-encoded; if the file begins with the text <code>---BEGIN CERTIFICATE---</code>, it is PEM-encoded and needs to be converted to DER encoding. </p>
+
+<div class="highlight"><pre><code class="bash">keytool -import -keystore <span class="nv">$JAVA_HOME</span>/jre/lib/security/cacerts -file tmp/cert.der -alias certName
+</code></pre></div>
+
+<p>If you have multiple java editions installed on your machine, make sure that the app / web server is pointing to the correct JDK/JRE version (The one to which the certificate has been exported correctly) One common mistake that occurs while generating self-validated certificates is that the <code>JAVA_HOME</code> might be different than that used by the server.</p>
+
+<h3 id="no-subject-alternative-names-present">No subject alternative names present</h3>
+
+<div class="highlight"><pre><code class="bash">javax.net.ssl.SSLHandshakeException: java.security.cert.CertificateException: No subject alternative names present
+</code></pre></div>
+
+<p>This is a hostname/SSL certificate CN mismatch. This commonly happens when a self-signed certificate issued to localhost is placed on a machine that is accessed by IP address. It should be noted that generating a certificate with an IP address for a common name, e.g. CN=192.168.1.1,OU=Middleware,dc=vt,dc=edu, will not work in most cases where the client making the connection is Java.</p>
+
+<h3 id="https-hostname-wrong">HTTPS hostname wrong</h3>
+
+<div class="highlight"><pre><code class="bash">java.lang.RuntimeException: java.io.IOException: HTTPS hostname wrong:  should be &lt;eiger.iad.vt.edu&gt;
+    org.jasig.cas.client.validation.Saml11TicketValidator.retrieveResponseFromServer<span class="o">(</span>Saml11TicketValidator.java:203<span class="o">)</span>
+    org.jasig.cas.client.validation.AbstractUrlBasedTicketValidator.validate<span class="o">(</span>AbstractUrlBasedTicketValidator.java:185<span class="o">)</span>
+    org.jasig.cas.client.validation.AbstractTicketValidationFilter.doFilter
+</code></pre></div>
+
+<p>The above error occurs most commonly when the CAS client ticket validator attempts to contact the CAS server and is presented a certificate whose CN does not match the fully-qualified host name of the CAS server. There are a few common root causes of this mismatch:</p>
+
+<ul>
+  <li>CAS client misconfiguration</li>
+  <li>Complex multi-tier server environment (e.g. clustered CAS server)</li>
+  <li>Host name too broad for scope of wildcard certificate</li>
+</ul>
+
+<p>It is also worth checking that the certificate your CAS server is using for SSL encryption matches the one the client is checking against. </p>
+
+<h3 id="wildcard-certificates">Wildcard Certificates</h3>
+<p>Java support for wildcard certificates is limited to hosts strictly in the same domain as the wildcard. For example, a certificate with <code>CN=.vt.edu</code> matches hosts <strong><code>a.vt.edu</code></strong> and <strong><code>b.vt.edu</code></strong>, but <em>not</em> <strong><code>a.b.vt.edu</code></strong>.</p>
+
+<h3 id="unrecognizedname-error">unrecognized_name Error</h3>
+
+<div class="highlight"><pre><code class="bash">javax.net.ssl.SSLProtocolException: handshake alert: unrecognized_name
+</code></pre></div>
+
+<p>The above error occurs mainly in Oracle JDK 7 CAS Server installations. In JDK7, SNI (Server Name Indication) is enabled by default. When the HTTPD Server does not send the correct Server Name back, the JDK HTTP Connection refuses to connect and the exception stated above is thrown.</p>
+
+<p>You must ensure your HTTPD Server is sending back the correct hostname. E.g. in Apache HTTPD, you must set the ServerAlias in the SSL vhost:</p>
+
+<div class="highlight"><pre><code class="bash">ServerName your.ssl-server.name
+ServerAlias your.ssl-server.name
+</code></pre></div>
+
+<p>Alternatively, you can disable the SNI detection in JDK7, by adding this flag to the Java options of your CAS Servers’ application server configuration:</p>
+
+<div class="highlight"><pre><code class="bash">-Djsse.enableSNIExtension<span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
+
+<h3 id="when-all-else-fails">When All Else Fails</h3>
+<p>If you have read, understood, and tried all the troubleshooting tips on this page and continue to have problems, please perform an SSL trace and attach it to a posting to the cas-user@lists.jasig.org mailing list. An SSL trace is written to STDOUT when the following system property is set, javax.net.debug=ssl. An example follows of how to do this in the Tomcat servlet container.</p>
+
+<p>Sample setenv.sh Tomcat Script follows:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># Uncomment the next 4 lines for custom SSL keystore</span>
+<span class="c"># used by all deployed applications</span>
+<span class="c">#KEYSTORE=&quot;$HOME/path/to/custom.keystore&quot;</span>
+<span class="c">#CATALINA_OPTS=$CATALINA_OPTS&quot; -Djavax.net.ssl.keyStore=$KEYSTORE&quot;</span>
+<span class="c">#CATALINA_OPTS=$CATALINA_OPTS&quot; -Djavax.net.ssl.keyStoreType=BKS&quot;</span>
+<span class="c">#CATALINA_OPTS=$CATALINA_OPTS&quot; -Djavax.net.ssl.keyStorePassword=changeit&quot;</span>
+ 
+<span class="c"># Uncomment the next 4 lines to allow custom SSL trust store</span>
+<span class="c"># used by all deployed applications</span>
+<span class="c">#TRUSTSTORE=&quot;$HOME/path/to/custom.truststore&quot;</span>
+<span class="c">#CATALINA_OPTS=$CATALINA_OPTS&quot; -Djavax.net.ssl.trustStore=$TRUSTSTORE&quot;</span>
+<span class="c">#CATALINA_OPTS=$CATALINA_OPTS&quot; -Djavax.net.ssl.trustStoreType=BKS&quot;</span>
+<span class="c">#CATALINA_OPTS=$CATALINA_OPTS&quot; -Djavax.net.ssl.trustStorePassword=changeit&quot;</span>
+ 
+<span class="c"># Uncomment the next line to print SSL debug trace in catalina.out</span>
+<span class="c">#CATALINA_OPTS=$CATALINA_OPTS&quot; -Djavax.net.debug=ssl&quot;</span>
+ 
+<span class="nb">export </span>CATALINA_OPTS
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - Upgrade Guide</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            
+<h1 id="upgrade-guide">Upgrade Guide</h1>
+
+<p>In general, it is recommended that adopters try to keep their CAS deployment in alignment with the latest CAS version available.
+In particular, releases that are of <code class="language-plaintext highlighter-rouge">PATCH</code> or <code class="language-plaintext highlighter-rouge">SECURITY</code> nature should be immediately applied as they are drop-in replacements
+for their corresponding parent version. See CAS <a href="../../developer/Release-Policy.html">Release Policy</a> for more info.</p>
+
+<p>The general objectives of a CAS upgrade could be:</p>
+
+<ol>
+  <li>Does the upgrade fix a critical security vulnerability or annoying issue? Is my CAS deployment 
+affected by that vulnerability and/or bug?</li>
+  <li>Does the upgrade present features that might be useful to achieve local use cases?</li>
+  <li>Does the upgrade provide functionality that is carried locally within my overlay, such that by getting rid of those
+local changes, I can realize their benefit from CAS directly and end up with a smaller more-maintainable overlay?</li>
+</ol>
+
+<p>This document attempts to describe, at a very high level, the scope and effort required to upgrade a given 
+<a href="../installation/WAR-Overlay-Installation.html">CAS deployment</a>. Rather than describing all steps/changes that would be required
+to review and adjust (which would be impossible), we describe a strategy by which the upgrade could be executed.</p>
+
+<h2 id="change-log">Change Log</h2>
+
+<p>Before attempting to upgrade, please review the <a href="https://github.com/apereo/cas/releases">CAS change log</a> to determine
+what changes/fixes are contained in the version you intend to upgrade to, and whether those are applicable to your environment
+and your CAS deployment. If you are working with an older CAS version and are experiencing what appears to be a bug, chances are
+by reviewing the change log, you will find a drop-in replacement for your overlay that takes care of the issue.</p>
+
+<h2 id="discuss-issue">Discuss Issue</h2>
+
+<p>Having reviewed the change log, if you do not see an improvement that fixes/adjusts the behavior you have in mind, 
+please discuss the issue on the appropriate CAS mailing lists. The result of the discussing would be a scope/effort
+evaluation to determine feasibility of the solution and the target version in which the fix will be done.</p>
+
+<h2 id="scope-review">Scope Review</h2>
+
+<p>Once you decide your ideal CAS version for the upgrade, before attempting to upgrade, 
+please review the CAS <a href="../../developer/Release-Policy.html">Release Policy</a>. This will provide you
+with an understanding of what changes you may expect from new version and what the required effort
+may be for the upgrade.</p>
+
+<h2 id="evaluate-local-overlay">Evaluate Local Overlay</h2>
+
+<p>As a best practice, it is recommended that you deploy CAS via the <a href="../installation/WAR-Overlay-Installation.html">overlay method</a>.
+If you have, the task here would be to identify the number of files your overlay has touched and modified. Catalog the 
+what and why of the changes applied, and cross-check those changes with the CAS change log. Chances are, many of the
+local changes that are present within your overlay are provided by default via CAS as a result of that upgrade which will
+have you shed many of those improvements locally.</p>
+
+<p>Your changes typically are:</p>
+
+<ul>
+  <li>Authentication scheme and strategy (i.e. LDAP, JDBC, etc)</li>
+  <li>Settings controlling CAS behavior in CAS properties files</li>
+  <li>User Interface changes may include CSS and JavaScript</li>
+  <li>Attribute resolution and release policy</li>
+  <li>Services registered and authorized to use CAS</li>
+</ul>
+
+<h2 id="prepare-development-environment">Prepare Development Environment</h2>
+
+<p><img src="http://i.imgur.com/jcdDHWb.jpg" width="160px" height="200px" /></p>
+
+<p>Um, No.</p>
+
+<p>Make sure you have a separate development environment ready for configuration and testing. Regardless of how small
+the upgrade is, you want to make sure it is well tested in your environment before you flip the switch. Evaluate
+the software dependencies and platform requirements of the new upgrade (i.e. Java, etc)
+and make sure you have everything installed and configured correctly before you attempt.</p>
+
+<h2 id="sanitize-configuration">Sanitize Configuration</h2>
+
+<p>We recommend that you first start out with a separate clean <a href="../installation/WAR-Overlay-Installation.html">CAS overlay</a> targeted
+at the version to which you want to upgrade. This has the advantage of guaranteeing that your new CAS deployment 
+will be functional without any local changes. Build and deploy the clean CAS overlay once to make sure
+your build/deployment process is functional.</p>
+
+<h2 id="apply-changes">Apply Changes</h2>
+
+<p>Go through your catalog of changes found in your local overlay. Compare and diff those files with their
+original version. You can find out the delta between two versions via the following ways:</p>
+
+<ol>
+  <li>
+    <p>If you have built the clean CAS overlay once, you will automatically get the original version typically
+in the <code class="language-plaintext highlighter-rouge">target</code> or <code class="language-plaintext highlighter-rouge">build/libs</code> directory of CAS overlay. Find the correct file at the correct path and compare.</p>
+  </li>
+  <li>
+    <p>Go directly to the <a href="https://github.com/apereo/cas">project source repository</a>, find the appropriate branch
+and compare files.</p>
+  </li>
+</ol>
+
+<p>Needless to say, you are going to need:</p>
+
+<ol>
+  <li>A decent diff tool, such as <a href="http://kdiff3.sourceforge.net/">KDiff3</a>, <a href="http://winmerge.org">WinDiff</a>, 
+<a href="http://www.scootersoftware.com/">Beyond Compare</a>, etc.</li>
+  <li>A decent intelligent text editor, such as <a href="http://www.sublimetext.com">Sublime</a>,
+<a href="https://atom.io/">Atom</a> or a full blown IDE such as <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a>.</li>
+</ol>
+
+<h2 id="document-changes">Document Changes</h2>
+
+<p>Remember to document the remaining changes that exist within your local overlay, so that the next time you do the
+same process, you have a clue as for why the overlay looks the way it does.</p>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Planning';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

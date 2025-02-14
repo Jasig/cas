@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - RADIUS Authentication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="radius-authentication">RADIUS Authentication</h1>
+<p>RADIUS support is enabled by including the following dependency in the Maven WAR overlay:</p>
+
+<div class="highlight"><pre><code class="xml">    <span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.jasig.cas<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>cas-server-support-radius<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>${cas.version}<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+
+<h2 id="radius-components">RADIUS Components</h2>
+
+<h6 id="radiusauthenticationhandler"><code>RadiusAuthenticationHandler</code></h6>
+<p>The RADIUS handler accepts username/password credentials and delegates authentication to one or more RADIUS
+servers. It supports two types of failovers: failover on an authentication failure, and failover on a server exception.</p>
+
+<ul>
+  <li><code>failoverOnAuthenticationFailure</code> - True to continue to the next configured RADIUS server on authentication failure,
+false otherwise. This flag is typically set when user accounts are spread across one or more RADIUS servers.</li>
+  <li><code>failoverOnException</code> - True to continue to next configured RADIUS server on an error other than authentication
+failure, false otherwise. This flag is typically set to support highly available deployments where authentication
+should proceed in the face of one or more RADIUS server failures.</li>
+  <li><code>servers</code> - Array of RADIUS servers to delegate to for authentication.</li>
+</ul>
+
+<h6 id="jradiusserverimpl"><code>JRadiusServerImpl</code></h6>
+<p>Component representing a RADIUS server has the following configuration properties.</p>
+
+<ul>
+  <li><code>protocol</code> - radius protocol to use.</li>
+  <li><code>clientFactory</code> - factory establish and create radius client instances.</li>
+</ul>
+
+<h2 id="radius-configuration-example">RADIUS Configuration Example</h2>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;radiusServer&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.adaptors.radius.JRadiusServerImpl&quot;</span>
+      <span class="na">c:protocol=</span><span class="s">&quot;EAP_MSCHAPv2&quot;</span>
+      <span class="na">c:clientFactory-ref=</span><span class="s">&quot;radiusClientFactory&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;radiusClientFactory&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.adaptors.radius.RadiusClientFactory&quot;</span>
+      <span class="na">p:inetAddress=</span><span class="s">&quot;localhost&quot;</span>
+      <span class="na">p:sharedSecret=</span><span class="s">&quot;fqhwhgads&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;radiusAuthenticationHandler&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.adaptors.radius.authentication.handler.support.RadiusAuthenticationHandler&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;servers&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;list&gt;</span>
+          <span class="nt">&lt;ref</span> <span class="na">local=</span><span class="s">&quot;radiusServer&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/list&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

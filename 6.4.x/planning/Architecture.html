@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - Architecture</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            
+<h1 id="architecture">Architecture</h1>
+
+<p><img src="../images/cas_architecture.png" alt="CAS Architecture Diagram" title="CAS Architecture Diagram" /></p>
+
+<h2 id="system-components">System Components</h2>
+
+<p>The CAS server and clients comprise the two physical components of the CAS system architecture that communicate
+by means of various protocols.</p>
+
+<h3 id="cas-server">CAS Server</h3>
+
+<p>The CAS server is Java servlet built on the Spring Framework whose primary responsibility is to authenticate users
+and grant access to CAS-enabled services, commonly called CAS clients, by issuing and validating tickets.
+An SSO session is created when the server issues a ticket-granting ticket (TGT) to the user upon successful login.
+A service ticket (ST) is issued to a service at the user’s request via browser redirects using the TGT as a token.
+The ST is subsequently validated at the CAS server via back-channel communication.
+These interactions are described in great detail in the CAS Protocol document.</p>
+
+<h3 id="cas-clients">CAS Clients</h3>
+
+<p>The term “CAS client” has two distinct meanings in its common use. A CAS client is any CAS-enabled application that
+can communicate with the server via a supported protocol. A CAS client is also a software package that can be
+integrated with various software platforms and applications in order to communicate with the CAS server via some
+authentication protocol (e.g. CAS, SAML, OAuth). CAS clients supporting a number of software platforms and products
+have been developed.</p>
+
+<p>Platforms:</p>
+
+<ul>
+  <li>Apache httpd Server (<a href="https://github.com/Jasig/mod_auth_cas">mod_auth_cas module</a>)</li>
+  <li>Java (<a href="https://github.com/apereo/java-cas-client">Java CAS Client</a>)</li>
+  <li>.NET (<a href="https://github.com/apereo/dotnet-cas-client">.NET CAS Client</a>)</li>
+  <li>PHP (<a href="https://github.com/Jasig/phpCAS">phpCAS</a>)</li>
+  <li>Perl (PerlCAS)</li>
+  <li>Python (pycas)</li>
+  <li>Ruby (rubycas-client)</li>
+</ul>
+
+<p>Applications:</p>
+
+<ul>
+  <li>Canvas</li>
+  <li>Atlassian Confluence</li>
+  <li>Atlassian JIRA</li>
+  <li>Drupal</li>
+  <li>Liferay</li>
+  <li>uPortal</li>
+  <li>…</li>
+</ul>
+
+<p>When the term “CAS client” appears in this manual without further qualification, it refers to the integration
+components such as the Java CAS Client rather than to the application relying upon (a client of) the CAS server.</p>
+
+<h2 id="supported-protocols">Supported Protocols</h2>
+
+<p>Clients communicate with the server by any of several supported protocols.  All the supported protocols are
+conceptually similar, yet some have features or characteristics that make them desirable for particular applications or use cases. For example, the CAS protocol supports delegated (proxy) authentication, and the SAML protocol supports attribute release and single sign-out.</p>
+
+<p>Supported protocols:</p>
+
+<ul>
+  <li><a href="../protocol/CAS-Protocol.html">CAS (versions 1, 2, and 3)</a></li>
+  <li><a href="../protocol/SAML-Protocol.html">SAML 1.1 and 2</a></li>
+  <li><a href="../protocol/OIDC-Protocol.html">OpenID Connect</a></li>
+  <li><a href="../protocol/OpenID-Protocol.html">OpenID</a></li>
+  <li><a href="../protocol/OAuth-Protocol.html">OAuth 2.0</a></li>
+  <li><a href="../protocol/WS-Federation-Protocol.html">WS Federation</a></li>
+</ul>
+
+<h2 id="software-components">Software Components</h2>
+
+<p>It is helpful to describe the CAS server in terms of three layered subsystems:</p>
+
+<ul>
+  <li>Web (Spring MVC/Spring Webflow)</li>
+  <li><a href="../ticketing/Configuring-Ticketing-Components.html">Ticketing</a></li>
+  <li><a href="../authentication/Configuring-Authentication-Components.html">Authentication</a></li>
+</ul>
+
+<p>Almost all deployment considerations and component configuration involve those three subsystems. The Web tier is the endpoint for communication with all external systems including CAS clients. The Web tier delegates to the ticketing subsystem to generate tickets for CAS client access. The SSO session begins with the issuance of a ticket-granting ticket on successful authentication, thus the ticketing subsystem frequently delegates to the authentication subsystem.</p>
+
+<p>The authentication system is typically only processing requests at the 
+start of the SSO session, though there are other cases when it can be invoked (e.g. forced authentication).</p>
+
+<h3 id="spring-framework">Spring Framework</h3>
+
+<p>CAS uses the many aspects of the Spring Framework; most notably,
+<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">Spring MVC</a> and
+<a href="https://projects.spring.io/spring-webflow/">Spring Webflow</a>. Spring provides a complete and extensible framework for
+the core CAS codebase as well as for deployers; it’s straightforward to customize or extend CAS behavior by hooking
+CAS and Spring API extension points. General knowledge of Spring is beneficial to understanding the interplay among
+some framework components, but it’s not strictly required.</p>
+
+<h3 id="spring-boot">Spring Boot</h3>
+
+<p>CAS is also heavily based on <a href="http://projects.spring.io/spring-boot/">Spring Boot</a>, which 
+allows it to take an opinionated view of 
+the Spring platform and third-party libraries to create a stand-alone web 
+application without the hassle of XML configuration as much as possible.
+Spring Boot allows CAS to hide much of the internal complexity of its 
+components and their configuration and instead provides auto-configuration modules that<br />
+and automatically configure the running application context without much manual interference.</p>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Planning';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="CAS - Enterprise Single Sign-On for the Web"/>
+    <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS"/>
+    <meta name="robots" content="index,follow"/>
+
+    
+    
+
+        
+    
+
+
+    
+
+    <script>
+        ((i, s, o, g, r, a, m) => {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-83384532-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <title>CAS - SAML2 Attribute Release</title>
+
+</head>
+
+<body>
+<!-- HEADER -->
+<header class="hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <a href="../../index.html">
+                    <img class="undecorated" src="../../images/cas_logo.png"/>
+                </a>
+            </div>
+            <div class="col-xs-8 col-md-6">
+                <h1>Enterprise Single Sign-On for All</h1>
+            </div>
+            <div class="hidden-sm-down col-md-4">
+                <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+                <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+                <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+                <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+                <li class="nav-item">
+                    <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Versions</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+                        
+                        
+                        <a class="dropdown-item" href="/cas/development/">Development</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.6.x/">v6.6.x</a>
+                        
+                        
+                        
+                        <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+                        
+                        
+
+                    </div>
+                </li>
+                <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+
+
+            
+
+            <section>
+                <nav id="docsNavBar">
+                    <span id="toolbarIcons"></span>
+                </nav>
+
+                <div id="cas-docs-container">
+                    
+<h1 id="saml2-attribute-release">SAML2 Attribute Release</h1>
+
+<p>Attribute filtering and release policies are defined per 
+SAML service. See <a href="../integration/Attribute-Release-Policies.html">this guide</a> for more info.</p>
+
+<h2 id="attribute-definitions">Attribute Definitions</h2>
+
+<p>Attribute definitions that specifically apply to the release of attributes as part of SAML response can be 
+defined using the <code class="language-plaintext highlighter-rouge">SamlIdPAttributeDefinition</code>. Defining an attribute with this definition does not
+prevent it from being released by other protocols.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"java.util.TreeMap"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"eduPersonPrincipalName"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.web.idp.profile.builders.attr.SamlIdPAttributeDefinition"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eduPersonPrincipalName"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eduPersonPrincipalName"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"urn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"urn:oid:1.3.6.1.4.1.5923.1.1.1.6"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"scoped"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"encrypted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attribute"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"friendlyName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eduPersonPrincipalName"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The following additional settings can be specified for a Saml IdP attribute definition:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">friendlyName</code></td>
+      <td>(Optional) Friendly name of the attribute shared with the target application during attribute release.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">urn</code></td>
+      <td>(Optional) Defined Universal Resource name for an attribute (i.e. <code class="language-plaintext highlighter-rouge">urn:oid:1.3.6.1.4.1.5923.1.1.1.6</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>To learn more about attribute definitions, please <a href="../integration/Attribute-Definitions.html">see this guide</a>.</p>
+
+<h2 id="attribute-value-types">Attribute Value Types</h2>
+
+<p><a href="Configuring-SAML2-Attribute-ValueTypes.html">See this guide</a>.</p>
+
+<h2 id="attribute-name-formats">Attribute Name Formats</h2>
+
+<p><a href="Configuring-SAML2-Attribute-NameFormat.html">See this guide</a>.</p>
+
+<h2 id="attribute-friendly-names">Attribute Friendly Names</h2>
+
+<p><a href="Configuring-SAML2-Attribute-FriendlyName.html">See this guide</a>.</p>
+
+<h2 id="incommon-research-and-scholarship">InCommon Research and Scholarship</h2>
+
+<p>A specific attribute release policy is available to release 
+the attribute bundles needed for InCommon Research and Scholarship service providers using the entity 
+attribute value <code class="language-plaintext highlighter-rouge">http://id.incommon.org/category/research-and-scholarship</code>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/incommon/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ChainingAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"policies"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w">
+      </span><span class="p">[</span><span class="w">
+         </span><span class="p">{</span><span class="w">
+           </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.InCommonRSAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+           </span><span class="nl">"useUniformResourceName"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Attributes authorized for release are set to be <code class="language-plaintext highlighter-rouge">eduPersonPrincipalName</code>, <code class="language-plaintext highlighter-rouge">eduPersonTargetedID</code>, <code class="language-plaintext highlighter-rouge">email</code>, <code class="language-plaintext highlighter-rouge">displayName</code>, 
+<code class="language-plaintext highlighter-rouge">givenName</code>, <code class="language-plaintext highlighter-rouge">surname</code>, <code class="language-plaintext highlighter-rouge">eduPersonScopedAffiliation</code>.</p>
+
+<h2 id="refeds-research-and-scholarship">REFEDS Research and Scholarship</h2>
+
+<p>A specific attribute release policy is available to release the <a href="https://refeds.org/category/research-and-scholarship">attribute bundles</a>
+needed for REFEDS Research and Scholarship service providers using 
+the entity attribute value <code class="language-plaintext highlighter-rouge">http://refeds.org/category/research-and-scholarship</code>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/incommon/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.ChainingAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"policies"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w">
+      </span><span class="p">[</span><span class="w">
+         </span><span class="p">{</span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.RefedsRSAttributeReleasePolicy"</span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>This policy is an extension of <code class="language-plaintext highlighter-rouge">InCommonRSAttributeReleasePolicy</code> that operates based on different entity attribute value.</p>
+
+<h2 id="releasing-edupersontargetedid">Releasing <code class="language-plaintext highlighter-rouge">eduPersonTargetedID</code></h2>
+
+<p>If you do not have pre-calculated values for the <code class="language-plaintext highlighter-rouge">eduPersonTargetedID</code> attribute to fetch before release, 
+you can let CAS calculate the <code class="language-plaintext highlighter-rouge">eduPersonTargetedID</code> attribute dynamically at release time using the following policy:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.EduPersonTargetedIdAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"salt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OqmG80fEKBQt"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"attribute"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"useUniformResourceName"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The generated id may be based off of an existing principal attribute. If left unspecified or attribute not found, 
+the authenticated principal id is used.</p>
+
+<h2 id="groovy-script">Groovy Script</h2>
+
+<p>This policy allows a Groovy script to calculate the collection of released attributes.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/incommon/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.GroovySamlRegisteredServiceAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"groovyScript"</span><span class="p">:</span><span class="w"> </span><span class="s2">"file:/etc/cas/config/script.groovy"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The configuration of this component qualifies to use 
+the <a href="../configuration/Configuration-Spring-Expressions.html">Spring Expression Language</a> syntax.</p>
+
+<p>The outline of the script may be designed as:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">java.util.*</span>
+<span class="kn">import</span> <span class="nn">org.apereo.cas.support.saml.services.*</span>
+<span class="kn">import</span> <span class="nn">org.apereo.cas.support.saml.*</span>
+
+<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">run</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">def</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">service</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">resolver</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">facade</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">entityDescriptor</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">applicationContext</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The following parameters are passed to the script:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">attributes</code></td>
+      <td>Map of current attributes resolved and available for release.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">service</code></td>
+      <td>The SAML service definition matched in the service registry.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">resolver</code></td>
+      <td>The metadata resolver instance of this service provider.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">facade</code></td>
+      <td>A wrapper on top of the metadata resolver that allows access to utility functions.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">entityDescriptor</code></td>
+      <td>The <code class="language-plaintext highlighter-rouge">EntityDescriptor</code> object matched and linked to this service provider’s metadata.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">applicationContext</code></td>
+      <td>CAS application context allowing direct access to beans, etc.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logger</code></td>
+      <td>The object responsible for issuing log messages such as <code class="language-plaintext highlighter-rouge">logger.info(...)</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>An example script follows:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">java.util.*</span>
+<span class="kn">import</span> <span class="nn">org.apereo.cas.support.saml.services.*</span>
+<span class="kn">import</span> <span class="nn">org.apereo.cas.support.saml.*</span>
+
+<span class="kt">def</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">run</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">def</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">service</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">resolver</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">facade</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">entityDescriptor</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">applicationContext</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">entityDescriptor</span><span class="o">.</span><span class="na">entityId</span> <span class="o">==</span> <span class="s2">"TestingSAMLApplication"</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="o">[</span><span class="nl">username:</span><span class="o">[</span><span class="s2">"something"</span><span class="o">],</span> <span class="nl">another:</span><span class="s2">"attribute"</span><span class="o">]</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="o">[:]</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="pattern-matching-entity-ids">Pattern Matching Entity Ids</h2>
+
+<p>In the event that an aggregate is defined containing multiple entity ids, the below attribute release 
+policy may be used to release a collection of allowed attributes to entity ids grouped together by a regular expression pattern:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/incommon/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.PatternMatchingEntityIdAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"cn"</span><span class="p">,</span><span class="w"> </span><span class="s2">"mail"</span><span class="p">,</span><span class="w"> </span><span class="s2">"sn"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"fullMatch"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"reverseMatch"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"entityIds"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"entityId1|entityId2|somewhere.+"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="entity-attributes-filter">Entity Attributes Filter</h2>
+
+<p>This attribute release policy authorizes the release of defined attributes, provided the accompanying 
+metadata for the service provider contains attributes that match certain values.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.MetadataEntityAttributesAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"cn"</span><span class="p">,</span><span class="w"> </span><span class="s2">"mail"</span><span class="p">,</span><span class="w"> </span><span class="s2">"sn"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"entityAttributeValues"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.LinkedHashSet"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"entity-attribute-value"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"entityAttribute"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"http://somewhere.org/category-x"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"entityAttributeFormat"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The specification of <code class="language-plaintext highlighter-rouge">entityAttributeFormat</code> is optional.</p>
+
+<h2 id="metadata-requested-attributes">Metadata Requested Attributes</h2>
+
+<p>This attribute release policy authorizes the release of defined attributes, based on the accompanying 
+metadata for the service provider having requested attributes as part of its <code class="language-plaintext highlighter-rouge">AttributeConsumingService</code> element.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.MetadataRequestedAttributesAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"useFriendlyName"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">useFriendlyName</code> allows the filter to compare the requested attribute’s friendly name with the resolved attribute.</p>
+
+<h2 id="metadata-registration-authority">Metadata Registration Authority</h2>
+
+<p>This attribute release policy authorizes the release of a subset of attributes if the registration authority
+specified as a metadata extension produces a successful match.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.MetadataRegistrationAuthorityAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"registrationAuthority"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"urn:example:.*"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"allowedAttributes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.ArrayList"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"cn"</span><span class="p">,</span><span class="w"> </span><span class="s2">"mail"</span><span class="p">,</span><span class="w"> </span><span class="s2">"sn"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">registrationAuthority</code> is a regular expression that is matched against the registration authority of the 
+<code class="language-plaintext highlighter-rouge">RegistrationInfo</code> element to authorize release of allowed attributes.</p>
+
+<h2 id="authentication-request-requested-attributes-filter">Authentication Request Requested Attributes Filter</h2>
+
+<p>This attribute release policy authorizes the release of a subset of attributes requested as extensions of
+the SAML2 authentication request. The intersection of requested attributes and those allowed by 
+the attribute release policy explicitly is evaluated for the final attribute release phase:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.SamlRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"entity-ids-allowed-via-regex"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAML"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadataLocation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/metadata.xml"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributeReleasePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.support.saml.services.AuthnRequestRequestedAttributesAttributeReleasePolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"useFriendlyName"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">useFriendlyName</code> allows the filter to compare the requested attribute’s friendly name with the resolved attribute.</p>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        CAS is supported by the <a href="https://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+</footer>
+
+<script>
+    let pageSection = 'Attributes';
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script src="../../javascripts/URI.js"></script>
+<script src="../../javascripts/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</body>
+
+</html>

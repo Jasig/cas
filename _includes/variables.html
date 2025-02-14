@@ -1,0 +1,12 @@
+{% capture version %}{{ page.url | replace:'/',' ' | truncatewords: 1 | strip | remove:'...' }}{% endcapture %}
+{% capture siteDataVersion %}{{ version | remove: "." }}{% endcapture %}
+{%- assign basePath = "/cas" -%}
+
+{% if site.url contains "localhost" %}
+{%- assign localhost = true -%}
+{%- assign basePath = "" -%}
+{% endif %}
+
+{% assign siteUrl = site.url | default: temp_dir %}
+{% assign baseUrl = siteUrl | append: basePath | append: "/" | append: version | append: "/" %}
+

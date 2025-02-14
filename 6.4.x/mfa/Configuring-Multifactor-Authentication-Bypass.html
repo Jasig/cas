@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CAS - Enterprise Single Sign-On for the Web" />
+  <meta name="keywords" content="authentication, login, cas, central authentication service, web, java, protocol, thymeleaf,
+                   open source, boot, spring, authorization, google, facebook, twitter, higher-ed, enterprise,
+                   access management, single signon, sso, RBAC, ABAC, attributes, SAML, OpenID, openid connect,
+                   JWT, ADFS" />
+  <meta name="robots" content="index,follow" />
+
+  
+  
+
+      
+    
+
+
+  
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-83384532-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.15.3/css/all.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="print" href="../../stylesheets/print.css">
+  
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  
+  <title>CAS - Multifactor Authentication Bypass</title>
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="hidden-sm-down">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-4 col-md-2">
+          <a href="../../index.html">
+            <img class="undecorated" src="../../images/cas_logo.png" />
+          </a>
+        </div>
+        <div class="col-xs-8 col-md-6">
+          <h1>Enterprise Single Sign-On for All</h1>
+        </div>
+        <div class="hidden-sm-down col-md-4">
+          <a id="forkme_banner" href="https://github.com/apereo/cas">View on GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary bg-dark">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsExample04">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"><a href="../../index.html" class="zoom nav-link">Home</a></li>
+          <li class="nav-item"><a href="https://github.com/apereo/cas/releases" class="zoom nav-link">Releases</a></li>
+          <li class="nav-item"><a href="../../Support.html" class="zoom nav-link">Support</a></li>
+          <li class="nav-item"><a href="../../Mailing-Lists.html" class="zoom nav-link">Mailing Lists</a></li>
+          <li class="nav-item">
+            <a class="zoom nav-link" href="../../Demos.html">Demos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="zoom nav-link dropdown-toggle mr-md-2" href="#" id="cas-versions" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Versions</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cas-versions">
+              
+              
+              <a class="dropdown-item" href="/cas/development/">Development</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.5.x/">v6.5.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.4.x/">v6.4.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.3.x/">v6.3.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.2.x/">v6.2.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.1.x/">v6.1.x</a>
+              
+              
+              
+              <a class="dropdown-item" href="/cas/6.0.x/">v6.0.x</a>
+              
+              
+
+            </div>
+          </li>
+          <li class="nav-item"><a href="https://apereo.github.io" target="_blank" class="zoom nav-link">Blog</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 docs-sidebar pb-5" id="sidebar"></div>
+
+
+      <div class="d-none d-xl-block col-xl-2 docs-toc">
+    <div id="pageContents">
+        <ul class="section-nav"></ul>
+    </div>
+</div>
+
+
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 cas-docs-content" role="main">
+        <form class="mb-3">
+          <label for="searchField" class="sr-only">Search</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search" title="At least 3 characters"
+              aria-label="Search" />
+          </div>
+        </form>
+
+        
+
+        <section>
+          <nav id="docsNavBar">
+            <span id="toolbarIcons"></span>
+          </nav>
+
+          <div id="cas-docs-container">
+            
+<h1 id="multifactor-authentication-bypass">Multifactor Authentication Bypass</h1>
+
+<p>Each <a href="Configuring-Multifactor-Authentication.html">multifactor provider</a> is equipped with 
+options to allow for bypass. Once the provider
+is chosen to honor the authentication request, bypass rules are then consulted
+to calculate whether the provider should ignore the request and skip MFA conditionally.</p>
+
+<h2 id="default-bypass">Default Bypass</h2>
+
+<p>CAS provides a default bypass policy for 
+each <a href="Configuring-Multifactor-Authentication.html">multifactor provider</a> that can be configured through CAS properties.<br />
+All providers will consult this policy for bypass events before consulting any other configured bypass providers.</p>
+
+<p>Bypass rules allow for the following options for each provider:</p>
+
+<ul>
+  <li>Skip multifactor authentication based on designated <strong>principal</strong> attribute <strong>names</strong>.</li>
+  <li>…[and optionally] Skip multifactor authentication based on designated <strong>principal</strong> attribute <strong>values</strong>.</li>
+  <li>Skip multifactor authentication based on designated <strong>authentication</strong> attribute <strong>names</strong>.</li>
+  <li>…[and optionally] Skip multifactor authentication based on designated <strong>authentication</strong> attribute <strong>values</strong>.</li>
+  <li>Skip multifactor authentication depending on method/form of primary authentication execution.</li>
+  <li>Skip multifactor authentication depending on the properties of the http request such as remote addr/host and/or header names.</li>
+</ul>
+
+<p>A few examples follow:</p>
+
+<ul>
+  <li>Trigger MFA except when the principal carries an <code class="language-plaintext highlighter-rouge">affiliation</code> attribute whose value is either <code class="language-plaintext highlighter-rouge">alum</code> or <code class="language-plaintext highlighter-rouge">member</code>.</li>
+  <li>Trigger MFA except when the principal carries a <code class="language-plaintext highlighter-rouge">superAdmin</code> attribute.</li>
+  <li>Trigger MFA except if the method of primary authentication is SPNEGO.</li>
+  <li>Trigger MFA except if credentials used for primary authentication are of type <code class="language-plaintext highlighter-rouge">org.example.MyCredential</code>.</li>
+</ul>
+
+<p>Note that in addition to the above options, some multifactor authentication providers
+may also skip and bypass the authentication request in the event that the authenticated principal does not quite “qualify”
+for multifactor authentication. See the documentation for each specific provider to learn more.</p>
+
+<h3 id="configuration">Configuration</h3>
+
+<p>Multifactor authentication bypass configuration is defined for each provider id. To learn more about the available settings,
+examine the configuration for your choice of multifactor authentication provider.</p>
+
+<p>Note that ticket validation requests shall successfully go through if multifactor authentication is
+bypassed for the given provider. In such cases, no authentication context is passed back to the application and
+additional attributes are supplanted to let the application know multifactor authentication is bypassed for the provider.</p>
+
+<h3 id="bypass-per-service">Bypass Per Service</h3>
+
+<p>MFA Bypass rules can be overridden per application via the CAS service registry. This is useful when
+MFA may be turned on globally for all applications and services, yet a few selectively need to be excluded. Services
+whose access should bypass MFA may be defined as such in the CAS service registry:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^(https|imaps)://.*"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"multifactorPolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.DefaultRegisteredServiceMultifactorPolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"multifactorAuthenticationProviders"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"java.util.LinkedHashSet"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"mfa-duo"</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"bypassEnabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="bypass-per-principal-attribute--service">Bypass Per Principal Attribute &amp; Service</h3>
+
+<p>This is similar to the above option, except that bypass is only activated for
+the registered application if the authenticated principal contains an attribute
+with the specified value(s).</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.RegexRegisteredService"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"serviceId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^(https|imaps)://.*"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"multifactorPolicy"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"@class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"org.apereo.cas.services.DefaultRegisteredServiceMultifactorPolicy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"bypassPrincipalAttributeName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"attributeForBypass"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"bypassPrincipalAttributeValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^bypass-value-[A-Z].+"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"bypassEnabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="additional-bypass-providers">Additional Bypass Providers</h2>
+
+<p>In addition to the configurable default bypass rules, the following bypass providers 
+can be defined and executed after default bypass rules are calculated.</p>
+
+<p>In the case where the default rules determine that the multifactor authentication 
+should be bypassed, the chain will be short circuited and no additional bypass providers will be consulted.</p>
+
+<h3 id="bypass-via-groovy">Bypass via Groovy</h3>
+
+<p>Multifactor authentication bypass may be determined using a Groovy script of your 
+own design. The outcome of the script, if <code class="language-plaintext highlighter-rouge">true</code> indicates that multifactor
+ authentication for the requested provider should proceed. Otherwise <code class="language-plaintext highlighter-rouge">false</code> indicates 
+that  multifactor authentication for this provider should be skipped and bypassed.</p>
+
+<p>The outline of the script may be as follows:</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">java.util.*</span>
+
+<span class="kt">def</span> <span class="kt">boolean</span> <span class="nf">run</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">def</span> <span class="n">authentication</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">principal</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">registeredService</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">provider</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">httpRequest</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span>
+
+    <span class="c1">// Stuff happens...</span>
+
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The parameters passed are as follows:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">authentication</code></td>
+      <td>The object representing the established authentication event.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">principal</code></td>
+      <td>The object representing the authenticated principal.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">service</code></td>
+      <td>The object representing the corresponding service definition in the registry.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">provider</code></td>
+      <td>The object representing the requested multifactor authentication provider.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logger</code></td>
+      <td>The object responsible for issuing log messages such as <code class="language-plaintext highlighter-rouge">logger.info(...)</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">httpRequest</code></td>
+      <td>The object responsible for capturing the http request.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>As an example, the following script skips multifactor authentication if the application 
+requesting it is registered in the CAS service registry under the name <code class="language-plaintext highlighter-rouge">MyApplication</code> and 
+only does so if the provider is Duo Security and the authenticated principal contains 
+an attribute named <code class="language-plaintext highlighter-rouge">mustBypassMfa</code> whose values contains <code class="language-plaintext highlighter-rouge">true</code>.</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre><span class="kt">boolean</span> <span class="nf">run</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">def</span> <span class="n">authentication</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">principal</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">service</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">provider</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span>
+    <span class="kt">def</span> <span class="n">httpRequest</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">service</span><span class="o">.</span><span class="na">name</span> <span class="o">==</span> <span class="s2">"MyApplication"</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s2">"Evaluating principal attributes ${principal.attributes}"</span><span class="o">)</span>
+
+        <span class="kt">def</span> <span class="n">bypass</span> <span class="o">=</span> <span class="n">principal</span><span class="o">.</span><span class="na">attributes</span><span class="o">[</span><span class="s1">'mustBypassMfa'</span><span class="o">]</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">bypass</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s2">"true"</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">provider</span><span class="o">.</span><span class="na">id</span> <span class="o">==</span> <span class="s2">"mfa-duo"</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s2">"Skipping bypass for principal ${principal.id}"</span><span class="o">)</span>
+            <span class="k">return</span> <span class="kc">false</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">true</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="bypass-via-rest">Bypass via REST</h3>
+
+<p>Multifactor authentication bypass may be determined using a REST API of your 
+own design. Endpoints must be designed to accept/process <code class="language-plaintext highlighter-rouge">application/json</code> via 
+<code class="language-plaintext highlighter-rouge">GET</code> requests. A returned status code <code class="language-plaintext highlighter-rouge">202</code> meaning <code class="language-plaintext highlighter-rouge">ACCEPTED</code> indicates that multifactor 
+authentication for the requested provider should proceed. Otherwise multifactor 
+authentication for this provider should be skipped and bypassed.</p>
+
+<p>The following parameters are passed:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">principal</code></td>
+      <td>The identifier of the authenticated principal.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">provider</code></td>
+      <td>The identifier of the multifactor authentication provider.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">service</code></td>
+      <td>The identifier of the registered service in the registry, if any.</td>
+    </tr>
+  </tbody>
+</table>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.
+    </div>
+  </footer>
+
+  <script>
+    var pageSection = 'Multifactor Authentication';
+  </script>
+
+  <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+  <script src="../../javascripts/URI.js"></script>
+  <script src="../../javascripts/main.js"></script>
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
+  <script type="text/javascript">
+    new ClipboardJS('.copy-button');
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    docsearch({
+      apiKey: 'e574b72c1301f8a28e49ec9644096c79',
+      indexName: 'apereo',
+      inputSelector: '#searchField',
+      algoliaOptions: { 'facetFilters': ["version: 6.4.x"] },
+      debug: false // Set debug to true if you want to inspect the dropdown
+    });
+  </script>
+</body>
+
+</html>

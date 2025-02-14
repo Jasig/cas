@@ -1,0 +1,28 @@
+<!-- fragment:keep -->
+<table class="cas-datatable paginated-table" id="table-theme-properties">
+    <thead>
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%- for cfg in site.data[siteDataVersion]["theme-properties"] -%}
+            {%- assign configBlock = cfg[1] -%}
+            {%- for config in configBlock -%}
+            <tr>
+                <td>
+                    <code>{{ config.name }}</code>
+                </td>
+                <td>
+                    <code>{{ config.value }}</code>
+                </td>
+                <td>
+                    {{ config.description }}
+                </td>
+            </tr>
+            {%- endfor -%}
+        {%- endfor -%}
+    </tbody>
+</table>

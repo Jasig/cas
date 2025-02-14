@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - JBoss Cache Ticket Registry</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="jboss-cache-ticket-registry">JBoss Cache Ticket Registry</h1>
+<p>JBoss integration is enabled by including the following dependency in the Maven WAR overlay:</p>
+
+<pre><code>&lt;dependency&gt;
+     &lt;groupId&gt;org.jasig.cas&lt;/groupId&gt;
+     &lt;artifactId&gt;cas-server-integration-jboss&lt;/artifactId&gt;
+     &lt;version&gt;${cas.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p><code>JBossCacheTicketRegistry</code> stores data in a <a href="http://www.jboss.org/jbosscache/">JBoss Cache</a> that supports distributed
+caches for failover support and is therefore suitable for HA deployments. Almost all of the configuration for this
+component happens in the JBoss Cache configuration file; we present a starting configuration here but readers should
+consult JBoss Cache
+<a href="http://docs.jboss.org/jbosscache/3.2.1.GA/userguide_en/html/configuration.html">configuration documentation</a>
+for further details.</p>
+
+<p>Sample <code>JBossCacheTicketRegistry</code> configuration for <code>ticketRegistry.xml</code>.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistry&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.ticket.registry.JBossCacheTicketRegistry&quot;</span>
+      <span class="na">p:cache-ref=</span><span class="s">&quot;cache&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;cache&quot;</span>
+      <span class="na">class=</span><span class="s">&quot;org.jasig.cas.util.JBossCacheFactoryBean&quot;</span>
+      <span class="na">p:configLocation=</span><span class="s">&quot;classpath:jbossCache.xml&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<p>The <code>jbossCache.xml</code> file may be bundled in the overlay which allows it to be accessed from the classpath, as in the
+example above, or it may be located on the filesystem. A sample <code>jbossCache.xml</code> file follows.</p>
+
+<div class="highlight"><pre><code class="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;server&gt;</span>
+  <span class="nt">&lt;mbean</span> <span class="na">code=</span><span class="s">&quot;org.jboss.cache.TreeCache&quot;</span> <span class="na">name=</span><span class="s">&quot;jboss.cache:service=TreeCache&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;depends&gt;</span>jboss:service=Naming<span class="nt">&lt;/depends&gt;</span>
+    <span class="nt">&lt;depends&gt;</span>jboss:service=TransactionManager<span class="nt">&lt;/depends&gt;</span>
+
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;TransactionManagerLookupClass&quot;</span><span class="nt">&gt;</span>
+    org.jboss.cache.transaction.DummyTransactionManagerLookup
+    <span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!--</span>
+<span class="c">       | SERIALIZABLE, REPEATABLE_READ (default), READ_COMMITTED, READ_UNCOMMITTED, NONE</span>
+<span class="c">       --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;IsolationLevel&quot;</span><span class="nt">&gt;</span>REPEATABLE_READ<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!--</span>
+<span class="c">       | LOCAL, REPL_ASYNC, REPL_SYNC, INVALIDATION_ASYNC, INVALIDATION_SYNC</span>
+<span class="c">       --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;CacheMode&quot;</span><span class="nt">&gt;</span>REPL_SYNC<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!-- Just used for async repl: use a replication queue --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;UseReplQueue&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!-- Replication interval for replication queue (in ms) --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;ReplQueueInterval&quot;</span><span class="nt">&gt;</span>0<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!-- Max number of elements which trigger replication --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;ReplQueueMaxElements&quot;</span><span class="nt">&gt;</span>0<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!-- Cluster name must be same for all members in cluster in order to find each other. --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;ClusterName&quot;</span><span class="nt">&gt;</span>TreeCache-Cluster<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;ClusterConfig&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;config&gt;</span>
+        <span class="c">&lt;!--</span>
+<span class="c">           | If you have a multihomed machine, set the bind_addr, e.g bind_addr=&quot;192.168.0.2&quot;</span>
+<span class="c">           --&gt;</span>
+        <span class="nt">&lt;UDP</span> <span class="na">mcast_addr=</span><span class="s">&quot;228.1.2.3&quot;</span> <span class="na">mcast_port=</span><span class="s">&quot;48866&quot;</span>
+          <span class="na">ip_ttl=</span><span class="s">&quot;64&quot;</span> <span class="na">ip_mcast=</span><span class="s">&quot;true&quot;</span>
+          <span class="na">mcast_send_buf_size=</span><span class="s">&quot;150000&quot;</span> <span class="na">mcast_recv_buf_size=</span><span class="s">&quot;80000&quot;</span>
+          <span class="na">ucast_send_buf_size=</span><span class="s">&quot;150000&quot;</span> <span class="na">ucast_recv_buf_size=</span><span class="s">&quot;80000&quot;</span>
+          <span class="na">loopback=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;PING</span> <span class="na">timeout=</span><span class="s">&quot;2000&quot;</span> <span class="na">num_initial_members=</span><span class="s">&quot;3&quot;</span> <span class="na">up_thread=</span><span class="s">&quot;false&quot;</span> <span class="na">down_thread=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;MERGE2</span> <span class="na">min_interval=</span><span class="s">&quot;10000&quot;</span> <span class="na">max_interval=</span><span class="s">&quot;20000&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;FD_SOCK/&gt;</span>
+        <span class="nt">&lt;VERIFY_SUSPECT</span> <span class="na">timeout=</span><span class="s">&quot;1500&quot;</span> <span class="na">up_thread=</span><span class="s">&quot;false&quot;</span> <span class="na">down_thread=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;pbcast.NAKACK</span> <span class="na">gc_lag=</span><span class="s">&quot;50&quot;</span> <span class="na">retransmit_timeout=</span><span class="s">&quot;600,1200,2400,4800&quot;</span>
+          <span class="na">max_xmit_size=</span><span class="s">&quot;8192&quot;</span> <span class="na">up_thread=</span><span class="s">&quot;false&quot;</span> <span class="na">down_thread=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;UNICAST</span> <span class="na">timeout=</span><span class="s">&quot;600,1200,2400&quot;</span> <span class="na">window_size=</span><span class="s">&quot;100&quot;</span> <span class="na">min_threshold=</span><span class="s">&quot;10&quot;</span> <span class="na">down_thread=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;pbcast.STABLE</span> <span class="na">desired_avg_gossip=</span><span class="s">&quot;20000&quot;</span> <span class="na">up_thread=</span><span class="s">&quot;false&quot;</span> <span class="na">down_thread=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;FRAG</span> <span class="na">frag_size=</span><span class="s">&quot;8192&quot;</span> <span class="na">down_thread=</span><span class="s">&quot;false&quot;</span> <span class="na">up_thread=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;pbcast.GMS</span> <span class="na">join_timeout=</span><span class="s">&quot;5000&quot;</span> <span class="na">join_retry_timeout=</span><span class="s">&quot;2000&quot;</span> <span class="na">shun=</span><span class="s">&quot;true&quot;</span> <span class="na">print_local_addr=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;pbcast.STATE_TRANSFER</span> <span class="na">up_thread=</span><span class="s">&quot;true&quot;</span> <span class="na">down_thread=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/config&gt;</span>
+    <span class="nt">&lt;/attribute&gt;</span>
+
+
+    <span class="c">&lt;!-- Whether or not to fetch state on joining a cluster. --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;FetchInMemoryState&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!--</span>
+<span class="c">       | </span>
+<span class="c">       | The max amount of time (in milliseconds) we wait until the</span>
+<span class="c">       | initial state (ie. the contents of the cache) are retrieved from</span>
+<span class="c">       | existing members in a clustered environment</span>
+<span class="c">       --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;InitialStateRetrievalTimeout&quot;</span><span class="nt">&gt;</span>15000<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!--</span>
+<span class="c">       | Number of milliseconds to wait until all responses for a</span>
+<span class="c">       | synchronous call have been received.</span>
+<span class="c">       --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;SyncReplTimeout&quot;</span><span class="nt">&gt;</span>15000<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!-- Max number of milliseconds to wait for a lock acquisition --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;LockAcquisitionTimeout&quot;</span><span class="nt">&gt;</span>10000<span class="nt">&lt;/attribute&gt;</span>
+
+    <span class="c">&lt;!-- Name of the eviction policy class. --&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;EvictionPolicyClass&quot;</span><span class="nt">&gt;&lt;/attribute&gt;</span>
+
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;UseMarshalling&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/attribute&gt;</span>
+    <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">&quot;StateTransferVersion&quot;</span><span class="nt">&gt;</span>130<span class="nt">&lt;/attribute&gt;</span>
+  <span class="nt">&lt;/mbean&gt;</span>
+<span class="nt">&lt;/server&gt;</span>
+</code></pre></div>
+
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+exclude:
+  - .idea
+  - .sass-cache
+  - .history
+  - .jekyll-cache
+  - .jekyll-metadata

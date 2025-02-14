@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CAS - Single Sign-On for the Web" />
+    
+    
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="../../stylesheets/v40x-stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="print"
+          href="../../stylesheets/print.css">
+    <title>CAS - ClearPass</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../../javascripts/URI.js"></script>
+    <script src="../../javascripts/v40x-main.js"></script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jasig/cas">View on GitHub</a>
+          <div id="project_title">
+            <a class="undecorated" href="../../index.html">
+              <img class="undecorated" src="../../images/cas_logo.png"/>
+            </a>
+          </div>
+          <h2 id="project_tagline">Single Sign-On for the Web</h2>
+        </header>
+    </div>
+
+    <!-- NAVBAR -->    
+    <div id="navbar_wrap" class="outer">
+      <header id="navbar_content" class="inner">
+        <div class="navlink">
+  <a href="../../index.html">Home</a>
+</div>
+<div class="navlink">
+  <a href="https://github.com/Jasig/cas/releases">Downloads</a>
+</div>
+<div class="navlink">
+  <a href="https://www.google.com/cse/publicurl?cx=017040929083740828958:sqr2hwvrxmg">Search</a>
+</div>
+<div class="navlink">
+  <a href="../../Support.html">Support</a>
+</div>
+<div class="navlink">
+  <a href="../../Mailing-Lists.html">Mailing Lists</a>
+</div>
+<div class="navlink">
+  <a href="../../Older-Versions.html">Older Versions</a>
+</div>
+
+        </header>
+    </div>
+
+      <!-- SIDEBAR -->
+      <div id="sidebar_wrap" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="sidebartoc"></span>
+        </header >
+      </div>
+      
+      <!-- PAGE TABLE OF CONTENTS -->
+      <div id="table_contents" class="outer">
+        <header id="sidebar_content" class="inner">
+          <span id="tableOfContents"></span>
+        </header>
+      </div>
+      
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+          <h1 id="clearpass-credential-caching-and-replay">ClearPass: Credential Caching and Replay</h1>
+<p>To enable single sign-on into some legacy application it may be necessary to provide them with the actual cleartext password. While such approach inevitably increases security risk, at times this may be a necessary evil in order to integrate applications with CAS.</p>
+
+<div class="alert alert-warning"><strong>Usage Warning!</strong><p>ClearPass is turned off by default. No applications will be able to obtain the user credentials unless ClearPass is explicitly turned on by the below configuration.</p></div>
+
+<h2 id="architecture">Architecture</h2>
+<p>A service may obtain cleartext credentials for an authenticated user by presenting a valid proxy ticket obtained specifically for the CAS cleartext extension service end-point that is ClearPass. Tickets issued for a ClearPass response are validated in the same way you would access a traditional proxied service. ClearPass ensures this by just being another CAS Client. Credentials are cached inside an Ehcache-backed map with support for encryption of the obtained password in memory.</p>
+
+<p>Upon receiving the request, ClearPass ensures that the following validation criteria are met:</p>
+
+<ul>
+  <li>The proxy ticket was obtained for the URL specifying location of the ClearPass service</li>
+  <li>The proxy is valid according to standard CAS spec</li>
+  <li>The proxy ticket is indeed a proxy ticket, not a service ticket</li>
+  <li>Each member of the proxy chain has been given explicit permission to receive cleartext credentials</li>
+</ul>
+
+<h2 id="validation-responses">Validation Responses</h2>
+<p>Upon successful validation the ClearPass service provides credentials in the following response:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;cas:clearPassResponse</span> <span class="na">xmlns:cas=</span><span class="s">&#39;http://www.yale.edu/tp/cas&#39;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cas:clearPassSuccess&gt;</span>
+        <span class="nt">&lt;cas:credentials&gt;</span>actual_password<span class="nt">&lt;/cas:credentials&gt;</span>
+    <span class="nt">&lt;/cas:clearPassSuccess&gt;</span>
+<span class="nt">&lt;/cas:clearPassResponse&gt;</span>
+</code></pre></div>
+
+<p>If the validation fails, the traditional response is a 403 Status code being returned. If there are failures for any other reason other than authorization, the following error response is returned:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;cas:clearPassResponse</span> <span class="na">xmlns:cas=</span><span class="s">&#39;http://www.yale.edu/tp/cas&#39;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cas:clearPassFailure&gt;</span>description of the problem<span class="nt">&lt;/cas:clearPassFailure&gt;</span>
+<span class="nt">&lt;/cas:clearPassResponse&gt;</span>
+</code></pre></div>
+
+<h2 id="components">Components</h2>
+<p>Support is enabled by including the following dependency in the Maven WAR overlay:</p>
+
+<pre><code>&lt;dependency&gt;
+   &lt;groupId&gt;org.jasig.cas&lt;/groupId&gt;
+   &lt;artifactId&gt;cas-server-extension-clearpass&lt;/artifactId&gt;
+   &lt;version&gt;${cas.version}&lt;/version&gt;
+   &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h3 id="cachecredentialsmetadatapopulator"><code>CacheCredentialsMetaDataPopulator</code></h3>
+<p>Retrieve and store the password in our cache.</p>
+
+<h3 id="clearpasscontroller"><code>ClearPassController</code></h3>
+<p>A controller that returns the password based on some external authentication/authorization rules. Attempts to obtain the password from the cache and render the appropriate output.</p>
+
+<h3 id="encryptedmapdecorator"><code>EncryptedMapDecorator</code></h3>
+<p>A <code>Map</code> implementation that will hash and store cached credentials.</p>
+
+<h3 id="ehcachebackedmap"><code>EhcacheBackedMap</code></h3>
+<p>A <code>Map</code> implementation that will use Ehcache as the backend storage.</p>
+
+<h3 id="ticketregistrydecorator"><code>TicketRegistryDecorator</code></h3>
+<p>A ticket registry implementation that dispatches ticketing operations to the <em>real</em> registry while mapping tickets to user names and placing them in the provided cache.</p>
+
+<h2 id="single-node-configuration">Single Node Configuration</h2>
+
+<h3 id="authenticationmetadatapopulator-in-deployerconfigcontextxml"><code>AuthenticationMetaDataPopulator</code> in <code>deployerConfigContext.xml</code></h3>
+<p>Uncomment the below element that is responsible for capturing and caching the password:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;authenticationMetaDataPopulators&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;list&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.extension.clearpass.CacheCredentialsMetaDataPopulator&quot;</span>
+      <span class="na">c:credentialCache-ref=</span><span class="s">&quot;encryptedMap&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  <span class="nt">&lt;/list&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+</code></pre></div>
+
+<h3 id="modifying-webxml">Modifying <code>web.xml</code></h3>
+<p>In your Maven overlay, modify the <code>web.xml</code> to include the following:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;servlet-mapping&gt;</span>
+  <span class="nt">&lt;servlet-name&gt;</span>cas<span class="nt">&lt;/servlet-name&gt;</span>
+  <span class="nt">&lt;url-pattern&gt;</span>/clearPass<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span>
+</code></pre></div>
+
+<p>Be sure to put this snippet with the other servlet-mappings.</p>
+
+<p>Next, add the following filter and filter-mapping:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;filter&gt;</span>
+  <span class="nt">&lt;filter-name&gt;</span>clearPassFilterChainProxy<span class="nt">&lt;/filter-name&gt;</span>
+  <span class="nt">&lt;filter-class&gt;</span>org.springframework.web.filter.DelegatingFilterProxy<span class="nt">&lt;/filter-class&gt;</span>
+<span class="nt">&lt;/filter&gt;</span>
+ 
+<span class="nt">&lt;filter-mapping&gt;</span>
+  <span class="nt">&lt;filter-name&gt;</span>clearPassFilterChainProxy<span class="nt">&lt;/filter-name&gt;</span>
+  <span class="nt">&lt;url-pattern&gt;</span>/clearPass<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/filter-mapping&gt;</span>
+</code></pre></div>
+
+<p>Be sure to put this snippet with the other filter and filter-mappings.</p>
+
+<h3 id="modifying-clearpass-configurationxml">Modifying <code>clearpass-configuration.xml</code></h3>
+<p>Obtain a copy of the <a href="https://github.com/Jasig/cas/blob/master/cas-server-webapp/src/main/webapp/WEB-INF/unused-spring-configuration/clearpass-configuration.xml"><code>clearpass-configuration.xml</code></a> file inside the <code>WEB-INF/unused-spring-configuration</code> of the project. Place that in your project’s <code>WEB-INF/spring-configuration</code> directory.</p>
+
+<p>Next, declare the following bean inside the file:</p>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;clearPassProxyList&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.client.validation.ProxyList&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg&gt;</span>
+        <span class="nt">&lt;list&gt;</span>
+            <span class="nt">&lt;value&gt;</span>https://proxy.server.edu/proxyCallback<span class="nt">&lt;/value&gt;</span>
+            <span class="nt">&lt;value&gt;</span>...<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/list&gt;</span>
+    <span class="nt">&lt;/constructor-arg&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<p>The above bean defines the list of proxying services authorized to obtain ClearPass credentials. Also note that
+proxy urls in the above list have to be fully specified and must produce an exact match. Otherwise, the CAS server
+will report back that the proxy chain is invalid for the requesting proxy url. </p>
+
+<p>Alternatively, you may replace:</p>
+
+<pre><code>&lt;property name="allowedProxyChains" ref="clearPassProxyList" /&gt; with:
+
+&lt;property name="acceptAnyProxy" value="true" /&gt;
+</code></pre>
+
+<p>…to allow all proxying services to be able to obtain ClearPass credentials.</p>
+
+<div class="alert alert-warning"><strong>Usage Warning!</strong><p>It's not appropriate in your environment to allow any service that can obtain a proxy ticket to proxy to ClearPass. Explicitly authorizing proxy chains to access ClearPass (and denying all unauthorized proxy chains) is an important access control on release of the end-user's password.</p></div>
+
+<h3 id="modifying-ticketregistryxml">Modifying <code>ticketRegistry.xml</code></h3>
+<p>Obtain a copy of the <a href="https://github.com/Jasig/cas/blob/master/cas-server-webapp/src/main/webapp/WEB-INF/spring-configuration/ticketRegistry.xml"><code>ticketRegistry.xml</code></a> file and place that in your project’s <code>WEB-INF/spring-configuration</code> directory.</p>
+
+<p>Replace:</p>
+
+<pre><code>&lt;bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.DefaultTicketRegistry" /&gt;
+</code></pre>
+
+<p>with:</p>
+
+<pre><code>&lt;bean id="ticketRegistryValue" class="org.jasig.cas.ticket.registry.DefaultTicketRegistry" /&gt;
+</code></pre>
+
+<h2 id="multiple-nodes-configuration">Multiple Nodes Configuration</h2>
+<p>ClearPass stores the password information it collects in a non-distributed EhCache-based Map. This works fine in single-server CAS environments but causes issues in multi-server CAS environments. In a normal multi-server CAS environment you would use a Distributed Ticket Registry like the <code>MemcacheTicketRegistry</code> or the <code>EhcacheTicketRegistry</code> so that all CAS servers would have knowledge of all the tickets. After the distributed Ticket Registry is setup you should replace ClearPass’s default in-memory Map with a Map implemenation that matches your ticket registry. </p>
+
+<h3 id="ehcache-based-map">EhCache-based Map</h3>
+<p>By default ClearPass is setup to use a non-distrbuted EhCache to store its passwords. If you are using the <code>EhcacheTicketRegistry</code> you will want to ensure that your ehcacheClearPass.xml file is setup to replicate the ClearPass Ehcache to all your CAS servers. </p>
+
+<h4 id="configuration">Configuration</h4>
+
+<h5 id="sample-clearpass-configurationxml">Sample <code>clearpass-configuration.xml</code></h5>
+
+<div class="highlight"><pre><code class="xml"><span class="c">&lt;!--  Credentials Cache implementation --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ehCacheManager&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.cache.ehcache.EhCacheManagerFactoryBean&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;configLocation&quot;</span> <span class="na">value=</span><span class="s">&quot;file:/etc/cas/clearpass-replicated.xml&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;shared&quot;</span> <span class="na">value=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;cacheManagerName&quot;</span> <span class="na">value=</span><span class="s">&quot;clearPassEhCacheManager&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;clearPassEhCache&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.cache.ehcache.EhCacheFactoryBean&quot;</span>
+    <span class="na">p:cacheManager-ref=</span><span class="s">&quot;ehCacheManager&quot;</span>
+    <span class="na">p:bootstrapCacheLoader-ref=</span><span class="s">&quot;ticketCacheBootstrapCacheLoader&quot;</span> 
+    <span class="na">p:cacheEventListeners-ref=</span><span class="s">&quot;ticketRMISynchronousCacheReplicator&quot;</span>
+    <span class="na">p:cacheName=</span><span class="s">&quot;org.jasig.cas.extension.clearpass.CACHE&quot;</span>
+    <span class="na">p:timeToIdle=</span><span class="s">&quot;720&quot;</span>
+    <span class="na">p:timeToLive=</span><span class="s">&quot;720&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRMISynchronousCacheReplicator&quot;</span> <span class="na">class=</span><span class="s">&quot;net.sf.ehcache.distribution.RMISynchronousCacheReplicator&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&quot;replicatePuts&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span> 
+    <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&quot;replicatePutsViaCopy&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span> 
+    <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&quot;replicateUpdates&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>  
+    <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&quot;replicateUpdatesViaCopy&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>  
+    <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&quot;replicateRemovals&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>       
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketCacheBootstrapCacheLoader&quot;</span> <span class="na">class=</span><span class="s">&quot;net.sf.ehcache.distribution.RMIBootstrapCacheLoader&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&quot;asynchronous&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>  
+    <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&quot;maximumChunkSize&quot;</span> <span class="na">value=</span><span class="s">&quot;5000000&quot;</span><span class="nt">/&gt;</span>  
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;credentialsCache&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.extensions.clearpass.EhcacheBackedMap&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;clearPassEhCache&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistry&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.extensions.clearpass.TicketRegistryDecorator&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;ticketRegistryValue&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;1&quot;</span> <span class="na">ref=</span><span class="s">&quot;credentialsCache&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="c">&lt;!-- implementation of the clear pass vending service --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;clearPassController&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.extensions.clearpass.ClearPassController&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;credentialsCache&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;handlerMappingClearPass&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.handler.SimpleUrlHandlerMapping&quot;</span>
+    <span class="na">p:alwaysUseFullPath=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;mappings&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;props&gt;</span>
+			<span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;/clearPass&quot;</span><span class="nt">&gt;</span>
+                clearPassController
+            <span class="nt">&lt;/prop&gt;</span>
+        <span class="nt">&lt;/props&gt;</span>
+	<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<h5 id="sample-clearpass-replicatedxml">Sample <code>clearpass-replicated.xml</code></h5>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;ehcache</span> <span class="na">name=</span><span class="s">&quot;clearPassEhCacheManager&quot;</span> <span class="na">updateCheck=</span><span class="s">&quot;false&quot;</span> 
+        <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> 
+         <span class="na">xsi:noNamespaceSchemaLocation=</span><span class="s">&quot;http://ehcache.sf.net/ehcache.xsd&quot;</span><span class="nt">&gt;</span>
+
+   <span class="nt">&lt;diskStore</span> <span class="na">path=</span><span class="s">&quot;java.io.tmpdir/cas&quot;</span><span class="nt">/&gt;</span>
+	
+	 <span class="nt">&lt;cacheManagerPeerProviderFactory</span> 
+                <span class="na">class=</span><span class="s">&quot;net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory&quot;</span>
+                <span class="na">properties=</span><span class="s">&quot;peerDiscovery=manual,</span>
+<span class="s">                rmiUrls=//10.1.1.123:40002/org.jasig.cas.extension.clearpass.CACHE&quot;</span> <span class="nt">/&gt;</span>
+   
+   <span class="c">&lt;!-- Port where it listens for peers. Should be different from peer provider port defined above --&gt;</span>
+   <span class="nt">&lt;cacheManagerPeerListenerFactory</span> 
+            <span class="na">class=</span><span class="s">&quot;net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory&quot;</span>
+            <span class="na">properties=</span><span class="s">&quot;port=40002&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/ehcache&gt;</span>
+</code></pre></div>
+
+<p>Note that the above uses manual peer discovery with RMI replication to transfer cached objects that are obtained by ClearPass. The IP addresses need to be changed for each CAS node to point to each other.</p>
+
+<h3 id="memcached--map">Memcached  Map</h3>
+<p>The spymemcached java client includes a Memcached Map implementation called <code>CacheMap</code>. </p>
+
+<h4 id="configuration-1">Configuration</h4>
+
+<h5 id="sample-clearpass-configurationxml-1">Sample <code>clearpass-configuration.xml</code></h5>
+
+<div class="highlight"><pre><code class="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;CPserialTranscoder&quot;</span> <span class="na">class=</span><span class="s">&quot;net.spy.memcached.transcoders.SerializingTranscoder&quot;</span>
+    <span class="na">p:compressionThreshold=</span><span class="s">&quot;2048&quot;</span> <span class="nt">/&gt;</span>
+     
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;memcachedMap&quot;</span> <span class="na">class=</span><span class="s">&quot;net.spy.memcached.CacheMap&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;net.spy.memcached.spring.MemcachedClientFactoryBean&quot;</span>
+          <span class="na">p:servers=</span><span class="s">&quot;memcache1.college.edu:11211,memcache2.college.edu:11211&quot;</span>
+          <span class="na">p:protocol=</span><span class="s">&quot;BINARY&quot;</span>
+          <span class="na">p:locatorType=</span><span class="s">&quot;ARRAY_MOD&quot;</span>
+          <span class="na">p:failureMode=</span><span class="s">&quot;Redistribute&quot;</span>
+          <span class="na">p:transcoder-ref=</span><span class="s">&quot;CPserialTranscoder&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hashAlg&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;util:constant</span> <span class="na">static-field=</span><span class="s">&quot;net.spy.memcached.DefaultHashAlgorithm.FNV1A_64_HASH&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  <span class="nt">&lt;/constructor-arg&gt;</span>
+  <span class="c">&lt;!-- this is the timeout for the cache in seconds --&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;1&quot;</span> <span class="na">value=</span><span class="s">&quot;7200&quot;</span> <span class="nt">/&gt;</span>
+  <span class="c">&lt;!-- this is the prefix for the keys stored in the map --&gt;</span> 
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;2&quot;</span> <span class="na">value=</span><span class="s">&quot;clearPass_&quot;</span> <span class="nt">/&gt;</span> 
+<span class="nt">&lt;/bean&gt;</span>  
+ 
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;credentialsCache&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.extension.clearpass.EncryptedMapDecorator&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;memcachedMap&quot;</span> <span class="nt">/&gt;</span>
+  <span class="c">&lt;!-- Replace the salt and secret key with one of your choosing --&gt;</span>      
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;1&quot;</span> <span class="na">value=</span><span class="s">&quot;salt1234&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;2&quot;</span> <span class="na">value=</span><span class="s">&quot;seCretKey0123456&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;ticketRegistry&quot;</span> <span class="na">class=</span><span class="s">&quot;org.jasig.cas.extension.clearpass.TicketRegistryDecorator&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;ticketRegistryValue&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;1&quot;</span> <span class="na">ref=</span><span class="s">&quot;credentialsCache&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+
+<p>Note that if you are using an SSH tunnel for your Memcached connections the Encrypted Map Decorator would not be necessary.</p>
+
+        </section>
+      </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>CAS is supported by the <a href="http://www.apereo.org/">Apereo Foundation</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
